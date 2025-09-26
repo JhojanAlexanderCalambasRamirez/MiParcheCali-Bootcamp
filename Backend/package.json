@@ -1,13 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "dev:auth": "nodemon src/Auth/auth.server.js",
-    "dev:plans": "nodemon src/Plans/plans.server.js",
-    "dev:search": "nodemon src/Search/search.server.js",
-    "dev:fav": "nodemon src/Favorites/favorites.server.js"
+    "dev:auth": "node src/auth-service/index.js",
+    "dev:users": "node src/users-service/index.js",
+    "dev:categories": "node src/categories-service/index.js",
+    "dev:patches": "node src/patches-service/index.js",
+    "dev:favorites": "node src/favorites-service/index.js"
 
   },
   "keywords": [],

@@ -1,51 +1,39 @@
 import { pool } from '../../db.js';
 
-export async function searchPlans(req, res, next) {
+export async function listMine(req, res) {
   try {
-    const { q = '', category, zone, page = 1, pageSize = 10 } = req.query;
-    const p = Math.max(parseInt(page, 10) || 1, 1);
-    const ps = Math.min(Math.max(parseInt(pageSize, 10) || 10, 1), 50);
-    const offset = (p - 1) * ps;
-
-    const params = [];
-    const where = [`p.status = 'published'`];
-
-    if (q) {
-      where.push(`(p.title LIKE ? OR p.description LIKE ?)`);
-      params.push(`%${q}%`, `%${q}%`);
-    }
-    if (category) {
-      where.push(`p.category_id = ?`);
-      params.push(Number(category));
-    }
-    if (zone) {
-      where.push(`p.zone LIKE ?`);
-      params.push(`%${zone}%`);
-    }
-
-    const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
-
-    const [totalRows] = await pool.query(
-      `SELECT COUNT(*) as total
-       FROM plans p
-       ${whereSql}`,
-      params
+    const userId = req.user.id;
+    const [rows] = await pool.query(
+      `SELECT p.id, p.titulo, p.cover_image_url
+       FROM favorites f
+       JOIN patches p ON p.id=f.patch_id
+       WHERE f.user_id=? AND p.deleted_at IS NULL AND p.is_published=1
+       ORDER BY f.id DESC`, [userId]
     );
-    const total = totalRows[0].total;
-
-    const [items] = await pool.query(
-      `SELECT p.id, p.title, p.description, p.zone, p.category_id, c.name as category_name, p.created_at
-       FROM plans p
-       JOIN categories c ON c.id = p.category_id
-       ${whereSql}
-       ORDER BY p.created_at DESC
-       LIMIT ? OFFSET ?`,
-      [...params, ps, offset]
-    );
-
-    res.json({ items, total, page: p, pageSize: ps });
-  } catch (err) {
-    next(err);
+    return res.json(rows);
+  } catch {
+    return res.status(500).json({ error: 'Error listando favoritos' });
   }
 }
 
+export async function add(req, res) {
+  try {
+    const userId = req.user.id;
+    const { patch_id } = req.body;
+    await pool.query('INSERT IGNORE INTO favorites (user_id, patch_id) VALUES (?,?)', [userId, patch_id]);
+    return res.status(201).json({ ok: true });
+  } catch {
+    return res.status(500).json({ error: 'Error agregando a favoritos' });
+  }
+}
+
+export async function remove(req, res) {
+  try {
+    const userId = req.user.id;
+    const patchId = Number(req.params.patch_id);
+    await pool.query('DELETE FROM favorites WHERE user_id=? AND patch_id=?', [userId, patchId]);
+    return res.json({ ok: true });
+  } catch {
+    return res.status(500).json({ error: 'Error removiendo favorito' });
+  }
+}

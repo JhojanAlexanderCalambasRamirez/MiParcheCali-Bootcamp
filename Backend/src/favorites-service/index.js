@@ -1,20 +1,16 @@
 import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
-import { config } from '../shared/config.js';
-import { dbPing } from '../shared/db.js';
-import { errorHandler } from '../shared/middlewares/errorHandler.js';
-import searchRoutes from './routes/patches.routes.js';
+import morgan from 'morgan';
+import { config } from '../../src/config.js';
+import routes from './routes/favorites.routes.js';
 
 const app = express();
-app.use(morgan('dev'));
-app.use(cors({ origin: config.corsOrigin }));
+app.use(cors({ origin: config.corsOrigin, credentials: true }));
 app.use(express.json());
+app.use(morgan('dev'));
 
-app.get('/health', async (_req, res) => res.json({ ok: await dbPing(), service: 'search' }));
-app.use('/api/search', searchRoutes);
-app.use(errorHandler);
+app.use('/favorites', routes);
 
-app.listen(config.ports?.search || 3003, () =>
-  console.log(`Search en http://localhost:${config.ports?.search || 3003}/api/search`)
-);
+app.listen(config.ports.favorites, () => {
+  console.log(`[favorites-service] puerto ${config.ports.favorites}`);
+});

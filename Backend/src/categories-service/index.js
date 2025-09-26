@@ -1,20 +1,16 @@
 import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
-import { config } from '../shared/config.js';
-import { dbPing } from '../shared/db.js';
-import { errorHandler } from '../shared/middlewares/errorHandler.js';
-import plansRoutes from './routes/categories.routes.js';
+import morgan from 'morgan';
+import { config } from '../../src/config.js';
+import categoriesRoutes from './routes/categories.routes.js';
 
 const app = express();
-app.use(morgan('dev'));
-app.use(cors({ origin: config.corsOrigin }));
+app.use(cors({ origin: config.corsOrigin, credentials: true }));
 app.use(express.json());
+app.use(morgan('dev'));
 
-app.get('/health', async (_req, res) => res.json({ ok: await dbPing(), service: 'plans' }));
-app.use('/api/plans', plansRoutes);
-app.use(errorHandler);
+app.use('/categories', categoriesRoutes);
 
-app.listen(config.ports?.plans || 3002, () =>
-  console.log(`Plans en http://localhost:${config.ports?.plans || 3002}/api/plans`)
-);
+app.listen(config.ports.categories, () => {
+  console.log(`[categories-service] puerto ${config.ports.categories}`);
+});

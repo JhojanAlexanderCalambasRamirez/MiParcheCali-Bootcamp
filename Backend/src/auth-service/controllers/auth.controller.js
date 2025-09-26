@@ -1,51 +1,82 @@
-import jwt from 'jsonwebtoken';
-import { pool } from '../shared/db.js';
-import { config } from '../shared/config.js';
-import { hashPassword, comparePassword } from '../shared/utils/password.js';
+import bcrypt from 'bcrypt';
+import { pool } from '../../db.js';
+import { signJwt } from '../../_shared/jwt.js';
 
-async function roleName(role_id) {
-  const [r] = await pool.query('SELECT name FROM roles WHERE id=?', [role_id]);
-  return r?.[0]?.name || null;
-}
+const ROL_ADMIN = 'ADMIN';
+const ROL_BUSCADOR = 'USUARIO_BUSCADOR';
+const ROL_EMPRESA  = 'USUARIO_EMPRESA';
 
-export async function register(req, res, next) {
+export async function register(req, res) {
   try {
-    const { full_name, email, password, role_id } = req.body;
-    if (!full_name || !email || !password || !role_id)
-      return res.status(422).json({ error: 'full_name, email, password y role_id son obligatorios' });
+    const { nombre, email, password, rol } = req.body;
+    if (![ROL_BUSCADOR, ROL_EMPRESA].includes(rol)) {
+      return res.status(400).json({ error: 'Rol inválido para registro público' });
+    }
+    const [exists] = await pool.query('SELECT id FROM users WHERE email=? AND deleted_at IS NULL', [email]);
+    if (exists.length) return res.status(409).json({ error: 'Email ya registrado' });
 
-    const [e] = await pool.query('SELECT id FROM users WHERE email=?', [email]);
-    if (e.length) return res.status(409).json({ error: 'Email ya registrado' });
-
-    const hash = await hashPassword(password);
-    const [ins] = await pool.query(
-      'INSERT INTO users (full_name, email, password_hash, role_id, is_active) VALUES (?,?,?,?,1)',
-      [full_name, email, hash, role_id]
+    const hash = await bcrypt.hash(password, 10);
+    const [r] = await pool.query(
+      'INSERT INTO users (nombre, email, password_hash, rol) VALUES (?,?,?,?)',
+      [nombre, email, hash, rol]
     );
-    const id = ins.insertId;
-    const role_name = await roleName(role_id);
 
-    const token = jwt.sign({ id, email, full_name, role_id, role_name }, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
-    res.status(201).json({ id, email, full_name, role_id, role_name, token });
-  } catch (err) { next(err); }
+    const user = { id: r.insertId, nombre, email, rol };
+    const token = signJwt({ id: user.id, email: user.email, rol: user.rol });
+    return res.status(201).json({ token, user });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: 'Error registrando usuario' });
+  }
 }
 
-export async function login(req, res, next) {
+export async function login(req, res) {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return res.status(422).json({ error: 'email y password son obligatorios' });
+    const [rows] = await pool.query(
+      'SELECT id, nombre, email, password_hash, rol FROM users WHERE email=? AND deleted_at IS NULL',
+      [email]
+    );
+    if (!rows.length) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-    const [r] = await pool.query('SELECT id,full_name,email,password_hash,role_id,is_active FROM users WHERE email=?', [email]);
-    const u = r?.[0];
-    if (!u || !u.is_active) return res.status(401).json({ error: 'Credenciales inválidas' });
-
-    const ok = await comparePassword(password, u.password_hash);
+    const u = rows[0];
+    const ok = await bcrypt.compare(password, u.password_hash);
     if (!ok) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-    const role_name = await roleName(u.role_id);
-    const token = jwt.sign({ id: u.id, email: u.email, full_name: u.full_name, role_id: u.role_id, role_name }, config.jwt.secret, { expiresIn: config.jwt.expiresIn });
-    res.json({ id: u.id, email: u.email, full_name: u.full_name, role_id: u.role_id, role_name, token });
-  } catch (err) { next(err); }
+    const user = { id: u.id, nombre: u.nombre, email: u.email, rol: u.rol };
+    const token = signJwt({ id: user.id, email: user.email, rol: user.rol });
+    return res.json({ token, user });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: 'Error en login' });
+  }
 }
 
-export async function me(req, res) { res.json({ user: req.user }); }
+export async function registerAdmin(req, res) {
+  try {
+    const { nombre, email, password } = req.body;
+
+    const [countRows] = await pool.query(
+      "SELECT COUNT(*) AS n FROM users WHERE rol='ADMIN' AND deleted_at IS NULL"
+    );
+    if (countRows[0].n > 0) {
+      return res.status(409).json({ error: 'Ya existe un ADMIN' });
+    }
+
+    const [exists] = await pool.query('SELECT id FROM users WHERE email=?', [email]);
+    if (exists.length) return res.status(409).json({ error: 'Email ya registrado' });
+
+    const hash = await bcrypt.hash(password, 10);
+    const [r] = await pool.query(
+      "INSERT INTO users (nombre, email, password_hash, rol) VALUES (?,?,?,'ADMIN')",
+      [nombre, email, hash]
+    );
+
+    const user = { id: r.insertId, nombre, email, rol: ROL_ADMIN };
+    const token = signJwt({ id: user.id, email: user.email, rol: user.rol });
+    return res.status(201).json({ token, user });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: 'Error creando ADMIN' });
+  }
+}

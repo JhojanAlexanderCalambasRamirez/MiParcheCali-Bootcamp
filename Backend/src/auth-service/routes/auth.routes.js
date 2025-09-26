@@ -1,11 +1,10 @@
 import { Router } from 'express';
-import { register, login, me } from './auth.controller.js';
-import { authGuard } from '../shared/middlewares/authGuard.js';
+import * as ctrl from '../controllers/auth.controller.js';
 
 const router = Router();
 
-router.post('/register', register);
-router.post('/login', login);
-router.get('/me', authGuard, me);
+router.post('/register', ctrl.register);        
+router.post('/login', ctrl.login);
+router.post('/register-admin', ctrl.registerAdmin); 
 
 export default router;
