@@ -1,4 +1,5 @@
 import 'dotenv/config';
+
 export const config = {
   db: {
     host: process.env.DB_HOST || 'localhost',
@@ -14,9 +15,9 @@ export const config = {
   corsOrigin: process.env.CORS_ORIGIN || '*',
   ports: {
     auth: Number(process.env.AUTH_PORT || 3001),
-    plans: Number(process.env.PLANS_PORT || 3002),
-    search: Number(process.env.SEARCH_PORT || 3003),
-    fav: Number(process.env.FAV_PORT || 3004)
+    users: Number(process.env.USERS_PORT || 3002),
+    patches: Number(process.env.PATCHES_PORT || 3003),
+    favorites: Number(process.env.FAVORITES_PORT || 3004),
+    categories: Number(process.env.CATEGORIES_PORT || 3005)
   }
 };
-

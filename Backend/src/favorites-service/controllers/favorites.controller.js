@@ -1,4 +1,4 @@
-import { pool } from '../shared/db.js';
+import { pool } from '../../db.js';
 
 export async function searchPlans(req, res, next) {
   try {
@@ -48,3 +48,4 @@ export async function searchPlans(req, res, next) {
     next(err);
   }
 }
+

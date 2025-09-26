@@ -4,7 +4,7 @@ import cors from 'cors';
 import { config } from '../shared/config.js';
 import { dbPing } from '../shared/db.js';
 import { errorHandler } from '../shared/middlewares/errorHandler.js';
-import searchRoutes from './search.routes.js';
+import searchRoutes from './routes/patches.routes.js';
 
 const app = express();
 app.use(morgan('dev'));
