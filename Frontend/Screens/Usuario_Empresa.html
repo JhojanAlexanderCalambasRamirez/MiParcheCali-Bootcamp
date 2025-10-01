@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Mi Parche Cali — Usuario Empresa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Ruta corregida al CSS -->
+  <link rel="stylesheet" href="/Frontend/Styles.css/base.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <div class="brand">Mi Parche Cali</div>
+        <div class="breadcrumbs">
+          <a href="./Inicio.html">Inicio</a> / Usuario_Empresa
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="btnBack">← Atrás</button>
+        <button class="btn btn-danger" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <!-- Formulario de creación de parche -->
+    <section>
+      <h2>Crear nuevo parche</h2>
+      <div id="fbForm" class="alert info" style="display:none;"></div>
+      <div class="grid-2">
+        <label>Título
+          <input id="fTitulo" class="input" placeholder="Ej.: Concierto, Ruta gastronómica...">
+        </label>
+        <label>Categoría
+          <select id="fCategoria" class="select"><option value="">Seleccione...</option></select>
+        </label>
+        <label>Zona
+          <input id="fZona" class="input" placeholder="Ej.: Norte, San Antonio, Granada...">
+        </label>
+        <label>Teléfono
+          <input id="fTelefono" class="input" placeholder="+57 300 0000000">
+        </label>
+        <label>Dirección
+          <input id="fDireccion" class="input" placeholder="Calle 00 # 00-00, Cali">
+        </label>
+        <label>Link red social
+          <input id="fLink" class="input" placeholder="https://instagram.com/mi_negocio">
+        </label>
+      </div>
+      <label>Descripción
+        <textarea id="fDescripcion" class="textarea" placeholder="Describe la actividad, requisitos, horarios, etc."></textarea>
+      </label>
+      <div class="grid-2">
+        <label>Portada (URL)
+          <input id="fCover" class="input" placeholder="https://...imagen.jpg">
+        </label>
+        <label>Fotos (hasta 3 URLs, separadas por salto de línea)
+          <textarea id="fFotos" class="textarea" placeholder="https://...foto1.jpg
+https://...foto2.jpg
+https://...foto3.jpg"></textarea>
+        </label>
+      </div>
+      <div class="actions" style="margin-top: 10px;">
+        <button class="btn btn-primary" id="btnCrear">Publicar parche</button>
+        <button class="btn" id="btnLimpiar">Limpiar</button>
+      </div>
+    </section>
+
+    <hr class="hr">
+
+    <!-- Lista de mis parches -->
+    <section>
+      <h2>Mis parches</h2>
+      <div id="fbList" class="alert info" style="display:none;"></div>
+      <table class="table" id="tblMine">
+        <thead>
+          <tr>
+            <th>ID</th><th>Título</th><th>Publicado</th><th>Creado</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Modal editar parche -->
+  <div class="modal-backdrop" id="editModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Editar parche</div>
+        <button class="btn btn-ghost" onclick="closeModal('editModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="fbEdit" class="alert info" style="display:none;"></div>
+        <label>Título
+          <input id="eTitulo" class="input">
+        </label>
+        <label>Publicado
+          <select id="ePublicado" class="select">
+            <option value="">(no cambiar)</option>
+            <option value="1">Publicado</option>
+            <option value="0">Oculto</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('editModal')">Cancelar</button>
+        <button class="btn btn-primary" id="btnGuardarEdit">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Modal para SUBIR FOTOS desde el PC -->
+  <div class="modal-backdrop" id="uploadModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Subir fotos al parche</div>
+        <button class="btn btn-ghost" onclick="closeModal('uploadModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="fbUpload" class="alert info" style="display:none;"></div>
+
+        <!-- Campo de selección de archivos -->
+        <label>Selecciona hasta 3 imágenes (JPG, PNG, WEBP o GIF, máx. 5MB c/u)
+          <input id="uFiles" type="file" class="input" accept="image/*" multiple>
+        </label>
+
+        <!-- Vista previa simple -->
+        <div id="uPreview" class="cards" style="grid-template-columns: repeat(3, 1fr);"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('uploadModal')">Cancelar</button>
+        <button class="btn btn-primary" id="btnDoUpload">Subir</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ------------------ Config común ------------------ */
+    const API = {
+      PATCHES: 'http://localhost:3003',
+      CATEGORIES: 'http://localhost:3005/categories'
+    };
+    const Session = {
+      token() { return localStorage.getItem('token'); },
+      user() { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
+      clear() { localStorage.removeItem('token'); localStorage.removeItem('user'); }
+    };
+    const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` }});
+    function show(el, text, type='info') { el.className = `alert ${type}`; el.textContent = text; el.style.display = 'block'; }
+    function hide(el){ el.style.display='none'; }
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    // Guard de rol
+    (function guard() {
+      const u = Session.user();
+      if (!u || u.rol !== 'USUARIO_EMPRESA') window.location.href = './Inicio.html';
+    })();
+
+    // Header actions
+    document.getElementById('btnLogout').onclick = () => { Session.clear(); window.location.href = './Inicio.html'; };
+    document.getElementById('btnBack').onclick = () => { history.length > 1 ? history.back() : window.location.href = './Inicio.html'; };
+
+    // Cargar categorías
+    async function loadCategories() {
+      try {
+        const { data } = await axios.get(API.CATEGORIES);
+        const sel = document.getElementById('fCategoria');
+        sel.innerHTML = '<option value="">Seleccione...</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+      } catch { /* tolerar */ }
+    }
+
+    // Crear parche
+    document.getElementById('btnCrear').onclick = async () => {
+      const fb = document.getElementById('fbForm');
+      hide(fb);
+
+      const titulo = document.getElementById('fTitulo').value.trim();
+      const categoria_id = document.getElementById('fCategoria').value;
+      const zona = document.getElementById('fZona').value.trim();
+      const telefono = document.getElementById('fTelefono').value.trim();
+      const direccion = document.getElementById('fDireccion').value.trim();
+      const link_red_social = document.getElementById('fLink').value.trim();
+      const descripcion = document.getElementById('fDescripcion').value.trim();
+      const cover_image_url = document.getElementById('fCover').value.trim();
+      const fotosTxt = document.getElementById('fFotos').value.trim();
+      const fotos = fotosTxt ? fotosTxt.split('\n').map(s => s.trim()).filter(Boolean) : [];
+
+      if (!titulo || !categoria_id || !zona || !telefono || !direccion || !descripcion) {
+        show(fb, 'Completa los campos obligatorios.', 'error'); return;
+      }
+
+      try {
+        await axios.post(`${API.PATCHES}/patches`, {
+          titulo, categoria_id, descripcion, zona, telefono, direccion,
+          link_red_social: link_red_social || null,
+          cover_image_url: cover_image_url || null,
+          fotos
+        }, authHeader());
+        show(fb, 'Parche creado correctamente.', 'success');
+        document.getElementById('btnLimpiar').click();
+        await loadMine();
+      } catch (e) {
+        show(fb, e?.response?.data?.error || 'No fue posible crear el parche.', 'error');
+      }
+    };
+
+    // Limpiar formulario
+    document.getElementById('btnLimpiar').onclick = () => {
+      ['fTitulo','fZona','fTelefono','fDireccion','fLink','fDescripcion','fCover','fFotos'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('fCategoria').value = '';
+    };
+
+    // Listar mis parches (agregamos botón "Subir fotos")
+    async function loadMine() {
+      const fb = document.getElementById('fbList');
+      hide(fb);
+      const tbody = document.querySelector('#tblMine tbody');
+      tbody.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
+      try {
+        const { data } = await axios.get(`${API.PATCHES}/my/patches`, authHeader());
+        if (!data.length) {
+          tbody.innerHTML = '<tr><td colspan="5">Aún no tienes parches creados.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.map(p => `
+          <tr>
+            <td>${p.id}</td>
+            <td>${p.titulo}</td>
+            <td>${p.is_published ? 'Sí' : 'No'}</td>
+            <td>${new Date(p.created_at).toLocaleString()}</td>
+            <td style="display:flex; gap:6px; flex-wrap: wrap;">
+              <button class="btn" onclick="openEdit(${p.id}, '${encodeURIComponent(p.titulo)}', ${p.is_published ? 1 : 0})">Editar</button>
+              <button class="btn btn-danger" onclick="delPatch(${p.id})">Eliminar</button>
+              <!-- ✅ Nuevo botón para subir fotos -->
+              <button class="btn btn-primary" onclick="openUpload(${p.id})">Subir fotos</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        show(fb, e?.response?.data?.error || 'Error cargando tus parches.', 'error');
+        tbody.innerHTML = '';
+      }
+    }
+
+    // Editar (abrir modal con título y publicado)
+    let editId = null;
+    function openEdit(id, titulo, publicado) {
+      editId = id;
+      document.getElementById('eTitulo').value = decodeURIComponent(titulo);
+      document.getElementById('ePublicado').value = String(publicado);
+      document.getElementById('fbEdit').style.display = 'none';
+      openModal('editModal');
+    }
+    window.openEdit = openEdit;
+
+    document.getElementById('btnGuardarEdit').onclick = async () => {
+      const fb = document.getElementById('fbEdit'); fb.style.display='none';
+      try {
+        const payload = {};
+        const t = document.getElementById('eTitulo').value.trim();
+        const pub = document.getElementById('ePublicado').value;
+        if (t) payload.titulo = t;
+        if (pub !== '') payload.is_published = Number(pub);
+        await axios.patch(`${API.PATCHES}/patches/${editId}`, payload, authHeader());
+        closeModal('editModal');
+        await loadMine();
+      } catch (e) {
+        show(fb, e?.response?.data?.error || 'No fue posible guardar.', 'error');
+      }
+    };
+
+    // Eliminar (soft delete)
+    async function delPatch(id) {
+      if (!confirm('¿Eliminar este parche?')) return;
+      const fb = document.getElementById('fbList'); fb.style.display='none';
+      try {
+        await axios.delete(`${API.PATCHES}/patches/${id}`, authHeader());
+        await loadMine();
+      } catch (e) {
+        show(fb, e?.response?.data?.error || 'No fue posible eliminar.', 'error');
+      }
+    }
+    window.delPatch = delPatch;
+
+    /* ================== SUBIR FOTOS DESDE PC (FRONTEND) ================== */
+    const MAX_FILES = 3;
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    let uploadPatchId = null;
+
+    // Abre el modal de subida y prepara el estado
+    function openUpload(patchId) {
+      uploadPatchId = patchId;
+      const fb = document.getElementById('fbUpload');
+      const input = document.getElementById('uFiles');
+      const preview = document.getElementById('uPreview');
+      input.value = '';       // limpiar selección previa
+      preview.innerHTML = ''; // limpiar previews
+      hide(fb);
+      openModal('uploadModal');
+    }
+    window.openUpload = openUpload;
+
+    // Vista previa simple y validaciones cliente
+    document.getElementById('uFiles').addEventListener('change', (e) => {
+      const files = Array.from(e.target.files || []);
+      const fb = document.getElementById('fbUpload');
+      const preview = document.getElementById('uPreview');
+      hide(fb);
+      preview.innerHTML = '';
+
+      if (files.length > MAX_FILES) {
+        show(fb, `Máximo ${MAX_FILES} archivos. Has seleccionado ${files.length}.`, 'error');
+        e.target.value = '';
+        return;
+      }
+
+      const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+      for (const f of files) {
+        if (!allowed.includes(f.type)) {
+          show(fb, `Tipo no permitido: ${f.name} (${f.type}).`, 'error');
+          e.target.value = ''; return;
+        }
+        if (f.size > MAX_SIZE) {
+          show(fb, `Archivo demasiado grande: ${f.name} (>5MB).`, 'error');
+          e.target.value = ''; return;
+        }
+      }
+
+      // Previsualizar
+      files.forEach(f => {
+        const url = URL.createObjectURL(f);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${url}" alt="${f.name}">
+          <div class="card-body">
+            <div class="card-title">${f.name}</div>
+            <div class="card-meta">${(f.size/1024).toFixed(1)} KB</div>
+          </div>
+        `;
+        preview.appendChild(card);
+      });
+    });
+
+    // Enviar FormData -> /patches/:id/photos
+    document.getElementById('btnDoUpload').onclick = async () => {
+      const fb = document.getElementById('fbUpload');
+      hide(fb);
+
+      if (!uploadPatchId) { show(fb, 'No hay parche seleccionado.', 'error'); return; }
+      const input = document.getElementById('uFiles');
+      const files = Array.from(input.files || []);
+      if (!files.length) { show(fb, 'Selecciona al menos una imagen.', 'error'); return; }
+
+      const fd = new FormData();
+      for (const f of files) fd.append('photos', f); // campo esperado por el backend
+
+      try {
+        // Importante: NO forzar 'Content-Type'; axios setea multipart/boundary automáticamente.
+        await axios.post(`${API.PATCHES}/patches/${uploadPatchId}/photos`, fd, {
+          headers: { Authorization: `Bearer ${Session.token()}` }
+        });
+        show(fb, 'Fotos subidas correctamente. La primera puede usarse como portada.', 'success');
+        // Opcional: cerrar modal y refrescar lista
+        setTimeout(async () => {
+          closeModal('uploadModal');
+          await loadMine();
+        }, 900);
+      } catch (e) {
+        show(fb, e?.response?.data?.error || 'No fue posible subir las fotos.', 'error');
+      }
+    };
+
+    // Boot
+    (async function init() {
+      await loadCategories();
+      await loadMine();
+    })();
+  </script>
+</body>
+</html>

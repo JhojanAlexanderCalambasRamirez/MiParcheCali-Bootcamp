@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Mi Parche Cali — Usuario Buscador</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/Frontend/Styles.css/base.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <div class="brand">Mi Parche Cali</div>
+        <div class="breadcrumbs">
+          <a href="./Inicio.html">Inicio</a> / Usuario_Buscador
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="btnBack">← Atrás</button>
+        <button class="btn" id="btnOnlyFav">Ver favoritos</button>
+        <button class="btn" id="btnAll">Todos</button>
+        <button class="btn btn-danger" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </header>
+    
+    <div class="toolbar">
+      <input id="txtQ" type="search" class="input" placeholder="Buscar por título, descripción, zona o dirección...">
+      <select id="selCat" class="select">
+        <option value="">Todas las categorías</option>
+      </select>
+      <button class="btn btn-primary" id="btnSearch">Buscar</button>
+      <button class="btn" id="btnReload">Recargar</button>
+    </div>
+
+    <div id="feedback" class="alert info" style="display:none;"></div>
+
+    <!-- Listado de tarjetas -->
+    <div id="grid" class="cards"></div>
+  </div>
+
+  <!-- Modal de detalle del parche -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="dTitle">Detalle del parche</div>
+        <button class="btn btn-ghost" onclick="closeModal('detailModal')">✕</button>
+      </div>
+      <div class="modal-body" id="dBody">
+        <!-- Se completa por JS con: Título, Categoría, Descripción, Zona, Teléfono, Dirección, link y 3 fotos -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeModal('detailModal')">Cerrar</button>
+        <button class="btn" id="dFavBtn">★ Favorito</button>
+        <button class="btn btn-primary" id="dShareBtn">Compartir</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ------------------ Config común ------------------ */
+    const API = {
+      AUTH: 'http://localhost:3001/auth',
+      USERS: 'http://localhost:3002/users',
+      PATCHES: 'http://localhost:3003',
+      FAVORITES: 'http://localhost:3004/favorites',
+      CATEGORIES: 'http://localhost:3005/categories'
+    };
+    const Session = {
+      token() { return localStorage.getItem('token'); },
+      user() { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
+      clear() { localStorage.removeItem('token'); localStorage.removeItem('user'); }
+    };
+    const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` }});
+
+    function openModal(id)  { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function showMsg(text, type='info') {
+      const fb = document.getElementById('feedback');
+      fb.className = `alert ${type}`; fb.textContent = text; fb.style.display = 'block';
+      setTimeout(() => fb.style.display = 'none', 3000);
+    }
+
+    // Guard de rol
+    (function guard() {
+      const u = Session.user();
+      if (!u || u.rol !== 'USUARIO_BUSCADOR') window.location.href = './Inicio.html';
+    })();
+
+    // Controles UI
+    document.getElementById('btnLogout').onclick = () => { Session.clear(); window.location.href = './Inicio.html'; };
+    document.getElementById('btnBack').onclick = () => { history.length > 1 ? history.back() : window.location.href = './Inicio.html'; };
+    document.getElementById('btnReload').onclick = () => load();
+    document.getElementById('btnSearch').onclick = () => load();
+    document.getElementById('btnOnlyFav').onclick = () => load(true);
+    document.getElementById('btnAll').onclick = () => { document.getElementById('txtQ').value=''; document.getElementById('selCat').value=''; load(); };
+
+    // Estado de detalle visible
+    let currentPatch = null;
+    document.getElementById('dShareBtn').onclick = async () => {
+      if (!currentPatch) return;
+      const shareText = `Mira este plan en Mi Parche Cali: ${currentPatch.titulo}`;
+      const url = window.location.href.split('#')[0] + `#parche-${currentPatch.id}`;
+      try {
+        if (navigator.share) await navigator.share({ title: 'Mi Parche Cali', text: shareText, url });
+        else {
+          await navigator.clipboard.writeText(`${shareText}\n${url}`);
+          showMsg('Enlace copiado al portapapeles.', 'success');
+        }
+      } catch { showMsg('No se pudo compartir.', 'error'); }
+    };
+
+    document.getElementById('dFavBtn').onclick = async () => {
+      if (!currentPatch) return;
+      try {
+        // Intentamos agregar; si ya existía, hacemos remove
+        await axios.post(API.FAVORITES, { patch_id: currentPatch.id }, authHeader());
+        showMsg('Añadido a favoritos', 'success');
+      } catch (e) {
+        // Si hay error, intentamos remover (flujo de alternancia rápido)
+        try {
+          await axios.delete(`${API.FAVORITES}/${currentPatch.id}`, authHeader());
+          showMsg('Removido de favoritos', 'success');
+        } catch {
+          showMsg('No fue posible actualizar favorito.', 'error');
+        }
+      }
+    };
+
+    // Carga de categorías para el select
+    async function loadCategories() {
+      try {
+        const { data } = await axios.get(API.CATEGORIES);
+        const sel = document.getElementById('selCat');
+        sel.innerHTML = '<option value="">Todas las categorías</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+      } catch { /* tolerar error: se puede buscar sin categorías */ }
+    }
+
+    // Renderiza tarjetas de resultados
+    function renderList(list) {
+      const grid = document.getElementById('grid');
+      if (!list.length) {
+        grid.innerHTML = '<div class="alert info">No se encontraron parches con los filtros seleccionados.</div>';
+        return;
+      }
+      grid.innerHTML = list.map(p => `
+        <article class="card">
+          <img src="${p.cover_image_url || 'https://picsum.photos/seed/parche'+p.id+'/600/400'}" alt="Portada">
+          <div class="card-body">
+            <h3 class="card-title">${p.titulo}</h3>
+            <div class="card-meta">${p.categoria || ''}</div>
+            <div class="card-actions">
+              <button class="btn btn-primary" onclick="openDetail(${p.id})">Ver detalle</button>
+              <button class="btn" onclick="toggleFav(${p.id})">★ Favorito</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Abrir detalle en modal
+    async function openDetail(id) {
+      try {
+        const { data } = await axios.get(`${API.PATCHES}/patches/${id}`);
+        currentPatch = data;
+        document.getElementById('dTitle').textContent = data.titulo;
+        document.getElementById('dBody').innerHTML = `
+          <div class="grid-2">
+            <div>
+              <p><b>Categoría:</b> ${data.categoria}</p>
+              <p><b>Zona:</b> ${data.zona}</p>
+              <p><b>Teléfono:</b> ${data.telefono}</p>
+              <p><b>Dirección:</b> ${data.direccion}</p>
+              <p><b>Red social:</b> ${data.link_red_social ? `<a href="${data.link_red_social}" target="_blank">Abrir</a>` : '—'}</p>
+            </div>
+            <div>
+              <p><b>Descripción:</b></p>
+              <div class="alert info">${data.descripcion}</div>
+            </div>
+          </div>
+          <hr class="hr">
+          <div class="cards" style="grid-template-columns: repeat(3, 1fr);">
+            ${(data.fotos || []).map(f => `<img src="${f.url}" style="height:140px; object-fit:cover; border-radius:10px; border:1px solid #1e293b;">`).join('')}
+          </div>
+        `;
+        openModal('detailModal');
+      } catch {
+        showMsg('No se pudo cargar el detalle.', 'error');
+      }
+    }
+    window.openDetail = openDetail; // Exponer a HTML
+
+    // Alternar favorito desde la tarjeta
+    async function toggleFav(id) {
+      try {
+        await axios.post(API.FAVORITES, { patch_id: id }, authHeader());
+        showMsg('Añadido a favoritos', 'success');
+      } catch {
+        try {
+          await axios.delete(`${API.FAVORITES}/${id}`, authHeader());
+          showMsg('Removido de favoritos', 'success');
+        } catch {
+          showMsg('No fue posible actualizar favorito.', 'error');
+        }
+      }
+    }
+    window.toggleFav = toggleFav;
+
+    // Cargar listado (todos o sólo favoritos)
+    async function load(onlyFavorites = false) {
+      const q = document.getElementById('txtQ').value.trim();
+      const categoria_id = document.getElementById('selCat').value;
+
+      try {
+        if (onlyFavorites) {
+          // Lista de favoritos: endpoint dedicado
+          const { data } = await axios.get(API.FAVORITES, authHeader());
+          renderList(data);
+        } else {
+          // Listado público con filtros
+          const params = new URLSearchParams();
+          if (q) params.set('q', q);
+          if (categoria_id) params.set('categoria_id', categoria_id);
+          const { data } = await axios.get(`${API.PATCHES}/patches?${params.toString()}`);
+          renderList(data);
+        }
+      } catch (e) {
+        renderList([]);
+        showMsg(e?.response?.data?.error || 'Error consultando parches.', 'error');
+      }
+    }
+
+    // Boot
+    (async function init() {
+      await loadCategories();
+      await load(false);
+    })();
+  </script>
+</body>
+</html>

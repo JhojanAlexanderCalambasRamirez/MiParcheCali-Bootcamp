@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Mi Parche Cali — Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/Frontend/Styles.css/base.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <div class="brand">Mi Parche Cali — Admin</div>
+        <div class="breadcrumbs">
+          <a href="./Inicio.html">Inicio</a> / Admin
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="btnBack">← Atrás</button>
+        <button class="btn btn-danger" id="btnLogout">Cerrar sesión</button>
+      </div>
+    </header>
+
+    <div class="alert info">
+      Como admin puedes listar/eliminar <b>usuarios</b> y <b>parches</b>. El listado de parches usa el endpoint público (publicados).
+    </div>
+
+    <section>
+      <h2>Usuarios</h2>
+      <div class="actions" style="margin-bottom:10px; gap:6px;">
+        <select id="uRol" class="select" style="max-width:220px;">
+          <option value="">Todos los roles</option>
+          <option value="ADMIN">ADMIN</option>
+          <option value="USUARIO_EMPRESA">USUARIO_EMPRESA</option>
+          <option value="USUARIO_BUSCADOR">USUARIO_BUSCADOR</option>
+        </select>
+        <button class="btn" id="uReload">Recargar</button>
+      </div>
+      <table class="table" id="tblUsers">
+        <thead>
+          <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Activo</th><th>Creado</th><th>Acciones</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <hr class="hr">
+
+    <section>
+      <h2>Parches publicados</h2>
+      <div class="actions" style="margin-bottom:10px;">
+        <button class="btn" id="pReload">Recargar</button>
+      </div>
+      <div id="grid" class="cards"></div>
+    </section>
+  </div>
+
+  <script>
+    const API = {
+      USERS: 'http://localhost:3002/users',
+      PATCHES: 'http://localhost:3003'
+    };
+    const Session = {
+      token() { return localStorage.getItem('token'); },
+      user() { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
+      clear() { localStorage.removeItem('token'); localStorage.removeItem('user'); }
+    };
+    const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` }});
+
+    (function guard() {
+      const u = Session.user();
+      if (!u || u.rol !== 'ADMIN') window.location.href = './Inicio.html';
+    })();
+
+    document.getElementById('btnLogout').onclick = () => { Session.clear(); window.location.href = './Inicio.html'; };
+    document.getElementById('btnBack').onclick = () => { history.length > 1 ? history.back() : window.location.href = './Inicio.html'; };
+
+    async function loadUsers() {
+      const rol = document.getElementById('uRol').value;
+      const params = new URLSearchParams({ page: 1, limit: 50 });
+      if (rol) params.set('rol', rol);
+      const tb = document.querySelector('#tblUsers tbody');
+      tb.innerHTML = '<tr><td colspan="7">Cargando...</td></tr>';
+      try {
+        const { data } = await axios.get(`${API.USERS}?${params.toString()}`, authHeader());
+        tb.innerHTML = data.data.map(u => `
+          <tr>
+            <td>${u.id}</td>
+            <td>${u.nombre}</td>
+            <td>${u.email}</td>
+            <td><span class="badge">${u.rol}</span></td>
+            <td>${u.is_active ? 'Sí' : 'No'}</td>
+            <td>${new Date(u.created_at).toLocaleString()}</td>
+            <td>
+              ${u.rol !== 'ADMIN' ? `<button class="btn btn-danger" onclick="delUser(${u.id})">Eliminar</button>` : '<span class="badge">Protegido</span>'}
+            </td>
+          </tr>
+        `).join('');
+      } catch {
+        tb.innerHTML = '<tr><td colspan="7">Error cargando usuarios.</td></tr>';
+      }
+    }
+    window.delUser = async function(id) {
+      if (!confirm('¿Eliminar este usuario?')) return;
+      try {
+        await axios.delete(`${API.USERS}/${id}`, authHeader());
+        await loadUsers();
+      } catch { alert('No fue posible eliminar.'); }
+    };
+    document.getElementById('uReload').onclick = loadUsers;
+    document.getElementById('uRol').onchange = loadUsers;
+
+    async function loadPatches() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '<div class="alert info">Cargando...</div>';
+      try {
+        const { data } = await axios.get(`${API.PATCHES}/patches`);
+        grid.innerHTML = data.map(p => `
+          <article class="card">
+            <img src="${p.cover_image_url || 'https://picsum.photos/seed/admin'+p.id+'/600/400'}" alt="Portada">
+            <div class="card-body">
+              <h3 class="card-title">${p.titulo}</h3>
+              <div class="card-meta">${p.categoria || ''}</div>
+              <div class="card-actions">
+                <button class="btn btn-danger" onclick="delPatch(${p.id})">Eliminar</button>
+              </div>
+            </div>
+          </article>
+        `).join('');
+      } catch {
+        grid.innerHTML = '<div class="alert error">Error cargando parches.</div>';
+      }
+    }
+    window.delPatch = async function(id) {
+      if (!confirm('¿Eliminar este parche?')) return;
+      try {
+        await axios.delete(`http://localhost:3003/patches/${id}`, authHeader());
+        await loadPatches();
+      } catch { alert('No fue posible eliminar el parche.'); }
+    };
+    document.getElementById('pReload').onclick = loadPatches;
+
+    (async function init() {
+      await loadUsers();
+      await loadPatches();
+    })();
+  </script>
+</body>
+</html>
