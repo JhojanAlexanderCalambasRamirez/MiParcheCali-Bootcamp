@@ -1,265 +1,456 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Empresa - Parcháte Cali</title>
-  <link rel="stylesheet" href="../styles/usuario.empresa.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- ✅ usa la carpeta Styles (mayúscula) -->
+  <link rel="stylesheet" href="../Styles/usuario.empresa.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 <header class="header-logo">
-    <h1 style="font-size: 60px;">Párchate Cali</h1>
-    <nav>
-      <ul>
-        <li><a href="#catalogo-planes">Planes</a></li>
-        <li><a href="#modal3">Perfil</a></li>
-        <li><a href="bienvenido.html">Cerrar sesión</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-<section class="banner-principal">
+  <h1 style="font-size: 60px;">Párchate Cali</h1>
+  <nav>
+    <ul>
+      <li><a href="#catalogo-planes">Planes</a></li>
+      <li><a href="#modalPerfil">Perfil</a></li>
+      <li><a href="#" id="lnkLogout">Cerrar sesión</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="banner-principal">
     <h2>Gestión de Planes</h2>
-  <p>Atrae a los caleños con planes únicos y emocionantes.</p>
-      <a href="#modal1" class="button">Crear nuevo plan</a>
-      <a href="#modal2" class="button">Editar plan existente</a>
-    </section>
-  </main>
+    <p>Atrae a los caleños con planes únicos y emocionantes.</p>
+    <a href="#modalCrear" class="button">Crear nuevo plan</a>
+  </section>
+</main>
+
 <div>
-  <br>
+  <br />
   <div class="contenedor">
-    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqGeI0Ep6NFmy-WCGN98tZTI3VnMUKp6xDfEsvqIVC2Sxve28GDiNbx64hwnf_Xv6dBa7c72Mc4dpgaJDW_Itblh_3BrhmT3BfFs3Bh3eEbHKdo5NDDPamvwEdyIgnE-qi7Qc0Z=w648-h374-n-k-no" alt="Imagen 1">
-    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noSCdi8R_u_FIEOK-saxUNjfMdxvtA-dMKnCKy-wCqUNSn7E9uQK3OWWwW_TkHzC81DKx-BlCQ5SVvKfQ4U5-SWT9Ni5OHvPiFUvdVy5khtKWrGLyLUoviYgUlFcragzcW7FpM=w648-h374-n-k-no" alt="Imagen 2">
-    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npcjg6k-PqfliqmbbNogSDq0DyAEPExBqy1Ln5xj9x3bYe_U-X6aj-K0YHYT6SaKH0MM_k3gAoCMOCYOYO2v3Ylsr1UH1i9O-A-N02sK-2CmKVDi2N1FagVDg_vqgO_IE2gwjJV=w648-h374-n-k-no" alt="Imagen 3">
+    <!-- (Opcional) cambia a ../Imagenes si tu carpeta no es "Images" -->
+    <img src="../Imagenes/calibanner.jpg" alt="Imagen 1" />
+    <img src="../Imagenes/ermita.jpg" alt="Imagen 2" />
+    <img src="../Imagenes/museo.jpg" alt="Imagen 3" />
   </div>
-  <div id="modal4" class="modal">
-    <div class="modal-content">      
-      <div class="modal-img"></div>
-      <div class="modal-form">
-        <a href="#" class="close">&times;</a>
-        <h2 style="color: #006bb3;">Plan Gastronómico en la Zona Rosa</h2>      
-      <div class="info">
-        <span><b>Tipo de plan:</b> Gastronómico 🍴</span>
-        <span><b>Número de personas:</b> 2 a 4</span>
-        <span><b>Ubicación:</b>Zona Rosa, Cali</span>
+</div>
+
+<!-- ===== PERFIL ===== -->
+<div id="modalPerfil" class="modal">
+  <div class="modal-content">
+    <div class="modal-img"></div>
+    <div class="modal-form">
+      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <h1 style="color: #006bb3;">PERFIL :</h1>
+      <p>Usuario Empresa</p>
+      <div id="perfilBody">
+        <!-- se inyecta con JS -->
       </div>
-      <p>
-        Vive una experiencia culinaria única en la Zona Rosa de Cali. 
-        Degusta la mejor comida típica vallecaucana con un toque moderno, 
-        acompañada de música en vivo y un ambiente vibrante.  
-        ¡Un plan perfecto para disfrutar con amigos o en pareja!
-      </p>
-      <a href="#modal4" class="editarplan">Editar Plan</a>
+      <button type="button" class="btn-submit" onclick="closeHashModal()">Listo</button>
     </div>
   </div>
 </div>
+
+<!-- ===== CREAR PARCHE ===== -->
+<div id="modalCrear" class="modal">
+  <div class="modal-content">
+    <div class="modal-form">
+      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <h2 style="color: #006bb3; font-size: 32px; font-family: 'Poppins','Roboto',sans-serif;">Nuevo parche</h2>
+
+      <div id="fbCrear" class="alert error" style="display:none;"></div>
+
+      <form id="formCrear" novalidate>
+        <label>Título
+          <input id="iTitulo" type="text" placeholder="Ej: Ruta gastronómica en Granada" required />
+        </label>
+
+        <label>Categoría
+          <select id="iCategoria" required>
+            <option value="">Cargando...</option>
+          </select>
+        </label>
+
+        <label>Zona
+          <input id="iZona" type="text" placeholder="Ej: Norte, San Antonio, Granada..." required />
+        </label>
+
+        <label>Teléfono
+          <input id="iTelefono" type="text" placeholder="Ej: +57 300 0000000" required />
+        </label>
+
+        <label>Dirección
+          <input id="iDireccion" type="text" placeholder="Calle 00 # 00-00, Cali" required />
+        </label>
+
+        <label>Descripción
+          <textarea id="iDescripcion" placeholder="Describe la actividad, horarios, requisitos..." required></textarea>
+        </label>
+
+        <label>Link red social (opcional)
+          <input id="iLink" type="url" placeholder="https://instagram.com/mi_negocio" />
+        </label>
+
+        <label>Portada (URL opcional)
+          <input id="iCover" type="url" placeholder="https://...imagen.jpg" />
+        </label>
+
+        <label>Fotos (opcional, hasta 3 imágenes)
+          <input id="iFotos" type="file" accept="image/*" multiple />
+          <small>Si seleccionas imágenes, se subirán tras crear el parche (máx. 3 archivos, 5MB c/u).</small>
+        </label>
+
+        <button type="submit" class="btn-submit">Guardar plan</button>
+      </form>
+    </div>
+  </div>
 </div>
-<!-- VENTANA FLOTANTE PERFIL-->
-<div id="modal3" class="modal">
-    <div class="modal-content">
-      
-      <div class="modal-img"></div>
 
+<!-- ===== EDITAR PARCHE ===== -->
+<div id="modalEditar" class="modal">
+  <div class="modal-content">
+    <div class="modal-form">
+      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <h2 style="color:#006bb3;">Editar parche</h2>
 
-      <div class="modal-form">
-        <a href="#" class="close">&times;</a>
-        <h1 style="color: #006bb3;">PERFIL :</h1>
-        <p>Usuario</p>
-        <form>
-          <label for="destino">Nombre Usuario:</label>
-          <p>Nicolás Hincapié Reyes</p>
+      <div id="fbEditar" class="alert error" style="display:none;"></div>
 
-          <label for="transporte">Correo:</label>
-          <p>nicolas.hincapie@example.com</p>
-          <label for="dias">No. teléfono</label>
-          <p>1234567890</p>
-          <label for="transporte">Ubicación:</label>
-          <p>Cali, Colombia</p>
-          <button type="submit" class="btn-submit">Listo</button>
-        </form>
+      <label>Título
+        <input id="eTitulo" type="text" />
+      </label>
+      <label>Publicado
+        <select id="ePublicado">
+          <option value="">(no cambiar)</option>
+          <option value="1">Publicado</option>
+          <option value="0">Oculto</option>
+        </select>
+      </label>
+
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button id="btnGuardarEdit" class="btn-submit">Guardar</button>
+        <button class="btn-submit" style="background:#eee; color:#333;" onclick="closeHashModal()">Cancelar</button>
       </div>
     </div>
   </div>
-
-
-
-  <!-- VENTANA FLOTANTE CREAR PLAN-->
-<div id="modal1" class="modal">
-    <div class="modal-content">
-      
-      <div class="modal-form">
-        <a href="#" class="close">&times;</a>
-        <h2 style="color: #006bb3; font-size: 50px; font-family: 'Poppins', 'Roboto', sans-serif;">Nuevo parche</h2>
-        
-        <form>
-          <label for="destino">Nombre parche:</label>
-          <input type="text" id="destino" name="destino" placeholder="Ej: Sato">
-
-          <label for="transporte">Categoría:</label>
-          <select id="transporte" name="transporte">
-            <option>Seleccionar</option>
-            <option>Comida</option>
-            <option>Arte</option>
-            <option>Musica</option>
-            <option>Soplar</option>
-          </select>
-
-          <label for="dias">No. telefono:</label>
-          <input type="number" id="dias" name="dias" min="1" placeholder="Ej: 1234567890">
-
-          <label for="transporte">Ubicación:</label>
-          <select id="transporte" name="transporte">
-            <option>Seleccionar</option>
-            <option>Norte</option>
-            <option>Sur</option>
-            <option>Este</option>
-            <option>Oeste</option>
-          </select>
-          <label for="destino">Descripción:</label>
-          <input type="text" id="destino" name="destino" placeholder="Mi negocio es...">
-          <label for="destino">Dirección:</label>
-          <input type="text" id="destino" name="destino" placeholder="Calle 1a4 #66-20">
-          <label for="destino">Dirección:</label>
-          <input type="text" id="destino" name="destino" placeholder=https://www.mipagina.com>
-          <label for="destino">Fotos del parche:</label>
-          <input type="file" accept="image/*" name="imagen_usuario">
-          <button type="submit" class="btn-submit">Guardar plan</button>
-          
-        </form>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- VENTANA FLOTANTE EDITAR PLAN-->
-  <div id="modal2" class="modal">
-    <div class="modal-content">
-      
-      <div class="modal-img"></div>
-      <div class="modal-form">
-        <a href="#" class="close">&times;</a>
-        <h2 style="color: #006bb3;">Nuevo parche </h2>
-        
-        <form>
-          <form class="search-box" action="resultados.html" method="get">
-            <input type="search" name="q" placeholder="Buscar destino...">
-            <button type="submit">🔍</button>
-          </form>
-
-          <label for="transporte">Categoría:</label>
-          <select id="transporte" name="transporte">
-            <option>Seleccionar</option>
-            <option>Comida</option>
-            <option>Arte</option>
-            <option>Musica</option>
-            <option>Soplar</option>
-          </select>
-          <button type="submit" class="btn-submit">Buscar plan</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="cp">
-    <label for="toggle-filtros" class="izquierda">
-      <a href="#miModal" class="btn">FILTRAR</a>
-    </label>
-    <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
-
- 
-  <!-- Modal -->
-  <div id="miModal" class="overlay">
-    <div class="popup">
-      <h3><B>FILTRAR POR:</B></h3>
-      <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
-<div class="lista-zonas">
-  <p>Selecciona una zona:</p>
-    <select id="opciones" name="opciones">
-      <option value="op1">Zonas</option>
-      <option value="op1">Norte</option>
-      <option value="op2">Centro</option>
-      <option value="op3">Sur</option>
-      <option value="op4">Occidente</option>
-      <option value="op4">Oriente</option>
-    </select>
-  </div>
-<div class="lista-zonas">
-  <p>Categorías:</p>
-    <select id="opciones" name="opciones">
-      <option value="op1">Comida</option>
-      <option value="op1">Nocturno</option>
-      <option value="op2">Musica</option>
-      <option value="op3">Arte</option>
-      <option value="op4">Soplar</option>
-      <option value="op4">Deporte</option>
-    </select>
 </div>
-      <a href="admin.html" class="aplicar">Aplicar</a>
-      <a href="#" class="close">Cerrar</a>
+
+<!-- ===== SUBIR FOTOS ===== -->
+<div id="modalUpload" class="modal">
+  <div class="modal-content">
+    <div class="modal-form">
+      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <h2 style="color:#006bb3;">Subir fotos al parche</h2>
+      <div id="fbUpload" class="alert error" style="display:none;"></div>
+
+      <label>Selecciona hasta 3 imágenes (JPG, PNG, WEBP o GIF, máx. 5MB c/u)
+        <input id="uFiles" type="file" accept="image/*" multiple />
+      </label>
+
+      <div id="uPreview" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px;"></div>
+
+      <div style="display:flex; gap:8px; margin-top:10px;">
+        <button id="btnDoUpload" class="btn-submit">Subir</button>
+        <button class="btn-submit" style="background:#eee; color:#333;" onclick="closeHashModal()">Cancelar</button>
+      </div>
     </div>
   </div>
-  </div>
+</div>
 
-  <div class="menu-filtros">
-    <h4>Filtrar por:</h4>
-    <label><input type="checkbox"> Precio bajo</label>
-    <label><input type="checkbox"> Premium</label>
-    <label><input type="checkbox"> Empresarial</label>
-    <label><input type="checkbox"> VIP</label>
-  </div>
-<div class="catalogo">
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 1">
-      <h3>Plan Musica</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
+<!-- ===== CATÁLOGO DE MIS PARCHES ===== -->
+<div class="cp">
+  <span class="centro" id="catalogo-planes">MIS PARCHES</span>
+</div>
+<div id="gridMine" class="catalogo" style="padding: 0 12px;"></div>
 
-    <div class="tarjeta"> 
-      <img src="../Imagenes/comida.jpg" alt="Plan 2">
-      <h3>Plan Comida</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 3">
-      <h3>Plan Musica</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/Deporte.jpg" alt="Plan 4">
-      <h3>Plan Deporte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-  </div>
-<br>
-<div class="catalogo2">
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 5">
-      <h3>Plan Arte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/Deporte.jpg" alt="Plan 6">
-      <h3>Plan Deporte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/Deporte.jpg" alt="Plan 7">
-      <h3>Plan Deporte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-    <div class="tarjeta">
-      <img src="../Imagenes/museo.jpg" alt="Plan 8">
-      <h3>Plan Arte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-  </div>
-  <br>
 <footer>
-    <p>&copy; 2015 Parchate Cali</p>
+  <p>&copy; 2025 Parchate Cali</p>
 </footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  /* =======================
+     Configuración & sesión
+     ======================= */
+  const API = {
+    PATCHES: 'http://localhost:3003',
+    CATEGORIES: 'http://localhost:3005/categories'
+  };
+
+  const Session = {
+    token(){ return localStorage.getItem('token'); },
+    user(){ try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
+    clear(){ localStorage.removeItem('token'); localStorage.removeItem('user'); }
+  };
+  const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` } });
+
+  function requireEmpresa(){
+    const u = Session.user();
+    if (!u || u.rol !== 'USUARIO_EMPRESA'){
+      window.location.href = './bienvenido.html';
+      return false;
+    }
+    return true;
+  }
+
+  document.getElementById('lnkLogout').addEventListener('click', (e) => {
+    e.preventDefault();
+    Session.clear();
+    window.location.href = '../Screens/bienvenido.html';
+  });
+
+  // Modal hash helpers
+  function closeHashModal(e){
+    if (e) e.preventDefault();
+    history.pushState('', document.title, window.location.pathname + window.location.search);
+  }
+
+  // UI helpers
+  function show(el, text, type='error'){
+    el.className = `alert ${type}`;
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+  function hide(el){ el.style.display = 'none'; }
+
+  // Imagen placeholder
+  function placeholderImg(text='Sin portada'){
+    const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
+    return 'data:image/svg+xml;charset=utf-8,'+svg;
+  }
+  function patchAsset(url){
+    if (!url) return placeholderImg();
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/patches')) return API.PATCHES + url;
+    return url;
+  }
+
+  /* =======================
+     Perfil
+     ======================= */
+  function loadProfile(){
+    const u = Session.user() || {};
+    const el = document.getElementById('perfilBody');
+    el.innerHTML = `
+      <p><b>Nombre:</b> ${u.nombre || '-'}</p>
+      <p><b>Email:</b> ${u.email || '-'}</p>
+      <p><b>Rol:</b> ${u.rol || '-'}</p>
+    `;
+  }
+
+  /* =======================
+     Categorías
+     ======================= */
+  async function loadCategories(){
+    const sel = document.getElementById('iCategoria');
+    sel.innerHTML = '<option value="">Cargando...</option>';
+    try{
+      const { data } = await axios.get(API.CATEGORIES);
+      sel.innerHTML = '<option value="">Seleccione...</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    }catch{
+      sel.innerHTML = '<option value="">(error)</option>';
+    }
+  }
+
+  /* =======================
+     Crear parche
+     ======================= */
+  const MAX_FILES = 3;
+  const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+  document.getElementById('iFotos').addEventListener('change', (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > MAX_FILES){ alert('Máximo 3 archivos'); e.target.value=''; return; }
+    for (const f of files){
+      if (f.size > MAX_SIZE){ alert(`"${f.name}" supera 5MB`); e.target.value=''; return; }
+      if (!/^image\//.test(f.type)){ alert(`"${f.name}" no es una imagen`); e.target.value=''; return; }
+    }
+  });
+
+  async function uploadPhotos(patchId, files){
+    if (!files || !files.length) return;
+    const fd = new FormData();
+    for (const f of files) fd.append('photos', f);
+    await axios.post(`${API.PATCHES}/patches/${patchId}/photos`, fd, authHeader()); // axios pone boundary solo
+  }
+
+  document.getElementById('formCrear').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fb = document.getElementById('fbCrear'); hide(fb);
+
+    const titulo       = document.getElementById('iTitulo').value.trim();
+    const categoria_id = document.getElementById('iCategoria').value;
+    const zona         = document.getElementById('iZona').value.trim();
+    const telefono     = document.getElementById('iTelefono').value.trim();
+    const direccion    = document.getElementById('iDireccion').value.trim();
+    const descripcion  = document.getElementById('iDescripcion').value.trim();
+    const link_red_social = document.getElementById('iLink').value.trim();
+    const cover_image_url = document.getElementById('iCover').value.trim();
+    const files = Array.from(document.getElementById('iFotos').files || []);
+
+    if (!titulo || !categoria_id || !zona || !telefono || !direccion || !descripcion){
+      show(fb, 'Completa los campos obligatorios.'); return;
+    }
+
+    try{
+      const { data } = await axios.post(`${API.PATCHES}/patches`, {
+        titulo, categoria_id, descripcion, zona, telefono, direccion,
+        link_red_social: link_red_social || null,
+        cover_image_url: cover_image_url || null,
+        fotos: [] // (URLs opcionales, aquí usamos subida de archivos abajo)
+      }, authHeader());
+
+      // Subir fotos si el usuario seleccionó archivos
+      if (files.length){
+        try { await uploadPhotos(data.id, files); }
+        catch { /* tolerar error de fotos sin bloquear el flujo */ }
+      }
+
+      // Limpiar y cerrar
+      e.target.reset();
+      closeHashModal();
+      await loadMine();
+    }catch(err){
+      show(fb, err?.response?.data?.error || 'No fue posible crear el parche.');
+    }
+  });
+
+  /* =======================
+     Mis parches (listar, editar, eliminar, subir fotos)
+     ======================= */
+  function cardMineHTML(p){
+    const img = patchAsset(p.cover_image_url);
+    const pub = p.is_published ? 'Publicado' : 'Oculto';
+    const created = new Date(p.created_at).toLocaleString();
+    return `
+      <div class="tarjeta">
+        <img src="${img}" alt="${p.titulo}">
+        <h3>${p.titulo}</h3>
+        <p style="margin:6px 0; font-size:.9rem; color:#666;">${pub} — ${created}</p>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <a href="#modalEditar" class="ver" onclick="openEdit(${p.id}, '${encodeURIComponent(p.titulo)}', ${p.is_published ? 1 : 0}); return true;">Editar</a>
+          <a href="#" class="ver" style="background:#ffe8e8; color:#a10000;" onclick="delPatch(${p.id}); return false;">Eliminar</a>
+          <a href="#modalUpload" class="ver" onclick="openUpload(${p.id}); return true;">Subir fotos</a>
+        </div>
+      </div>
+    `;
+  }
+
+  async function loadMine(){
+    const grid = document.getElementById('gridMine');
+    grid.innerHTML = '<div class="tarjeta"><h3>Cargando...</h3></div>';
+    try{
+      const { data } = await axios.get(`${API.PATCHES}/my/patches`, authHeader());
+      if (!data.length){
+        grid.innerHTML = '<div class="tarjeta"><h3>Aún no tienes parches creados.</h3></div>';
+        return;
+      }
+      grid.innerHTML = data.map(cardMineHTML).join('');
+    }catch(e){
+      grid.innerHTML = '<div class="tarjeta"><h3>Error cargando tus parches</h3></div>';
+    }
+  }
+
+  // Editar
+  let editId = null;
+  function openEdit(id, titulo, publicado){
+    editId = id;
+    document.getElementById('eTitulo').value = decodeURIComponent(titulo);
+    document.getElementById('ePublicado').value = String(publicado);
+    hide(document.getElementById('fbEditar'));
+  }
+  window.openEdit = openEdit;
+
+  document.getElementById('btnGuardarEdit').addEventListener('click', async () => {
+    const fb = document.getElementById('fbEditar'); hide(fb);
+    try{
+      const payload = {};
+      const t = document.getElementById('eTitulo').value.trim();
+      const pub = document.getElementById('ePublicado').value;
+      if (t) payload.titulo = t;
+      if (pub !== '') payload.is_published = Number(pub);
+      await axios.patch(`${API.PATCHES}/patches/${editId}`, payload, authHeader());
+      closeHashModal();
+      await loadMine();
+    }catch(e){
+      show(fb, e?.response?.data?.error || 'No fue posible guardar.');
+    }
+  });
+
+  // Eliminar
+  async function delPatch(id){
+    if (!confirm('¿Eliminar este parche?')) return;
+    try{
+      await axios.delete(`${API.PATCHES}/patches/${id}`, authHeader());
+      await loadMine();
+    }catch(e){
+      alert(e?.response?.data?.error || 'No fue posible eliminar.');
+    }
+  }
+  window.delPatch = delPatch;
+
+  // Subir fotos
+  let uploadPatchId = null;
+  function openUpload(patchId){
+    uploadPatchId = patchId;
+    const input = document.getElementById('uFiles');
+    const prev  = document.getElementById('uPreview');
+    input.value = '';
+    prev.innerHTML = '';
+    hide(document.getElementById('fbUpload'));
+  }
+  window.openUpload = openUpload;
+
+  document.getElementById('uFiles').addEventListener('change', (e) => {
+    const files = Array.from(e.target.files || []);
+    const prev = document.getElementById('uPreview'); prev.innerHTML = '';
+    if (files.length > MAX_FILES){ alert('Máximo 3 archivos'); e.target.value=''; return; }
+    for (const f of files){
+      if (f.size > MAX_SIZE){ alert(`"${f.name}" supera 5MB`); e.target.value=''; return; }
+      if (!/^image\//.test(f.type)){ alert(`"${f.name}" no es una imagen`); e.target.value=''; return; }
+      const url = URL.createObjectURL(f);
+      const img = document.createElement('img');
+      img.src = url; img.style.width='100%'; img.style.height='120px'; img.style.objectFit='cover';
+      prev.appendChild(img);
+    }
+  });
+
+  document.getElementById('btnDoUpload').addEventListener('click', async () => {
+    const fb = document.getElementById('fbUpload'); hide(fb);
+    if (!uploadPatchId){ show(fb,'No hay parche seleccionado'); return; }
+    const files = Array.from(document.getElementById('uFiles').files || []);
+    if (!files.length){ show(fb,'Selecciona al menos una imagen'); return; }
+    try{
+      await uploadPhotos(uploadPatchId, files);
+      show(fb, 'Fotos subidas correctamente', 'success');
+      setTimeout(async () => { closeHashModal(); await loadMine(); }, 900);
+    }catch(e){
+      show(fb, e?.response?.data?.error || 'No fue posible subir las fotos');
+    }
+  });
+
+  /* =======================
+     Boot
+     ======================= */
+  (async function init(){
+    if (!requireEmpresa()) return;
+
+    loadProfile();
+    await loadCategories();
+    await loadMine();
+
+    // Abrir modales por hash
+    window.addEventListener('hashchange', () => {
+      const h = location.hash;
+      if (h === '#modalPerfil')  document.getElementById('modalPerfil').style.display = 'block';
+      if (h === '#modalCrear')   document.getElementById('modalCrear').style.display = 'block';
+      if (h === '#modalEditar')  document.getElementById('modalEditar').style.display = 'block';
+      if (h === '#modalUpload')  document.getElementById('modalUpload').style.display = 'block';
+    });
+  })();
+</script>
 </body>
 </html>

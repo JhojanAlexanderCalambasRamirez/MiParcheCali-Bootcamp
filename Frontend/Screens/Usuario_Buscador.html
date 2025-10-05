@@ -1,332 +1,393 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Usuario - Parcháte Cali</title>
-  <link rel="stylesheet" href="../styles/usuario_buscador.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- ✅ corrige la ruta: tu carpeta es Styles -->
+  <link rel="stylesheet" href="../Styles/usuario_buscador.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 <header class="header-logo">
-    <h1 style="font-size: 60px;">Párchate Cali</h1>
-    <nav>
-      <ul>
-        <li><a href="#catalogo-planes">Planes</a></li>
-        <li><a href="bienvenido.html">Cerrar sesión</a></li>
-        <li><a href="#catalogo-favoritos">Favoritos</a></li>
-      </ul>
-    </nav>
-  </header>
+  <h1 style="font-size: 60px;">Párchate Cali</h1>
+  <nav>
+    <ul>
+      <li><a href="#catalogo-planes">Planes</a></li>
+      <li><a href="#catalogo-favoritos">Favoritos</a></li>
+      <li><a href="#" id="lnkLogout">Cerrar sesión</a></li>
+    </ul>
+  </nav>
+</header>
+
 <div>
-  <br>
+  <br />
   <div class="contenedor">
-    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqGeI0Ep6NFmy-WCGN98tZTI3VnMUKp6xDfEsvqIVC2Sxve28GDiNbx64hwnf_Xv6dBa7c72Mc4dpgaJDW_Itblh_3BrhmT3BfFs3Bh3eEbHKdo5NDDPamvwEdyIgnE-qi7Qc0Z=w648-h374-n-k-no" alt="Imagen 1">
-    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noSCdi8R_u_FIEOK-saxUNjfMdxvtA-dMKnCKy-wCqUNSn7E9uQK3OWWwW_TkHzC81DKx-BlCQ5SVvKfQ4U5-SWT9Ni5OHvPiFUvdVy5khtKWrGLyLUoviYgUlFcragzcW7FpM=w648-h374-n-k-no" alt="Imagen 2">
-    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npcjg6k-PqfliqmbbNogSDq0DyAEPExBqy1Ln5xj9x3bYe_U-X6aj-K0YHYT6SaKH0MM_k3gAoCMOCYOYO2v3Ylsr1UH1i9O-A-N02sK-2CmKVDi2N1FagVDg_vqgO_IE2gwjJV=w648-h374-n-k-no" alt="Imagen 3">
+    <!-- (Opcional) ajusta a ../Imagenes si tu carpeta no es "Images" -->
+    <img src="../Imagenes/calibanner.jpg" alt="Imagen 1" />
+    <img src="../Imagenes/ermita.jpg" alt="Imagen 2" />
+    <img src="../Imagenes/museo.jpg" alt="Imagen 3" />
   </div>
-<!-- VENTANA FLOTANTE PERFIL-->
-<div id="modal3" class="modal">
+
+  <!-- ===== PERFIL (relleno dinámico) ===== -->
+  <div id="modalPerfil" class="modal">
     <div class="modal-content">
-      
       <div class="modal-img"></div>
-
-
       <div class="modal-form">
-        <a href="#" class="close">&times;</a>
+        <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
         <h1 style="color: #006bb3;">PERFIL :</h1>
         <p>Usuario</p>
-        <form>
-          <label for="destino">Nombre Usuario:</label>
-          <p>Nicolás Hincapié Reyes</p>
-
-          <label for="transporte">Correo:</label>
-          <p>nicolas.hincapie@example.com</p>
-          <label for="dias">No. teléfono</label>
-          <p>1234567890</p>
-          <label for="transporte">Ubicación:</label>
-          <p>Cali, Colombia</p>
-          <button type="submit" class="btn-submit">Listo</button>
-        </form>
+        <div id="perfilBody">
+          <!-- se inyecta con JS -->
+        </div>
       </div>
     </div>
   </div>
 
-<div id="modal4" class="modal">
-    <div class="modal-content">      
-      <div class="modal-img"></div>
-      <div class="modal-form">
-        <a href="#closeusu" class="close">&times;</a>
-        <h2 style="color: #006bb3;">Plan Gastronómico en la Zona Rosa</h2>      
-      <div class="info">
-        <span><b>Tipo de plan:</b> Gastronómico 🍴</span>
-        <span><b>Número de personas:</b> 2 a 4</span>
-        <span><b>Ubicación:</b>Zona Rosa, Cali</span>
-      </div>
-      <p>
-        Vive una experiencia culinaria única en la Zona Rosa de Cali. 
-        Degusta la mejor comida típica vallecaucana con un toque moderno, 
-        acompañada de música en vivo y un ambiente vibrante.  
-        ¡Un plan perfecto para disfrutar con amigos o en pareja!
-      </p>
-      <a href="#" class="favoritos">Quitar de favoritos</a>
-    </div>
-  </div>
-</div>
-</div>
-
-
-
-  <!-- VENTANA FLOTANTE CREAR PLAN-->
-<div id="modal1" class="modal">
+  <!-- ===== DETALLE PARCHE (dinámico) ===== -->
+  <div id="modalDetalle" class="modal">
     <div class="modal-content">
-      
-      <div class="modal-img"></div>
-
-
+      <div class="modal-img" id="dCover" style="background:#f2f2f2;"></div>
       <div class="modal-form">
-        <a href="#" class="close">&times;</a>
-        <h2 style="color: #006bb3;">Nuevo parche  </h2>
-        
-        <form>
-          <label for="destino">Nombre parche:</label>
-          <input type="text" id="destino" name="destino" placeholder="Ej: Sato">
+        <!-- ⛳️ Botón X controlado por JS -->
+        <a href="#" class="close" id="btnCloseDetalle">&times;</a>
+        <h2 id="dTitulo" style="color:#006bb3;">Detalle del parche</h2>
+        <div class="info">
+          <span><b>Categoría:</b> <span id="dCategoria">—</span></span>
+          <span><b>Zona:</b> <span id="dZona">—</span></span>
+          <span><b>Teléfono:</b> <span id="dTelefono">—</span></span>
+          <span><b>Dirección:</b> <span id="dDireccion">—</span></span>
+        </div>
+        <p id="dDescripcion">Cargando...</p>
+        <p><b>Red social:</b> <a id="dLink" href="#" target="_blank" rel="noopener">—</a></p>
 
-          <label for="transporte">Categoría:</label>
-          <select id="transporte" name="transporte">
-            <option>Seleccionar</option>
-            <option>Comida</option>
-            <option>Arte</option>
-            <option>Musica</option>
-            <option>Soplar</option>
-          </select>
+        <div id="dFotos" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:10px;"></div>
 
-          <label for="dias">No. personas sugeridas:</label>
-          <input type="number" id="dias" name="dias" min="1">
-
-          <label for="transporte">Ubicación:</label>
-          <select id="transporte" name="transporte">
-            <option>Seleccionar</option>
-            <option>Norte</option>
-            <option>Sur</option>
-            <option>Este</option>
-            <option>Oeste</option>
-          </select>
-
-          <button type="submit" class="btn-submit">Guardar plan</button>
-        </form>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button id="btnFavToggle" class="btn-submit">Agregar a favoritos</button>
+          <button id="btnShare" class="btn-submit" style="background:#eef;">Compartir</button>
+        </div>
       </div>
     </div>
   </div>
-
-
-  <!-- VENTANA FLOTANTE EDITAR PLAN-->
-  <div id="modal2" class="modal">
-    <div class="modal-content">
-      
-      <div class="modal-img"></div>
-      <div class="modal-form">
-        <a href="#" class="close">&times;</a>
-        <h2 style="color: #006bb3;">Nuevo parche</h2>
-        
-        <form>
-          <form class="search-box" action="resultados.html" method="get">
-            <input type="search" name="q" placeholder="Buscar destino...">
-            <button type="submit">🔍</button>
-          </form>
-
-          <label for="transporte">Categoría:</label>
-          <select id="transporte" name="transporte">
-            <option>Seleccionar</option>
-            <option>Comida</option>
-            <option>Arte</option>
-            <option>Musica</option>
-            <option>Soplar</option>
-          </select>
-          <button type="submit" class="btn-submit">Buscar plan</button>
-        </form>
-      </div>
-    </div>
-  </div>
-  <div id="closeusu"></div>
-  <div class="cp">
-    <label for="toggle-filtros" class="izquierda">
-      <a href="#miModal" class="btn">FILTRAR</a>
-    </label>
-    <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
-
- 
-  <!-- Modal -->
-  <div id="miModal" class="overlay">
-    <div class="popup">
-      <h3><B>FILTRAR POR:</B></h3>
-      <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
-<div class="lista-zonas">
-  <p>Selecciona una zona:</p>
-    <select id="opciones" name="opciones">
-      <option value="op1">Zonas</option>
-      <option value="op1">Norte</option>
-      <option value="op2">Centro</option>
-      <option value="op3">Sur</option>
-      <option value="op4">Occidente</option>
-      <option value="op4">Oriente</option>
-    </select>
-  </div>
-<div class="lista-zonas">
-  <p>Categorías:</p>
-    <select id="opciones" name="opciones">
-      <option value="op1">Comida</option>
-      <option value="op1">Nocturno</option>
-      <option value="op2">Musica</option>
-      <option value="op3">Arte</option>
-      <option value="op4">Soplar</option>
-      <option value="op4">Deporte</option>
-    </select>
 </div>
-      <a href="admin.html" class="aplicar">Aplicar</a>
-      <a href="#" class="close">Cerrar</a>
-    </div>
-  </div>
-  </div>
 
-  <div class="menu-filtros">
-    <h4>Filtrar por:</h4>
-    <label><input type="checkbox"> Precio bajo</label>
-    <label><input type="checkbox"> Premium</label>
-    <label><input type="checkbox"> Empresarial</label>
-    <label><input type="checkbox"> VIP</label>
-  </div>
-
-<div class="catalogo">
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 1">
-      <h3>Plan Musica</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta"> 
-      <img src="../Imagenes/comida.jpg" alt="Plan 2">
-      <h3>Plan Comida</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 3">
-      <h3>Plan Musica</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/Deporte.jpg" alt="Plan 4">
-      <h3>Plan Deporte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-  </div>
-<br>
-<div class="catalogo2">
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 5">
-      <h3>Plan Arte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/Deporte.jpg" alt="Plan 6">
-      <h3>Plan Deporte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/Deporte.jpg" alt="Plan 7">
-      <h3>Plan Deporte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-    <div class="tarjeta">
-      <img src="../Imagenes/museo.jpg" alt="Plan 8">
-      <h3>Plan Arte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-  </div>
-  <br>
-
-  <!-- PANEL DE FAVORITOS -->
-   <div class="cp">
-    <label for="toggle-filtros" class="izquierda">
-      <a href="#miModal" class="btn">FILTRAR</a>
-    </label>
-    <span class="centro" id="catalogo-favoritos">PLANES FAVORITOS</span>
-
- 
-  <!-- Modal -->
-  <div id="miModal" class="overlay">
-    <div class="popup">
-      <h3><B>FILTRAR POR:</B></h3>
-      <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
-<div class="lista-zonas">
-  <p>Selecciona una zona:</p>
-    <select id="opciones" name="opciones">
-      <option value="op1">Zonas</option>
-      <option value="op1">Norte</option>
-      <option value="op2">Centro</option>
-      <option value="op3">Sur</option>
-      <option value="op4">Occidente</option>
-      <option value="op4">Oriente</option>
-    </select>
-  </div>
-<div class="lista-zonas">
-  <p>Categorías:</p>
-    <select id="opciones" name="opciones">
-      <option value="op1">Comida</option>
-      <option value="op1">Nocturno</option>
-      <option value="op2">Musica</option>
-      <option value="op3">Arte</option>
-      <option value="op4">Soplar</option>
-      <option value="op4">Deporte</option>
-    </select>
+<!-- ====== FILTROS ====== -->
+<div class="cp">
+  <label class="izquierda">
+    <a href="#miModal" class="btn">FILTRAR</a>
+  </label>
+  <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
 </div>
-      <a href="admin.html" class="aplicar">Aplicar</a>
-      <a href="#" class="close">Cerrar</a>
+
+<!-- Modal de filtros (dinámico con categorías reales) -->
+<div id="miModal" class="overlay">
+  <div class="popup">
+    <h3><b>FILTRAR POR:</b></h3>
+    <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
+
+    <div class="lista-zonas">
+      <p>Búsqueda por texto (zona, título, dirección...):</p>
+      <input id="fQ" type="text" placeholder="Ej.: Norte, San Antonio, concierto..." />
     </div>
+
+    <div class="lista-zonas">
+      <p>Categorías:</p>
+      <select id="fCategoria">
+        <option value="">Todas</option>
+        <!-- se cargan con JS -->
+      </select>
+    </div>
+
+    <a href="#" class="aplicar" id="btnApplyFilters">Aplicar</a>
+    <a href="#" class="close" onclick="closeFilters(event)">Cerrar</a>
   </div>
-  </div>
+</div>
 
-  <div class="menu-filtros">
-    <h4>Filtrar por:</h4>
-    <label><input type="checkbox"> Precio bajo</label>
-    <label><input type="checkbox"> Premium</label>
-    <label><input type="checkbox"> Empresarial</label>
-    <label><input type="checkbox"> VIP</label>
-  </div>
+<!-- GRID de parches (dinámico) -->
+<div id="gridParches" class="catalogo" style="padding: 0 12px;"></div>
 
-<div class="catalogo">
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 1">
-      <h3>Plan Musica</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
+<br />
 
-    <div class="tarjeta"> 
-      <img src="../Imagenes/comida.jpg" alt="Plan 2">
-      <h3>Plan Comida</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
+<!-- ====== FAVORITOS ====== -->
+<div class="cp">
+  <span class="centro" id="catalogo-favoritos">PLANES FAVORITOS</span>
+</div>
+<div id="gridFavs" class="catalogo" style="padding: 0 12px;"></div>
 
-    <div class="tarjeta">
-      <img src="../Imagenes/musica.jpg" alt="Plan 3">
-      <h3>Plan Musica</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-
-    <div class="tarjeta">
-      <img src="../Imagenes/Deporte.jpg" alt="Plan 4">
-      <h3>Plan Deporte</h3>
-      <a href="#modal4" class="ver">Ver</a>
-    </div>
-  </div>
-<br>
-  <br>
 <footer>
-    <p>&copy; 2015 Parchate Cali</p>
+  <p>&copy; 2025 Parchate Cali</p>
 </footer>
+
+<!-- ====== SCRIPTS ====== -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  /* ========== Config y sesión ========== */
+  const API = {
+    PATCHES: 'http://localhost:3003',
+    FAVORITES: 'http://localhost:3004/favorites',
+    CATEGORIES: 'http://localhost:3005/categories'
+  };
+
+  const Session = {
+    token(){ return localStorage.getItem('token'); },
+    user(){ try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
+    clear(){ localStorage.removeItem('token'); localStorage.removeItem('user'); }
+  };
+  const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` } });
+
+  function requireRole(role){
+    const u = Session.user();
+    if (!u || u.rol !== role){
+      window.location.href = './bienvenido.html';
+      return false;
+    }
+    return true;
+  }
+
+  document.getElementById('lnkLogout').addEventListener('click', (e) => {
+    e.preventDefault();
+    Session.clear();
+    window.location.href = './bienvenido.html';
+  });
+
+  /* ========== Helpers UI ========== */
+  function placeholderImg(text='Sin portada'){
+    const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
+    return 'data:image/svg+xml;charset=utf-8,'+svg;
+  }
+  function patchAsset(url){
+    if (!url) return placeholderImg();
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/patches')) return API.PATCHES + url; // servido por el microservicio
+    return url;
+  }
+  function cardHTML(p, isFav=false){
+    const img = patchAsset(p.cover_image_url);
+    const fav = isFav ? '<span class="badge" style="background:#ffe08a; padding:2px 6px; border-radius:6px;">★ Favorito</span>' : '';
+    return `
+      <div class="tarjeta">
+        <img src="${img}" alt="${p.titulo}">
+        <h3>${p.titulo}</h3>
+        <div style="display:flex; gap:6px; align-items:center; justify-content:space-between;">
+          <a href="#modalDetalle" class="ver" onclick="openDetalle(${p.id}); return true;">Ver</a>
+          ${fav}
+        </div>
+      </div>
+    `;
+  }
+  function closeHashModal(e){ if(e) e.preventDefault(); history.pushState('', document.title, window.location.pathname + window.location.search); }
+
+  /* ========== Estado en memoria ========== */
+  let favSet = new Set();   // ids de parches en favoritos
+  let lastQuery = {};       // últimos filtros aplicados
+
+  /* ========== Perfil ========== */
+  function loadProfile(){
+    const u = Session.user() || {};
+    const el = document.getElementById('perfilBody');
+    el.innerHTML = `
+      <p><b>Nombre:</b> ${u.nombre || '-'}</p>
+      <p><b>Email:</b> ${u.email || '-'}</p>
+      <p><b>Rol:</b> ${u.rol || '-'}</p>
+    `;
+  }
+
+  /* ========== Categorías para filtros ========== */
+  async function loadCategories(){
+    const sel = document.getElementById('fCategoria');
+    sel.innerHTML = '<option value="">Todas</option>';
+    try{
+      const { data } = await axios.get(API.CATEGORIES);
+      sel.innerHTML += data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    }catch{ /* tolerar */ }
+  }
+
+  /* ========== Parches (catálogo público) ========== */
+  async function loadPatches(params = {}){
+    lastQuery = params;
+    const grid = document.getElementById('gridParches');
+    grid.innerHTML = '<div class="tarjeta"><h3>Cargando...</h3></div>';
+    try{
+      const { data } = await axios.get(`${API.PATCHES}/patches`, { params });
+      if (!data.length){
+        grid.innerHTML = '<div class="tarjeta"><h3>No hay resultados</h3></div>';
+        return;
+      }
+      grid.innerHTML = data.map(p => cardHTML(p, favSet.has(p.id))).join('');
+    }catch(e){
+      grid.innerHTML = '<div class="tarjeta"><h3>Error cargando parches</h3></div>';
+    }
+  }
+
+  /* ========== Favoritos ========== */
+  async function loadFavorites(){
+    const cont = document.getElementById('gridFavs');
+    cont.innerHTML = '<div class="tarjeta"><h3>Cargando favoritos...</h3></div>';
+    try{
+      const { data } = await axios.get(API.FAVORITES, authHeader());
+
+      // Soportar dos formatos: [ {patch_id, patch:{...}} ] o [ { id, titulo, cover_image_url, ... } ]
+      const items = Array.isArray(data) ? data : [];
+      const patches = items.map(it => {
+        if (it.patch) return it.patch;
+        if (it.id)    return it;
+        if (it.patch_id) return { id: it.patch_id, titulo: '(parche)', cover_image_url: null };
+        return null;
+      }).filter(Boolean);
+
+      favSet = new Set(patches.map(p => p.id)); // refresca set
+      if (!patches.length){
+        cont.innerHTML = '<div class="tarjeta"><h3>Todavía no tienes favoritos</h3></div>';
+        return;
+      }
+      cont.innerHTML = patches.map(p => cardHTML(p, true)).join('');
+    }catch(e){
+      cont.innerHTML = '<div class="tarjeta"><h3>Error cargando favoritos</h3></div>';
+    }
+  }
+
+  async function toggleFavorite(patchId){
+    try{
+      if (favSet.has(patchId)){
+        await axios.delete(`${API.FAVORITES}/${patchId}`, authHeader());
+        favSet.delete(patchId);
+      } else {
+        await axios.post(API.FAVORITES, { patch_id: patchId }, authHeader());
+        favSet.add(patchId);
+      }
+      // refrescar paneles
+      await loadFavorites();
+      await loadPatches(lastQuery);
+      // actualizar texto del botón del modal
+      updateFavButton(patchId);
+    }catch(e){
+      alert(e?.response?.data?.error || 'No fue posible actualizar favoritos.');
+    }
+  }
+
+  function updateFavButton(currentPatchId){
+    const btn = document.getElementById('btnFavToggle');
+    if (!btn) return;
+    const isFav = favSet.has(currentPatchId);
+    btn.textContent = isFav ? 'Quitar de favoritos' : 'Agregar a favoritos';
+  }
+
+  /* ========== Modal helpers (abrir/cerrar robusto) ========== */
+  function showModal(id){
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex'; // usa flex para mantener centrado
+  }
+  function hideModal(id){
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+    // limpiar hash (si lo hubiera)
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+  }
+  // Cerrar con la X
+  document.getElementById('btnCloseDetalle')?.addEventListener('click', (e) => {
+    e.preventDefault(); hideModal('modalDetalle');
+  });
+  // Cerrar con tecla ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') hideModal('modalDetalle');
+  });
+  // Cerrar al hacer click fuera del contenido
+  document.getElementById('modalDetalle')?.addEventListener('click', (e) => {
+    if (e.target.id === 'modalDetalle') hideModal('modalDetalle');
+  });
+
+  /* ========== Detalle ========== */
+  async function openDetalle(id){
+    try{
+      const { data } = await axios.get(`${API.PATCHES}/patches/${id}`);
+      document.getElementById('dTitulo').textContent = data.titulo;
+      document.getElementById('dCategoria').textContent = data.categoria || '—';
+      document.getElementById('dZona').textContent = data.zona || '—';
+      document.getElementById('dTelefono').textContent = data.telefono || '—';
+      document.getElementById('dDireccion').textContent = data.direccion || '—';
+      document.getElementById('dDescripcion').textContent = data.descripcion || '—';
+
+      const link = document.getElementById('dLink');
+      if (data.link_red_social){
+        link.href = data.link_red_social; link.textContent = data.link_red_social;
+      } else { link.href = '#'; link.textContent = '—'; }
+
+      const cover = patchAsset(data.cover_image_url);
+      document.getElementById('dCover').style.backgroundImage = `url('${cover}')`;
+      document.getElementById('dCover').style.backgroundSize = 'cover';
+      document.getElementById('dCover').style.backgroundPosition = 'center';
+
+      const gal = document.getElementById('dFotos');
+      gal.innerHTML = (data.fotos || []).map(f => `<img src="${patchAsset(f.url)}" alt="" />`).join('');
+
+      // fav
+      const btnFav = document.getElementById('btnFavToggle');
+      btnFav.onclick = () => toggleFavorite(id);
+      updateFavButton(id);
+
+      // compartir
+      document.getElementById('btnShare').onclick = async () => {
+        const shareData = {
+          title: 'Parchate Cali',
+          text: data.titulo,
+          url: window.location.origin + '/Frontend/Screens/usuario_buscador.html#parche-' + id
+        };
+        try {
+          if (navigator.share) await navigator.share(shareData);
+          else {
+            await navigator.clipboard.writeText(shareData.url);
+            alert('Enlace copiado al portapapeles.');
+          }
+        } catch {}
+      };
+
+      // 👉 abrir el modal de forma robusta
+      showModal('modalDetalle');
+
+    }catch(e){
+      alert(e?.response?.data?.error || 'No fue posible cargar el detalle.');
+    }
+  }
+
+  /* ========== Filtros ==========
+     q: texto (zona, título, dirección, etc.)
+     categoria_id: id seleccionado
+  ================================= */
+  document.getElementById('btnApplyFilters').addEventListener('click', (e) => {
+    e.preventDefault();
+    const q = document.getElementById('fQ').value.trim();
+    const categoria_id = document.getElementById('fCategoria').value || '';
+    const params = {};
+    if (q) params.q = q;
+    if (categoria_id) params.categoria_id = categoria_id;
+    loadPatches(params);
+    closeFilters();
+  });
+  function closeFilters(e){ if(e) e.preventDefault(); document.location.hash = ''; }
+
+  /* ========== Boot ========== */
+  (async function init(){
+    if (!requireRole('USUARIO_BUSCADOR')) return;
+
+    // Perfil
+    loadProfile();
+
+    // Filtros
+    await loadCategories();
+
+    // Datos
+    await loadFavorites();
+    await loadPatches();
+
+    // Abrir modales por hash (opcional)
+    window.addEventListener('hashchange', () => {
+      const h = location.hash;
+      if (h === '#miModal') { /* overlay CSS abre solo*/ }
+      if (h === '#modalPerfil') { document.getElementById('modalPerfil').style.display = 'block'; }
+    });
+  })();
+</script>
 </body>
 </html>

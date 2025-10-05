@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bienvenido - Parchate Cali</title>
-  <link rel="stylesheet" href="../Styles/bienvenido.css">
+
+  <!-- ✅ Corrige la ruta al CSS (tu carpeta se llama Styles) -->
+  <link rel="stylesheet" href="../Styles/bienvenido.css" />
 </head>
 <body>
   <header class="header-logo">
@@ -20,23 +22,29 @@
       </ul>
     </nav>
   </header>
+
   <main>
     <section class="origen">
       <h1>¿Quiénes somos?</h1>
       <div class="descripcion">
-        <p style="font-size: 20px;">Parchate Cali es una plataforma dedicada a conectar a los habitantes y visitantes de Cali con los mejores planes, eventos y actividades que la ciudad tiene para ofrecer. Ya seas un explorador buscando nuevas experiencias, un organizador queriendo compartir tus eventos, o una empresa promocionando tus servicios.</p>
+        <p style="font-size: 20px;">
+          Parchate Cali es una plataforma dedicada a conectar a los habitantes y visitantes de Cali con los mejores planes, eventos y actividades que la ciudad tiene para ofrecer. Ya seas un explorador buscando nuevas experiencias, un organizador queriendo compartir tus eventos, o una empresa promocionando tus servicios.
+        </p>
       </div>
-     <div class="banner-origen">
-  <div class="collage">
-    <img src="../Imagenes/calibanner.jpg" alt="Cristo Rey">
-    <img src="../Imagenes/ermita.jpg" alt="La Ermita">
-    <img src="../Imagenes/zoo.jpg">
-    <img src="../Imagenes/museo.jpg" alt="Río Cali">
-    <img src="../Imagenes/gatos.jpg" alt="Parque de los Gatos">
-    <img src="../Imagenes/paisaje.jpg" alt="Cali paisaje">
-  </div>
-</div>
+
+      <!-- ✅ Opcional: si tu carpeta es "Images" (en inglés), cambia Imagenes -> Images -->
+      <div class="banner-origen">
+        <div class="collage">
+          <img src="../Imagenes/calibanner.jpg" alt="Cristo Rey" />
+          <img src="../Imagenes/ermita.jpg" alt="La Ermita" />
+          <img src="../Imagenes/zoo.jpg" alt="Zoológico de Cali" />
+          <img src="../Imagenes/museo.jpg" alt="Río Cali" />
+          <img src="../Imagenes/gatos.jpg" alt="Parque de los Gatos" />
+          <img src="../Imagenes/paisaje.jpg" alt="Cali paisaje" />
+        </div>
+      </div>
     </section>
+
     <section class="tipos-usuario">
       <h2 style="font-size: 50px;">Tipos de Usuario</h2>
       <div class="usuarios">
@@ -59,9 +67,9 @@
       <h2>Creadores</h2>
       <p>Conoce al equipo que hace posible Parchate Cali y su visión.</p>
       <div class="equipo">
-        <div class="miembro"><img src="../Imagenes/miembro1.jpg" alt="Miembro 1"></div>
-        <div class="miembro"><img src="../Imagenes/miembro2.jpg" alt="Miembro 2"></div>
-        <div class="miembro"><img src="../Imagenes/miembro3.jpg" alt="Miembro 3"></div>
+        <div class="miembro"><img src="../Imagenes/miembro1.jpg" alt="Miembro 1" /></div>
+        <div class="miembro"><img src="../Imagenes/miembro2.jpg" alt="Miembro 2" /></div>
+        <div class="miembro"><img src="../Imagenes/miembro3.jpg" alt="Miembro 3" /></div>
       </div>
     </section>
   </main>
@@ -70,42 +78,164 @@
     <p>&copy; 2025 Parchate Cali</p>
   </footer>
 
-  <input type="checkbox" id="login-toggle" hidden>
-  <input type="checkbox" id="register-toggle" hidden>
+  <!-- Toggles para abrir/cerrar modales (estilo CSS) -->
+  <input type="checkbox" id="login-toggle" hidden />
+  <input type="checkbox" id="register-toggle" hidden />
 
+  <!-- ===== Modal Login ===== -->
   <div class="modal login-modal">
     <div class="modal-content">
       <label for="login-toggle" class="modal-close btn">&times;</label>
       <h3 style="font-size: 30px; margin-bottom: -2px;">Iniciar Sesión</h3>
+
+      <!-- feedback de errores -->
+      <div id="fbLogin" class="alert error" style="display:none;"></div>
+
       <form id="loginForm" novalidate>
         <p style="margin-bottom: -10px;">Correo Electrónico</p>
-        <input type="email" placeholder="" required>
+        <input id="lEmail" type="email" placeholder="tucorreo@ejemplo.com" required />
         <p style="margin-bottom: -10px;">Contraseña</p>
-        <input type="password" placeholder="" required>
+        <input id="lPass" type="password" placeholder="••••••••" required />
         <button type="submit" class="big-check-btn">✓</button>
       </form>
     </div>
   </div>
 
+  <!-- ===== Modal Registro ===== -->
   <div class="modal register-modal">
     <div class="modal-content">
       <label for="register-toggle" class="modal-close btn">&times;</label>
       <h3>Crear Cuenta</h3>
+
+      <!-- feedback de errores -->
+      <div id="fbRegister" class="alert error" style="display:none;"></div>
+
       <form id="registerForm" novalidate>
-        <label>Nombre <input type="text" name="name" required></label>
-        <label>Correo <input type="email" name="email" required></label>
-        <label>Contraseña <input type="password" name="password" required></label>
+        <label>Nombre
+          <input id="rNombre" type="text" required />
+        </label>
+        <label>Correo
+          <input id="rEmail" type="email" required />
+        </label>
+        <label>Contraseña
+          <input id="rPass" type="password" required />
+        </label>
         <label>Tipo de Usuario
-          <select name="tipo" required>
+          <!-- ✅ Valores alineados con el backend -->
+          <select id="rRol" required>
             <option value="" disabled selected>Seleccione...</option>
-            <option value="usuario">Usuario</option>
-            <option value="empresa">Empresa</option>
+            <option value="USUARIO_BUSCADOR">Usuario / Explorador</option>
+            <option value="USUARIO_EMPRESA">Empresa</option>
           </select>
         </label>
         <button type="submit" class="btn btn-primary">Crear cuenta</button>
       </form>
     </div>
   </div>
+
+  <!-- ====== Scripts ====== -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    /* =========================================================
+       Conexión con microservicios (AUTH) y flujo de login/signup
+       ========================================================= */
+    const API = {
+      AUTH: 'http://localhost:3001/auth'
+    };
+
+    // Sesión simple en localStorage
+    const Session = {
+      set(token, user) {
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
+      },
+      user() {
+        try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
+      },
+      clear() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
+    };
+
+    // Si ya está logueado, redirigir por rol
+    (function redirectIfLogged() {
+      const u = Session.user();
+      if (!u) return;
+      if (u.rol === 'USUARIO_EMPRESA')      window.location.href = './usuario_empresa.html';
+      else if (u.rol === 'USUARIO_BUSCADOR') window.location.href = './usuario_buscador.html';
+      else if (u.rol === 'ADMIN')            window.location.href = './admin.html';
+    })();
+
+    // Helpers UI
+    function show(el, text, type='error') {
+      el.className = `alert ${type}`;
+      el.textContent = text;
+      el.style.display = 'block';
+    }
+    function hide(el) { el.style.display = 'none'; }
+
+    // ====== LOGIN ======
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fb = document.getElementById('fbLogin'); hide(fb);
+
+      const email = document.getElementById('lEmail').value.trim();
+      const password = document.getElementById('lPass').value.trim();
+      if (!email || !password) {
+        show(fb, 'Por favor ingresa tu correo y contraseña.');
+        return;
+      }
+
+      try {
+        const { data } = await axios.post(`${API.AUTH}/login`, { email, password });
+        Session.set(data.token, data.user);
+
+        // Cerrar modal
+        document.getElementById('login-toggle').checked = false;
+
+        // Redirigir según rol
+        const u = data.user;
+        if (u.rol === 'USUARIO_EMPRESA')      window.location.href = './usuario_empresa.html';
+        else if (u.rol === 'USUARIO_BUSCADOR') window.location.href = './usuario_buscador.html';
+        else if (u.rol === 'ADMIN')            window.location.href = './admin.html';
+        else                                   show(fb, 'Rol no reconocido en el sistema.');
+      } catch (e2) {
+        show(fb, e2?.response?.data?.error || 'Credenciales inválidas o servicio no disponible.');
+      }
+    });
+
+    // ====== REGISTRO ======
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fb = document.getElementById('fbRegister'); hide(fb);
+
+      const nombre = document.getElementById('rNombre').value.trim();
+      const email  = document.getElementById('rEmail').value.trim();
+      const password = document.getElementById('rPass').value.trim();
+      const rol = document.getElementById('rRol').value;
+
+      if (!nombre || !email || !password || !rol) {
+        show(fb, 'Completa todos los campos del registro.');
+        return;
+      }
+
+      try {
+        const { data } = await axios.post(`${API.AUTH}/register`, { nombre, email, password, rol });
+        Session.set(data.token, data.user);
+
+        // Cerrar modal
+        document.getElementById('register-toggle').checked = false;
+
+        // Redirigir según rol
+        const u = data.user;
+        if (u.rol === 'USUARIO_EMPRESA')      window.location.href = './usuario_empresa.html';
+        else if (u.rol === 'USUARIO_BUSCADOR') window.location.href = './usuario_buscador.html';
+        else                                   show(fb, 'Rol no reconocido en el sistema.');
+      } catch (e2) {
+        show(fb, e2?.response?.data?.error || 'No fue posible crear tu cuenta.');
+      }
+    });
+  </script>
 </body>
 </html>
-
