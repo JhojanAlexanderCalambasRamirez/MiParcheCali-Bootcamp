@@ -1,383 +1,265 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Mi Parche Cali — Usuario Empresa</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Ruta corregida al CSS -->
-  <link rel="stylesheet" href="/Frontend/Styles.css/base.css">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresa - Parcháte Cali</title>
+  <link rel="stylesheet" href="../styles/usuario.empresa.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div>
-        <div class="brand">Mi Parche Cali</div>
-        <div class="breadcrumbs">
-          <a href="./Inicio.html">Inicio</a> / Usuario_Empresa
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-ghost" id="btnBack">← Atrás</button>
-        <button class="btn btn-danger" id="btnLogout">Cerrar sesión</button>
-      </div>
-    </header>
-
-    <!-- Formulario de creación de parche -->
-    <section>
-      <h2>Crear nuevo parche</h2>
-      <div id="fbForm" class="alert info" style="display:none;"></div>
-      <div class="grid-2">
-        <label>Título
-          <input id="fTitulo" class="input" placeholder="Ej.: Concierto, Ruta gastronómica...">
-        </label>
-        <label>Categoría
-          <select id="fCategoria" class="select"><option value="">Seleccione...</option></select>
-        </label>
-        <label>Zona
-          <input id="fZona" class="input" placeholder="Ej.: Norte, San Antonio, Granada...">
-        </label>
-        <label>Teléfono
-          <input id="fTelefono" class="input" placeholder="+57 300 0000000">
-        </label>
-        <label>Dirección
-          <input id="fDireccion" class="input" placeholder="Calle 00 # 00-00, Cali">
-        </label>
-        <label>Link red social
-          <input id="fLink" class="input" placeholder="https://instagram.com/mi_negocio">
-        </label>
-      </div>
-      <label>Descripción
-        <textarea id="fDescripcion" class="textarea" placeholder="Describe la actividad, requisitos, horarios, etc."></textarea>
-      </label>
-      <div class="grid-2">
-        <label>Portada (URL)
-          <input id="fCover" class="input" placeholder="https://...imagen.jpg">
-        </label>
-        <label>Fotos (hasta 3 URLs, separadas por salto de línea)
-          <textarea id="fFotos" class="textarea" placeholder="https://...foto1.jpg
-https://...foto2.jpg
-https://...foto3.jpg"></textarea>
-        </label>
-      </div>
-      <div class="actions" style="margin-top: 10px;">
-        <button class="btn btn-primary" id="btnCrear">Publicar parche</button>
-        <button class="btn" id="btnLimpiar">Limpiar</button>
-      </div>
+<header class="header-logo">
+    <h1 style="font-size: 60px;">Párchate Cali</h1>
+    <nav>
+      <ul>
+        <li><a href="#catalogo-planes">Planes</a></li>
+        <li><a href="#modal3">Perfil</a></li>
+        <li><a href="bienvenido.html">Cerrar sesión</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+<section class="banner-principal">
+    <h2>Gestión de Planes</h2>
+  <p>Atrae a los caleños con planes únicos y emocionantes.</p>
+      <a href="#modal1" class="button">Crear nuevo plan</a>
+      <a href="#modal2" class="button">Editar plan existente</a>
     </section>
+  </main>
+<div>
+  <br>
+  <div class="contenedor">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqGeI0Ep6NFmy-WCGN98tZTI3VnMUKp6xDfEsvqIVC2Sxve28GDiNbx64hwnf_Xv6dBa7c72Mc4dpgaJDW_Itblh_3BrhmT3BfFs3Bh3eEbHKdo5NDDPamvwEdyIgnE-qi7Qc0Z=w648-h374-n-k-no" alt="Imagen 1">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noSCdi8R_u_FIEOK-saxUNjfMdxvtA-dMKnCKy-wCqUNSn7E9uQK3OWWwW_TkHzC81DKx-BlCQ5SVvKfQ4U5-SWT9Ni5OHvPiFUvdVy5khtKWrGLyLUoviYgUlFcragzcW7FpM=w648-h374-n-k-no" alt="Imagen 2">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npcjg6k-PqfliqmbbNogSDq0DyAEPExBqy1Ln5xj9x3bYe_U-X6aj-K0YHYT6SaKH0MM_k3gAoCMOCYOYO2v3Ylsr1UH1i9O-A-N02sK-2CmKVDi2N1FagVDg_vqgO_IE2gwjJV=w648-h374-n-k-no" alt="Imagen 3">
+  </div>
+  <div id="modal4" class="modal">
+    <div class="modal-content">      
+      <div class="modal-img"></div>
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Plan Gastronómico en la Zona Rosa</h2>      
+      <div class="info">
+        <span><b>Tipo de plan:</b> Gastronómico 🍴</span>
+        <span><b>Número de personas:</b> 2 a 4</span>
+        <span><b>Ubicación:</b>Zona Rosa, Cali</span>
+      </div>
+      <p>
+        Vive una experiencia culinaria única en la Zona Rosa de Cali. 
+        Degusta la mejor comida típica vallecaucana con un toque moderno, 
+        acompañada de música en vivo y un ambiente vibrante.  
+        ¡Un plan perfecto para disfrutar con amigos o en pareja!
+      </p>
+      <a href="#modal4" class="editarplan">Editar Plan</a>
+    </div>
+  </div>
+</div>
+</div>
+<!-- VENTANA FLOTANTE PERFIL-->
+<div id="modal3" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
 
-    <hr class="hr">
 
-    <!-- Lista de mis parches -->
-    <section>
-      <h2>Mis parches</h2>
-      <div id="fbList" class="alert info" style="display:none;"></div>
-      <table class="table" id="tblMine">
-        <thead>
-          <tr>
-            <th>ID</th><th>Título</th><th>Publicado</th><th>Creado</th><th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h1 style="color: #006bb3;">PERFIL :</h1>
+        <p>Usuario</p>
+        <form>
+          <label for="destino">Nombre Usuario:</label>
+          <p>Nicolás Hincapié Reyes</p>
+
+          <label for="transporte">Correo:</label>
+          <p>nicolas.hincapie@example.com</p>
+          <label for="dias">No. teléfono</label>
+          <p>1234567890</p>
+          <label for="transporte">Ubicación:</label>
+          <p>Cali, Colombia</p>
+          <button type="submit" class="btn-submit">Listo</button>
+        </form>
+      </div>
+    </div>
   </div>
 
-  <!-- Modal editar parche -->
-  <div class="modal-backdrop" id="editModal">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">Editar parche</div>
-        <button class="btn btn-ghost" onclick="closeModal('editModal')">✕</button>
-      </div>
-      <div class="modal-body">
-        <div id="fbEdit" class="alert info" style="display:none;"></div>
-        <label>Título
-          <input id="eTitulo" class="input">
-        </label>
-        <label>Publicado
-          <select id="ePublicado" class="select">
-            <option value="">(no cambiar)</option>
-            <option value="1">Publicado</option>
-            <option value="0">Oculto</option>
+
+
+  <!-- VENTANA FLOTANTE CREAR PLAN-->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3; font-size: 50px; font-family: 'Poppins', 'Roboto', sans-serif;">Nuevo parche</h2>
+        
+        <form>
+          <label for="destino">Nombre parche:</label>
+          <input type="text" id="destino" name="destino" placeholder="Ej: Sato">
+
+          <label for="transporte">Categoría:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Comida</option>
+            <option>Arte</option>
+            <option>Musica</option>
+            <option>Soplar</option>
           </select>
-        </label>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" onclick="closeModal('editModal')">Cancelar</button>
-        <button class="btn btn-primary" id="btnGuardarEdit">Guardar</button>
-      </div>
-    </div>
-  </div>
 
-  <!-- ✅ Modal para SUBIR FOTOS desde el PC -->
-  <div class="modal-backdrop" id="uploadModal">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title">Subir fotos al parche</div>
-        <button class="btn btn-ghost" onclick="closeModal('uploadModal')">✕</button>
-      </div>
-      <div class="modal-body">
-        <div id="fbUpload" class="alert info" style="display:none;"></div>
+          <label for="dias">No. telefono:</label>
+          <input type="number" id="dias" name="dias" min="1" placeholder="Ej: 1234567890">
 
-        <!-- Campo de selección de archivos -->
-        <label>Selecciona hasta 3 imágenes (JPG, PNG, WEBP o GIF, máx. 5MB c/u)
-          <input id="uFiles" type="file" class="input" accept="image/*" multiple>
-        </label>
-
-        <!-- Vista previa simple -->
-        <div id="uPreview" class="cards" style="grid-template-columns: repeat(3, 1fr);"></div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" onclick="closeModal('uploadModal')">Cancelar</button>
-        <button class="btn btn-primary" id="btnDoUpload">Subir</button>
+          <label for="transporte">Ubicación:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Norte</option>
+            <option>Sur</option>
+            <option>Este</option>
+            <option>Oeste</option>
+          </select>
+          <label for="destino">Descripción:</label>
+          <input type="text" id="destino" name="destino" placeholder="Mi negocio es...">
+          <label for="destino">Dirección:</label>
+          <input type="text" id="destino" name="destino" placeholder="Calle 1a4 #66-20">
+          <label for="destino">Dirección:</label>
+          <input type="text" id="destino" name="destino" placeholder=https://www.mipagina.com>
+          <label for="destino">Fotos del parche:</label>
+          <input type="file" accept="image/*" name="imagen_usuario">
+          <button type="submit" class="btn-submit">Guardar plan</button>
+          
+        </form>
       </div>
     </div>
   </div>
 
-  <script>
-    /* ------------------ Config común ------------------ */
-    const API = {
-      PATCHES: 'http://localhost:3003',
-      CATEGORIES: 'http://localhost:3005/categories'
-    };
-    const Session = {
-      token() { return localStorage.getItem('token'); },
-      user() { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
-      clear() { localStorage.removeItem('token'); localStorage.removeItem('user'); }
-    };
-    const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` }});
-    function show(el, text, type='info') { el.className = `alert ${type}`; el.textContent = text; el.style.display = 'block'; }
-    function hide(el){ el.style.display='none'; }
-    function openModal(id)  { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-    // Guard de rol
-    (function guard() {
-      const u = Session.user();
-      if (!u || u.rol !== 'USUARIO_EMPRESA') window.location.href = './Inicio.html';
-    })();
+  <!-- VENTANA FLOTANTE EDITAR PLAN-->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Nuevo parche </h2>
+        
+        <form>
+          <form class="search-box" action="resultados.html" method="get">
+            <input type="search" name="q" placeholder="Buscar destino...">
+            <button type="submit">🔍</button>
+          </form>
 
-    // Header actions
-    document.getElementById('btnLogout').onclick = () => { Session.clear(); window.location.href = './Inicio.html'; };
-    document.getElementById('btnBack').onclick = () => { history.length > 1 ? history.back() : window.location.href = './Inicio.html'; };
+          <label for="transporte">Categoría:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Comida</option>
+            <option>Arte</option>
+            <option>Musica</option>
+            <option>Soplar</option>
+          </select>
+          <button type="submit" class="btn-submit">Buscar plan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="cp">
+    <label for="toggle-filtros" class="izquierda">
+      <a href="#miModal" class="btn">FILTRAR</a>
+    </label>
+    <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
 
-    // Cargar categorías
-    async function loadCategories() {
-      try {
-        const { data } = await axios.get(API.CATEGORIES);
-        const sel = document.getElementById('fCategoria');
-        sel.innerHTML = '<option value="">Seleccione...</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-      } catch { /* tolerar */ }
-    }
+ 
+  <!-- Modal -->
+  <div id="miModal" class="overlay">
+    <div class="popup">
+      <h3><B>FILTRAR POR:</B></h3>
+      <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
+<div class="lista-zonas">
+  <p>Selecciona una zona:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Zonas</option>
+      <option value="op1">Norte</option>
+      <option value="op2">Centro</option>
+      <option value="op3">Sur</option>
+      <option value="op4">Occidente</option>
+      <option value="op4">Oriente</option>
+    </select>
+  </div>
+<div class="lista-zonas">
+  <p>Categorías:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Comida</option>
+      <option value="op1">Nocturno</option>
+      <option value="op2">Musica</option>
+      <option value="op3">Arte</option>
+      <option value="op4">Soplar</option>
+      <option value="op4">Deporte</option>
+    </select>
+</div>
+      <a href="admin.html" class="aplicar">Aplicar</a>
+      <a href="#" class="close">Cerrar</a>
+    </div>
+  </div>
+  </div>
 
-    // Crear parche
-    document.getElementById('btnCrear').onclick = async () => {
-      const fb = document.getElementById('fbForm');
-      hide(fb);
+  <div class="menu-filtros">
+    <h4>Filtrar por:</h4>
+    <label><input type="checkbox"> Precio bajo</label>
+    <label><input type="checkbox"> Premium</label>
+    <label><input type="checkbox"> Empresarial</label>
+    <label><input type="checkbox"> VIP</label>
+  </div>
+<div class="catalogo">
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 1">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
 
-      const titulo = document.getElementById('fTitulo').value.trim();
-      const categoria_id = document.getElementById('fCategoria').value;
-      const zona = document.getElementById('fZona').value.trim();
-      const telefono = document.getElementById('fTelefono').value.trim();
-      const direccion = document.getElementById('fDireccion').value.trim();
-      const link_red_social = document.getElementById('fLink').value.trim();
-      const descripcion = document.getElementById('fDescripcion').value.trim();
-      const cover_image_url = document.getElementById('fCover').value.trim();
-      const fotosTxt = document.getElementById('fFotos').value.trim();
-      const fotos = fotosTxt ? fotosTxt.split('\n').map(s => s.trim()).filter(Boolean) : [];
+    <div class="tarjeta"> 
+      <img src="../Imagenes/comida.jpg" alt="Plan 2">
+      <h3>Plan Comida</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
 
-      if (!titulo || !categoria_id || !zona || !telefono || !direccion || !descripcion) {
-        show(fb, 'Completa los campos obligatorios.', 'error'); return;
-      }
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 3">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
 
-      try {
-        await axios.post(`${API.PATCHES}/patches`, {
-          titulo, categoria_id, descripcion, zona, telefono, direccion,
-          link_red_social: link_red_social || null,
-          cover_image_url: cover_image_url || null,
-          fotos
-        }, authHeader());
-        show(fb, 'Parche creado correctamente.', 'success');
-        document.getElementById('btnLimpiar').click();
-        await loadMine();
-      } catch (e) {
-        show(fb, e?.response?.data?.error || 'No fue posible crear el parche.', 'error');
-      }
-    };
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 4">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+  </div>
+<br>
+<div class="catalogo2">
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 5">
+      <h3>Plan Arte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
 
-    // Limpiar formulario
-    document.getElementById('btnLimpiar').onclick = () => {
-      ['fTitulo','fZona','fTelefono','fDireccion','fLink','fDescripcion','fCover','fFotos'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('fCategoria').value = '';
-    };
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 6">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
 
-    // Listar mis parches (agregamos botón "Subir fotos")
-    async function loadMine() {
-      const fb = document.getElementById('fbList');
-      hide(fb);
-      const tbody = document.querySelector('#tblMine tbody');
-      tbody.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
-      try {
-        const { data } = await axios.get(`${API.PATCHES}/my/patches`, authHeader());
-        if (!data.length) {
-          tbody.innerHTML = '<tr><td colspan="5">Aún no tienes parches creados.</td></tr>';
-          return;
-        }
-        tbody.innerHTML = data.map(p => `
-          <tr>
-            <td>${p.id}</td>
-            <td>${p.titulo}</td>
-            <td>${p.is_published ? 'Sí' : 'No'}</td>
-            <td>${new Date(p.created_at).toLocaleString()}</td>
-            <td style="display:flex; gap:6px; flex-wrap: wrap;">
-              <button class="btn" onclick="openEdit(${p.id}, '${encodeURIComponent(p.titulo)}', ${p.is_published ? 1 : 0})">Editar</button>
-              <button class="btn btn-danger" onclick="delPatch(${p.id})">Eliminar</button>
-              <!-- ✅ Nuevo botón para subir fotos -->
-              <button class="btn btn-primary" onclick="openUpload(${p.id})">Subir fotos</button>
-            </td>
-          </tr>
-        `).join('');
-      } catch (e) {
-        show(fb, e?.response?.data?.error || 'Error cargando tus parches.', 'error');
-        tbody.innerHTML = '';
-      }
-    }
-
-    // Editar (abrir modal con título y publicado)
-    let editId = null;
-    function openEdit(id, titulo, publicado) {
-      editId = id;
-      document.getElementById('eTitulo').value = decodeURIComponent(titulo);
-      document.getElementById('ePublicado').value = String(publicado);
-      document.getElementById('fbEdit').style.display = 'none';
-      openModal('editModal');
-    }
-    window.openEdit = openEdit;
-
-    document.getElementById('btnGuardarEdit').onclick = async () => {
-      const fb = document.getElementById('fbEdit'); fb.style.display='none';
-      try {
-        const payload = {};
-        const t = document.getElementById('eTitulo').value.trim();
-        const pub = document.getElementById('ePublicado').value;
-        if (t) payload.titulo = t;
-        if (pub !== '') payload.is_published = Number(pub);
-        await axios.patch(`${API.PATCHES}/patches/${editId}`, payload, authHeader());
-        closeModal('editModal');
-        await loadMine();
-      } catch (e) {
-        show(fb, e?.response?.data?.error || 'No fue posible guardar.', 'error');
-      }
-    };
-
-    // Eliminar (soft delete)
-    async function delPatch(id) {
-      if (!confirm('¿Eliminar este parche?')) return;
-      const fb = document.getElementById('fbList'); fb.style.display='none';
-      try {
-        await axios.delete(`${API.PATCHES}/patches/${id}`, authHeader());
-        await loadMine();
-      } catch (e) {
-        show(fb, e?.response?.data?.error || 'No fue posible eliminar.', 'error');
-      }
-    }
-    window.delPatch = delPatch;
-
-    /* ================== SUBIR FOTOS DESDE PC (FRONTEND) ================== */
-    const MAX_FILES = 3;
-    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
-    let uploadPatchId = null;
-
-    // Abre el modal de subida y prepara el estado
-    function openUpload(patchId) {
-      uploadPatchId = patchId;
-      const fb = document.getElementById('fbUpload');
-      const input = document.getElementById('uFiles');
-      const preview = document.getElementById('uPreview');
-      input.value = '';       // limpiar selección previa
-      preview.innerHTML = ''; // limpiar previews
-      hide(fb);
-      openModal('uploadModal');
-    }
-    window.openUpload = openUpload;
-
-    // Vista previa simple y validaciones cliente
-    document.getElementById('uFiles').addEventListener('change', (e) => {
-      const files = Array.from(e.target.files || []);
-      const fb = document.getElementById('fbUpload');
-      const preview = document.getElementById('uPreview');
-      hide(fb);
-      preview.innerHTML = '';
-
-      if (files.length > MAX_FILES) {
-        show(fb, `Máximo ${MAX_FILES} archivos. Has seleccionado ${files.length}.`, 'error');
-        e.target.value = '';
-        return;
-      }
-
-      const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-      for (const f of files) {
-        if (!allowed.includes(f.type)) {
-          show(fb, `Tipo no permitido: ${f.name} (${f.type}).`, 'error');
-          e.target.value = ''; return;
-        }
-        if (f.size > MAX_SIZE) {
-          show(fb, `Archivo demasiado grande: ${f.name} (>5MB).`, 'error');
-          e.target.value = ''; return;
-        }
-      }
-
-      // Previsualizar
-      files.forEach(f => {
-        const url = URL.createObjectURL(f);
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img src="${url}" alt="${f.name}">
-          <div class="card-body">
-            <div class="card-title">${f.name}</div>
-            <div class="card-meta">${(f.size/1024).toFixed(1)} KB</div>
-          </div>
-        `;
-        preview.appendChild(card);
-      });
-    });
-
-    // Enviar FormData -> /patches/:id/photos
-    document.getElementById('btnDoUpload').onclick = async () => {
-      const fb = document.getElementById('fbUpload');
-      hide(fb);
-
-      if (!uploadPatchId) { show(fb, 'No hay parche seleccionado.', 'error'); return; }
-      const input = document.getElementById('uFiles');
-      const files = Array.from(input.files || []);
-      if (!files.length) { show(fb, 'Selecciona al menos una imagen.', 'error'); return; }
-
-      const fd = new FormData();
-      for (const f of files) fd.append('photos', f); // campo esperado por el backend
-
-      try {
-        // Importante: NO forzar 'Content-Type'; axios setea multipart/boundary automáticamente.
-        await axios.post(`${API.PATCHES}/patches/${uploadPatchId}/photos`, fd, {
-          headers: { Authorization: `Bearer ${Session.token()}` }
-        });
-        show(fb, 'Fotos subidas correctamente. La primera puede usarse como portada.', 'success');
-        // Opcional: cerrar modal y refrescar lista
-        setTimeout(async () => {
-          closeModal('uploadModal');
-          await loadMine();
-        }, 900);
-      } catch (e) {
-        show(fb, e?.response?.data?.error || 'No fue posible subir las fotos.', 'error');
-      }
-    };
-
-    // Boot
-    (async function init() {
-      await loadCategories();
-      await loadMine();
-    })();
-  </script>
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 7">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+    <div class="tarjeta">
+      <img src="../Imagenes/museo.jpg" alt="Plan 8">
+      <h3>Plan Arte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+  </div>
+  <br>
+<footer>
+    <p>&copy; 2015 Parchate Cali</p>
+</footer>
 </body>
 </html>

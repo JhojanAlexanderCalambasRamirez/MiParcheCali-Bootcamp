@@ -1,0 +1,466 @@
+body {
+  background-color: #F5F5F5;
+  color: #000000;
+}
+
+header {
+  background: linear-gradient(90deg, #0077B6, #00B894);
+  color: #FFFFFF;
+  padding: 5px; 
+  text-align: center;
+  border-radius: 15px 15px 0 0;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  text-align: center;
+  gap: 20px;
+  padding-top: 10px;
+  margin-left: 34.5%;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+    .ver {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 15px;
+      background: #1084d7;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+nav ul li a:hover {
+  background-color: #FFC857;
+}
+
+main section {
+  padding: 20px 20px;
+  margin-top: 20px;
+  text-align: center;
+  background-color: #FFFFFF;
+  border-radius: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px; 
+}
+
+main section h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  color: #0077B6;
+}
+
+main section p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+}
+
+a.button {
+  background-color: #FFC857 ;
+  color: #000000;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 5px;
+}
+
+a.button:hover {
+  background-color: #27AE60;
+}
+
+footer {
+  background: linear-gradient(90deg,#00B894, #0077B6);
+  color: #FFFFFF;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  border-radius: 0 0 15px 15px;
+}
+.cp {
+  margin: 20px 0;
+  background: linear-gradient(90deg, #0077B6, #00B894);
+  color: #F5F5F5;
+  font-family: 'Poppins', 'Roboto', sans-serif;
+  font-size: 25px;
+  padding: 30px 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 
+
+.izquierda {
+    position: absolute;
+    left: 50px;
+  }
+
+  .centro {
+    text-align: center;
+  }
+
+/* CSS PARA CATALOGO ADMIN */
+
+body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #f7f7f7;
+    }
+
+    
+    .catalogo2 {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .catalogo3 {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .catalogo {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .tarjeta {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
+    .tarjeta img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .tarjeta:hover img {
+      transform: scale(1.1);
+    }
+
+    .tarjeta h3 {
+      margin: 15px;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    /* Área clickeable completa */
+    .izquierda {
+      position: absolute;
+      left: 50px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Ícono y texto dentro del label */
+    .izquierda i {
+      font-size: 30px;
+    }
+
+    /* Checkbox oculto */
+    #toggle-filtros {
+      display: none;
+    }
+
+    /* Menú desplegable */
+    .menu-filtros {
+      position: absolute;
+      top: 75px;
+      left: 20px;
+      background: white;
+      color: black;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      padding: 15px;
+      width: 220px;
+      display: none;
+      z-index: 10;
+    }
+
+    #toggle-filtros:checked ~ .menu-filtros {
+      display: block;
+    }
+
+    .menu-filtros h4 {
+      margin-top: 0;
+      color: #006bb3;
+    }
+
+    .menu-filtros label {
+      display: block;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+    .close {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 15px;
+      background: #dc3545;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .aplicar {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 15px;
+      background: #26a104;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+       .btn {
+      padding: 10px 20px;
+      background:  #00B894 ;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-left: 0%;
+    }
+
+    /* Fondo oscuro */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Contenido del modal */
+    .popup {
+      background: rgb(255, 255, 255);
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      color: black ;
+    }
+
+    /* Mostrar modal cuando está activo */
+    .overlay:target {
+      display: flex;
+    }
+    .lista-zonas {
+      color:#0077B6 ;
+      margin-bottom: 20px;
+    }
+        select {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #666;
+      background-color: #f9f9f9;
+      font-size: 14px;
+    }
+
+    select:focus {
+      border-color: #333;
+      outline: none;
+    }
+
+/*CREAR PLANES ADMIN*/
+
+.modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Mostrar cuando tiene el target */
+    .modal:target {
+      display: flex;
+    }
+
+    /* Contenido */
+    .modal-content {
+      background: #fff;
+      display: flex; /* división en dos columnas */
+      width: 600px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Columna izquierda (imagen) */
+    .modal-img {
+      flex: 1;
+      background: url("https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcQLwrkG00nPvtMz0-BNdYyDfmrqJ6BroB4fkfbv3SLrPM5EufTUvdfcQrjwI9pJtxnxSzWH1i2aNUWApvaGnQA6NFrY60aNQB8YHvW6Qu4") center/cover no-repeat;
+    }
+
+    /* Columna derecha (formulario) */
+    .modal-form {
+      flex: 1.2;
+      padding: 20px;
+    }
+
+    .modal-form h2 {
+      margin-top: 0;
+    }
+
+    .close {
+      float: right;
+      font-size: 22px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .closec:hover {
+      color: red;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .btn-submit {
+      margin-top: 15px;
+      background: #28a745;
+      display: inline-block;
+      color: #fff;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 6px;
+    }
+    .btn-submit:hover {
+      background: #218838;
+    }
+    .contenedor {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
+      gap: 15px; /* espacio entre imágenes */
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .contenedor img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px; /* esquinas redondeadas opcionales */
+    }
+
+  .eliminarplan {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 8px 15px;
+      background: #dc3545;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    /* CSS para modal usuarios */
+
+ .btn {
+background: #2563eb;
+color: #fff;
+padding: 10px 16px;
+border: none;
+border-radius: 6px;
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
+}
+
+/* Modal básico */
+#modalusuarios {
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.5);
+align-items: center;
+justify-content: center;
+padding: 20px;
+}
+
+
+#modalusuarios .content {
+background: #fff;
+padding: 18px;
+border-radius: 8px;
+max-width: 600px;
+width: 100%;
+box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+
+#modalusuarios table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 8px;
+}
+
+
+#modalusuarios th, #modalusuarios td {
+padding: 8px;
+border: 1px solid #e6e6e6;
+text-align: left;
+font-size: 14px;
+}
+
+
+#modalusuarios th { background: #f9fafb; }
+
+
+.closeusuarios {
+display: inline-block;
+margin-top: 12px;
+background: #ef4444;
+color: #fff;
+padding: 8px 12px;
+border-radius: 6px;
+text-decoration: none;
+}
+/* :target para abrir modal sin JS */
+#modalusuarios:target { display: flex; }

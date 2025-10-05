@@ -1,240 +1,332 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Mi Parche Cali — Usuario Buscador</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/Frontend/Styles.css/base.css">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Usuario - Parcháte Cali</title>
+  <link rel="stylesheet" href="../styles/usuario_buscador.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div>
-        <div class="brand">Mi Parche Cali</div>
-        <div class="breadcrumbs">
-          <a href="./Inicio.html">Inicio</a> / Usuario_Buscador
-        </div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-ghost" id="btnBack">← Atrás</button>
-        <button class="btn" id="btnOnlyFav">Ver favoritos</button>
-        <button class="btn" id="btnAll">Todos</button>
-        <button class="btn btn-danger" id="btnLogout">Cerrar sesión</button>
-      </div>
-    </header>
-    
-    <div class="toolbar">
-      <input id="txtQ" type="search" class="input" placeholder="Buscar por título, descripción, zona o dirección...">
-      <select id="selCat" class="select">
-        <option value="">Todas las categorías</option>
-      </select>
-      <button class="btn btn-primary" id="btnSearch">Buscar</button>
-      <button class="btn" id="btnReload">Recargar</button>
-    </div>
-
-    <div id="feedback" class="alert info" style="display:none;"></div>
-
-    <!-- Listado de tarjetas -->
-    <div id="grid" class="cards"></div>
+<header class="header-logo">
+    <h1 style="font-size: 60px;">Párchate Cali</h1>
+    <nav>
+      <ul>
+        <li><a href="#catalogo-planes">Planes</a></li>
+        <li><a href="bienvenido.html">Cerrar sesión</a></li>
+        <li><a href="#catalogo-favoritos">Favoritos</a></li>
+      </ul>
+    </nav>
+  </header>
+<div>
+  <br>
+  <div class="contenedor">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqGeI0Ep6NFmy-WCGN98tZTI3VnMUKp6xDfEsvqIVC2Sxve28GDiNbx64hwnf_Xv6dBa7c72Mc4dpgaJDW_Itblh_3BrhmT3BfFs3Bh3eEbHKdo5NDDPamvwEdyIgnE-qi7Qc0Z=w648-h374-n-k-no" alt="Imagen 1">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noSCdi8R_u_FIEOK-saxUNjfMdxvtA-dMKnCKy-wCqUNSn7E9uQK3OWWwW_TkHzC81DKx-BlCQ5SVvKfQ4U5-SWT9Ni5OHvPiFUvdVy5khtKWrGLyLUoviYgUlFcragzcW7FpM=w648-h374-n-k-no" alt="Imagen 2">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npcjg6k-PqfliqmbbNogSDq0DyAEPExBqy1Ln5xj9x3bYe_U-X6aj-K0YHYT6SaKH0MM_k3gAoCMOCYOYO2v3Ylsr1UH1i9O-A-N02sK-2CmKVDi2N1FagVDg_vqgO_IE2gwjJV=w648-h374-n-k-no" alt="Imagen 3">
   </div>
+<!-- VENTANA FLOTANTE PERFIL-->
+<div id="modal3" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
 
-  <!-- Modal de detalle del parche -->
-  <div class="modal-backdrop" id="detailModal">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title" id="dTitle">Detalle del parche</div>
-        <button class="btn btn-ghost" onclick="closeModal('detailModal')">✕</button>
-      </div>
-      <div class="modal-body" id="dBody">
-        <!-- Se completa por JS con: Título, Categoría, Descripción, Zona, Teléfono, Dirección, link y 3 fotos -->
-      </div>
-      <div class="modal-footer">
-        <button class="btn" onclick="closeModal('detailModal')">Cerrar</button>
-        <button class="btn" id="dFavBtn">★ Favorito</button>
-        <button class="btn btn-primary" id="dShareBtn">Compartir</button>
+
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h1 style="color: #006bb3;">PERFIL :</h1>
+        <p>Usuario</p>
+        <form>
+          <label for="destino">Nombre Usuario:</label>
+          <p>Nicolás Hincapié Reyes</p>
+
+          <label for="transporte">Correo:</label>
+          <p>nicolas.hincapie@example.com</p>
+          <label for="dias">No. teléfono</label>
+          <p>1234567890</p>
+          <label for="transporte">Ubicación:</label>
+          <p>Cali, Colombia</p>
+          <button type="submit" class="btn-submit">Listo</button>
+        </form>
       </div>
     </div>
   </div>
 
-  <script>
-    /* ------------------ Config común ------------------ */
-    const API = {
-      AUTH: 'http://localhost:3001/auth',
-      USERS: 'http://localhost:3002/users',
-      PATCHES: 'http://localhost:3003',
-      FAVORITES: 'http://localhost:3004/favorites',
-      CATEGORIES: 'http://localhost:3005/categories'
-    };
-    const Session = {
-      token() { return localStorage.getItem('token'); },
-      user() { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
-      clear() { localStorage.removeItem('token'); localStorage.removeItem('user'); }
-    };
-    const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` }});
+<div id="modal4" class="modal">
+    <div class="modal-content">      
+      <div class="modal-img"></div>
+      <div class="modal-form">
+        <a href="#closeusu" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Plan Gastronómico en la Zona Rosa</h2>      
+      <div class="info">
+        <span><b>Tipo de plan:</b> Gastronómico 🍴</span>
+        <span><b>Número de personas:</b> 2 a 4</span>
+        <span><b>Ubicación:</b>Zona Rosa, Cali</span>
+      </div>
+      <p>
+        Vive una experiencia culinaria única en la Zona Rosa de Cali. 
+        Degusta la mejor comida típica vallecaucana con un toque moderno, 
+        acompañada de música en vivo y un ambiente vibrante.  
+        ¡Un plan perfecto para disfrutar con amigos o en pareja!
+      </p>
+      <a href="#" class="favoritos">Quitar de favoritos</a>
+    </div>
+  </div>
+</div>
+</div>
 
-    function openModal(id)  { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function showMsg(text, type='info') {
-      const fb = document.getElementById('feedback');
-      fb.className = `alert ${type}`; fb.textContent = text; fb.style.display = 'block';
-      setTimeout(() => fb.style.display = 'none', 3000);
-    }
 
-    // Guard de rol
-    (function guard() {
-      const u = Session.user();
-      if (!u || u.rol !== 'USUARIO_BUSCADOR') window.location.href = './Inicio.html';
-    })();
 
-    // Controles UI
-    document.getElementById('btnLogout').onclick = () => { Session.clear(); window.location.href = './Inicio.html'; };
-    document.getElementById('btnBack').onclick = () => { history.length > 1 ? history.back() : window.location.href = './Inicio.html'; };
-    document.getElementById('btnReload').onclick = () => load();
-    document.getElementById('btnSearch').onclick = () => load();
-    document.getElementById('btnOnlyFav').onclick = () => load(true);
-    document.getElementById('btnAll').onclick = () => { document.getElementById('txtQ').value=''; document.getElementById('selCat').value=''; load(); };
+  <!-- VENTANA FLOTANTE CREAR PLAN-->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
 
-    // Estado de detalle visible
-    let currentPatch = null;
-    document.getElementById('dShareBtn').onclick = async () => {
-      if (!currentPatch) return;
-      const shareText = `Mira este plan en Mi Parche Cali: ${currentPatch.titulo}`;
-      const url = window.location.href.split('#')[0] + `#parche-${currentPatch.id}`;
-      try {
-        if (navigator.share) await navigator.share({ title: 'Mi Parche Cali', text: shareText, url });
-        else {
-          await navigator.clipboard.writeText(`${shareText}\n${url}`);
-          showMsg('Enlace copiado al portapapeles.', 'success');
-        }
-      } catch { showMsg('No se pudo compartir.', 'error'); }
-    };
 
-    document.getElementById('dFavBtn').onclick = async () => {
-      if (!currentPatch) return;
-      try {
-        // Intentamos agregar; si ya existía, hacemos remove
-        await axios.post(API.FAVORITES, { patch_id: currentPatch.id }, authHeader());
-        showMsg('Añadido a favoritos', 'success');
-      } catch (e) {
-        // Si hay error, intentamos remover (flujo de alternancia rápido)
-        try {
-          await axios.delete(`${API.FAVORITES}/${currentPatch.id}`, authHeader());
-          showMsg('Removido de favoritos', 'success');
-        } catch {
-          showMsg('No fue posible actualizar favorito.', 'error');
-        }
-      }
-    };
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Nuevo parche  </h2>
+        
+        <form>
+          <label for="destino">Nombre parche:</label>
+          <input type="text" id="destino" name="destino" placeholder="Ej: Sato">
 
-    // Carga de categorías para el select
-    async function loadCategories() {
-      try {
-        const { data } = await axios.get(API.CATEGORIES);
-        const sel = document.getElementById('selCat');
-        sel.innerHTML = '<option value="">Todas las categorías</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-      } catch { /* tolerar error: se puede buscar sin categorías */ }
-    }
+          <label for="transporte">Categoría:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Comida</option>
+            <option>Arte</option>
+            <option>Musica</option>
+            <option>Soplar</option>
+          </select>
 
-    // Renderiza tarjetas de resultados
-    function renderList(list) {
-      const grid = document.getElementById('grid');
-      if (!list.length) {
-        grid.innerHTML = '<div class="alert info">No se encontraron parches con los filtros seleccionados.</div>';
-        return;
-      }
-      grid.innerHTML = list.map(p => `
-        <article class="card">
-          <img src="${p.cover_image_url || 'https://picsum.photos/seed/parche'+p.id+'/600/400'}" alt="Portada">
-          <div class="card-body">
-            <h3 class="card-title">${p.titulo}</h3>
-            <div class="card-meta">${p.categoria || ''}</div>
-            <div class="card-actions">
-              <button class="btn btn-primary" onclick="openDetail(${p.id})">Ver detalle</button>
-              <button class="btn" onclick="toggleFav(${p.id})">★ Favorito</button>
-            </div>
-          </div>
-        </article>
-      `).join('');
-    }
+          <label for="dias">No. personas sugeridas:</label>
+          <input type="number" id="dias" name="dias" min="1">
 
-    // Abrir detalle en modal
-    async function openDetail(id) {
-      try {
-        const { data } = await axios.get(`${API.PATCHES}/patches/${id}`);
-        currentPatch = data;
-        document.getElementById('dTitle').textContent = data.titulo;
-        document.getElementById('dBody').innerHTML = `
-          <div class="grid-2">
-            <div>
-              <p><b>Categoría:</b> ${data.categoria}</p>
-              <p><b>Zona:</b> ${data.zona}</p>
-              <p><b>Teléfono:</b> ${data.telefono}</p>
-              <p><b>Dirección:</b> ${data.direccion}</p>
-              <p><b>Red social:</b> ${data.link_red_social ? `<a href="${data.link_red_social}" target="_blank">Abrir</a>` : '—'}</p>
-            </div>
-            <div>
-              <p><b>Descripción:</b></p>
-              <div class="alert info">${data.descripcion}</div>
-            </div>
-          </div>
-          <hr class="hr">
-          <div class="cards" style="grid-template-columns: repeat(3, 1fr);">
-            ${(data.fotos || []).map(f => `<img src="${f.url}" style="height:140px; object-fit:cover; border-radius:10px; border:1px solid #1e293b;">`).join('')}
-          </div>
-        `;
-        openModal('detailModal');
-      } catch {
-        showMsg('No se pudo cargar el detalle.', 'error');
-      }
-    }
-    window.openDetail = openDetail; // Exponer a HTML
+          <label for="transporte">Ubicación:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Norte</option>
+            <option>Sur</option>
+            <option>Este</option>
+            <option>Oeste</option>
+          </select>
 
-    // Alternar favorito desde la tarjeta
-    async function toggleFav(id) {
-      try {
-        await axios.post(API.FAVORITES, { patch_id: id }, authHeader());
-        showMsg('Añadido a favoritos', 'success');
-      } catch {
-        try {
-          await axios.delete(`${API.FAVORITES}/${id}`, authHeader());
-          showMsg('Removido de favoritos', 'success');
-        } catch {
-          showMsg('No fue posible actualizar favorito.', 'error');
-        }
-      }
-    }
-    window.toggleFav = toggleFav;
+          <button type="submit" class="btn-submit">Guardar plan</button>
+        </form>
+      </div>
+    </div>
+  </div>
 
-    // Cargar listado (todos o sólo favoritos)
-    async function load(onlyFavorites = false) {
-      const q = document.getElementById('txtQ').value.trim();
-      const categoria_id = document.getElementById('selCat').value;
 
-      try {
-        if (onlyFavorites) {
-          // Lista de favoritos: endpoint dedicado
-          const { data } = await axios.get(API.FAVORITES, authHeader());
-          renderList(data);
-        } else {
-          // Listado público con filtros
-          const params = new URLSearchParams();
-          if (q) params.set('q', q);
-          if (categoria_id) params.set('categoria_id', categoria_id);
-          const { data } = await axios.get(`${API.PATCHES}/patches?${params.toString()}`);
-          renderList(data);
-        }
-      } catch (e) {
-        renderList([]);
-        showMsg(e?.response?.data?.error || 'Error consultando parches.', 'error');
-      }
-    }
+  <!-- VENTANA FLOTANTE EDITAR PLAN-->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Nuevo parche</h2>
+        
+        <form>
+          <form class="search-box" action="resultados.html" method="get">
+            <input type="search" name="q" placeholder="Buscar destino...">
+            <button type="submit">🔍</button>
+          </form>
 
-    // Boot
-    (async function init() {
-      await loadCategories();
-      await load(false);
-    })();
-  </script>
+          <label for="transporte">Categoría:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Comida</option>
+            <option>Arte</option>
+            <option>Musica</option>
+            <option>Soplar</option>
+          </select>
+          <button type="submit" class="btn-submit">Buscar plan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="closeusu"></div>
+  <div class="cp">
+    <label for="toggle-filtros" class="izquierda">
+      <a href="#miModal" class="btn">FILTRAR</a>
+    </label>
+    <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
+
+ 
+  <!-- Modal -->
+  <div id="miModal" class="overlay">
+    <div class="popup">
+      <h3><B>FILTRAR POR:</B></h3>
+      <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
+<div class="lista-zonas">
+  <p>Selecciona una zona:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Zonas</option>
+      <option value="op1">Norte</option>
+      <option value="op2">Centro</option>
+      <option value="op3">Sur</option>
+      <option value="op4">Occidente</option>
+      <option value="op4">Oriente</option>
+    </select>
+  </div>
+<div class="lista-zonas">
+  <p>Categorías:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Comida</option>
+      <option value="op1">Nocturno</option>
+      <option value="op2">Musica</option>
+      <option value="op3">Arte</option>
+      <option value="op4">Soplar</option>
+      <option value="op4">Deporte</option>
+    </select>
+</div>
+      <a href="admin.html" class="aplicar">Aplicar</a>
+      <a href="#" class="close">Cerrar</a>
+    </div>
+  </div>
+  </div>
+
+  <div class="menu-filtros">
+    <h4>Filtrar por:</h4>
+    <label><input type="checkbox"> Precio bajo</label>
+    <label><input type="checkbox"> Premium</label>
+    <label><input type="checkbox"> Empresarial</label>
+    <label><input type="checkbox"> VIP</label>
+  </div>
+
+<div class="catalogo">
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 1">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta"> 
+      <img src="../Imagenes/comida.jpg" alt="Plan 2">
+      <h3>Plan Comida</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 3">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 4">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+  </div>
+<br>
+<div class="catalogo2">
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 5">
+      <h3>Plan Arte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 6">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 7">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+    <div class="tarjeta">
+      <img src="../Imagenes/museo.jpg" alt="Plan 8">
+      <h3>Plan Arte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+  </div>
+  <br>
+
+  <!-- PANEL DE FAVORITOS -->
+   <div class="cp">
+    <label for="toggle-filtros" class="izquierda">
+      <a href="#miModal" class="btn">FILTRAR</a>
+    </label>
+    <span class="centro" id="catalogo-favoritos">PLANES FAVORITOS</span>
+
+ 
+  <!-- Modal -->
+  <div id="miModal" class="overlay">
+    <div class="popup">
+      <h3><B>FILTRAR POR:</B></h3>
+      <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
+<div class="lista-zonas">
+  <p>Selecciona una zona:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Zonas</option>
+      <option value="op1">Norte</option>
+      <option value="op2">Centro</option>
+      <option value="op3">Sur</option>
+      <option value="op4">Occidente</option>
+      <option value="op4">Oriente</option>
+    </select>
+  </div>
+<div class="lista-zonas">
+  <p>Categorías:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Comida</option>
+      <option value="op1">Nocturno</option>
+      <option value="op2">Musica</option>
+      <option value="op3">Arte</option>
+      <option value="op4">Soplar</option>
+      <option value="op4">Deporte</option>
+    </select>
+</div>
+      <a href="admin.html" class="aplicar">Aplicar</a>
+      <a href="#" class="close">Cerrar</a>
+    </div>
+  </div>
+  </div>
+
+  <div class="menu-filtros">
+    <h4>Filtrar por:</h4>
+    <label><input type="checkbox"> Precio bajo</label>
+    <label><input type="checkbox"> Premium</label>
+    <label><input type="checkbox"> Empresarial</label>
+    <label><input type="checkbox"> VIP</label>
+  </div>
+
+<div class="catalogo">
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 1">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta"> 
+      <img src="../Imagenes/comida.jpg" alt="Plan 2">
+      <h3>Plan Comida</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 3">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 4">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+  </div>
+<br>
+  <br>
+<footer>
+    <p>&copy; 2015 Parchate Cali</p>
+</footer>
 </body>
 </html>

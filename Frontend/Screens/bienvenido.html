@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bienvenido - Parchate Cali</title>
+  <link rel="stylesheet" href="../Styles/bienvenido.css">
+</head>
+<body>
+  <header class="header-logo">
+    <p style="font-size: 35px; font-weight: bold; margin: 20px;">Parchate Cali</p>
+    <nav>
+      <ul>
+        <li>
+          <label for="login-toggle" class="btn btn-primary">Iniciar Sesión</label>
+        </li>
+        <li>
+          <label for="register-toggle" class="btn btn-secondary">Crear Cuenta</label>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section class="origen">
+      <h1>¿Quiénes somos?</h1>
+      <div class="descripcion">
+        <p style="font-size: 20px;">Parchate Cali es una plataforma dedicada a conectar a los habitantes y visitantes de Cali con los mejores planes, eventos y actividades que la ciudad tiene para ofrecer. Ya seas un explorador buscando nuevas experiencias, un organizador queriendo compartir tus eventos, o una empresa promocionando tus servicios.</p>
+      </div>
+     <div class="banner-origen">
+  <div class="collage">
+    <img src="../Imagenes/calibanner.jpg" alt="Cristo Rey">
+    <img src="../Imagenes/ermita.jpg" alt="La Ermita">
+    <img src="../Imagenes/zoo.jpg">
+    <img src="../Imagenes/museo.jpg" alt="Río Cali">
+    <img src="../Imagenes/gatos.jpg" alt="Parque de los Gatos">
+    <img src="../Imagenes/paisaje.jpg" alt="Cali paisaje">
+  </div>
+</div>
+    </section>
+    <section class="tipos-usuario">
+      <h2 style="font-size: 50px;">Tipos de Usuario</h2>
+      <div class="usuarios">
+        <div class="usuario">
+          <h3>Explorador</h3>
+          <p>Usuarios que buscan descubrir nuevos planes y actividades en la ciudad.</p>
+        </div>
+        <div class="usuario">
+          <h3>Organizador</h3>
+          <p>Usuarios que crean y publican eventos culturales o sociales.</p>
+        </div>
+        <div class="usuario">
+          <h3>Empresa</h3>
+          <p>Negocios que promocionan sus servicios y actividades para la comunidad.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="creadores">
+      <h2>Creadores</h2>
+      <p>Conoce al equipo que hace posible Parchate Cali y su visión.</p>
+      <div class="equipo">
+        <div class="miembro"><img src="../Imagenes/miembro1.jpg" alt="Miembro 1"></div>
+        <div class="miembro"><img src="../Imagenes/miembro2.jpg" alt="Miembro 2"></div>
+        <div class="miembro"><img src="../Imagenes/miembro3.jpg" alt="Miembro 3"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Parchate Cali</p>
+  </footer>
+
+  <input type="checkbox" id="login-toggle" hidden>
+  <input type="checkbox" id="register-toggle" hidden>
+
+  <div class="modal login-modal">
+    <div class="modal-content">
+      <label for="login-toggle" class="modal-close btn">&times;</label>
+      <h3 style="font-size: 30px; margin-bottom: -2px;">Iniciar Sesión</h3>
+      <form id="loginForm" novalidate>
+        <p style="margin-bottom: -10px;">Correo Electrónico</p>
+        <input type="email" placeholder="" required>
+        <p style="margin-bottom: -10px;">Contraseña</p>
+        <input type="password" placeholder="" required>
+        <button type="submit" class="big-check-btn">✓</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal register-modal">
+    <div class="modal-content">
+      <label for="register-toggle" class="modal-close btn">&times;</label>
+      <h3>Crear Cuenta</h3>
+      <form id="registerForm" novalidate>
+        <label>Nombre <input type="text" name="name" required></label>
+        <label>Correo <input type="email" name="email" required></label>
+        <label>Contraseña <input type="password" name="password" required></label>
+        <label>Tipo de Usuario
+          <select name="tipo" required>
+            <option value="" disabled selected>Seleccione...</option>
+            <option value="usuario">Usuario</option>
+            <option value="empresa">Empresa</option>
+          </select>
+        </label>
+        <button type="submit" class="btn btn-primary">Crear cuenta</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
+

@@ -1,150 +1,294 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Mi Parche Cali — Admin</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/Frontend/Styles.css/base.css">
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administración - Parcháte Cali</title>
+  <link rel="stylesheet" href="../styles/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <div id="closeusu"></div>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div>
-        <div class="brand">Mi Parche Cali — Admin</div>
-        <div class="breadcrumbs">
-          <a href="./Inicio.html">Inicio</a> / Admin
-        </div>
+<header class="header-logo">
+    <h1 style="font-size: 60px;">Párchate Cali</h1>
+    <nav>
+      <ul>
+        <li><a href="#catalogo-planes">Planes</a></li>
+        <li><a href="#modal3">Perfil</a></li>
+        <li><a href="bienvenido.html">Cerrar sesión</a></li>
+      </ul>
+    </nav>
+  </header>
+<main>
+<section class="banner-principal">
+    <h2>Panel de Administración</h2>
+  <p>Administra los perfiles de los usuarios</p>
+      <a href="#modalusuarios" class="button">Buscar usuarios</a>
+    </section>
+  </main>
+<div>
+  <br>
+  <div class="contenedor">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqGeI0Ep6NFmy-WCGN98tZTI3VnMUKp6xDfEsvqIVC2Sxve28GDiNbx64hwnf_Xv6dBa7c72Mc4dpgaJDW_Itblh_3BrhmT3BfFs3Bh3eEbHKdo5NDDPamvwEdyIgnE-qi7Qc0Z=w648-h374-n-k-no" alt="Imagen 1">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noSCdi8R_u_FIEOK-saxUNjfMdxvtA-dMKnCKy-wCqUNSn7E9uQK3OWWwW_TkHzC81DKx-BlCQ5SVvKfQ4U5-SWT9Ni5OHvPiFUvdVy5khtKWrGLyLUoviYgUlFcragzcW7FpM=w648-h374-n-k-no" alt="Imagen 2">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npcjg6k-PqfliqmbbNogSDq0DyAEPExBqy1Ln5xj9x3bYe_U-X6aj-K0YHYT6SaKH0MM_k3gAoCMOCYOYO2v3Ylsr1UH1i9O-A-N02sK-2CmKVDi2N1FagVDg_vqgO_IE2gwjJV=w648-h374-n-k-no" alt="Imagen 3">
+  </div>
+  <div id="modal4" class="modal">
+    <div class="modal-content">      
+      <div class="modal-img"></div>
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Plan Gastronómico en la Zona Rosa</h2>      
+      <div class="info">
+        <span><b>Tipo de plan:</b> Gastronómico 🍴</span>
+        <span><b>Número de personas:</b> 2 a 4</span>
+        <span><b>Ubicación:</b>Zona Rosa, Cali</span>
       </div>
-      <div class="actions">
-        <button class="btn btn-ghost" id="btnBack">← Atrás</button>
-        <button class="btn btn-danger" id="btnLogout">Cerrar sesión</button>
-      </div>
-    </header>
-
-    <div class="alert info">
-      Como admin puedes listar/eliminar <b>usuarios</b> y <b>parches</b>. El listado de parches usa el endpoint público (publicados).
+      <p>
+        Vive una experiencia culinaria única en la Zona Rosa de Cali. 
+        Degusta la mejor comida típica vallecaucana con un toque moderno, 
+        acompañada de música en vivo y un ambiente vibrante.  
+        ¡Un plan perfecto para disfrutar con amigos o en pareja!
+      </p>
+      <a href="#modal4" class="eliminarplan">Elimar Plan</a>
     </div>
+     
+  </div>
+</div>
+</div>
 
-    <section>
-      <h2>Usuarios</h2>
-      <div class="actions" style="margin-bottom:10px; gap:6px;">
-        <select id="uRol" class="select" style="max-width:220px;">
-          <option value="">Todos los roles</option>
-          <option value="ADMIN">ADMIN</option>
-          <option value="USUARIO_EMPRESA">USUARIO_EMPRESA</option>
-          <option value="USUARIO_BUSCADOR">USUARIO_BUSCADOR</option>
-        </select>
-        <button class="btn" id="uReload">Recargar</button>
+<div id="modalusuarios">
+  <div class="content">
+  <h2>Usuarios registrados</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+      </tr>
+    </thead>
+      <tbody>
+      <tr>
+        <td>María Gómez</td>
+        <td>maria@example.com</td>
+        <td>Administrador</td>
+      </tr>
+      <tr>
+        <td>Juan Pérez</td>
+        <td>juan@example.com</td>
+        <td>Usuario</td>
+      </tr>
+      <tr>
+        <td>Catalina Ruiz</td>
+        <td>cata@example.com</td>
+        <td>Usuario</td>
+      </tr>
+    </tbody>
+  </table>
+  <a href="#closeusu" class="closeusuarios">Cerrar</a>
+  </div>
+</div>
+<!-- VENTANA FLOTANTE PERFIL-->
+<div id="modal3" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
+
+
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h1 style="color: #006bb3;">PERFIL :</h1>
+        <p>Administrador</p>
+        <form>
+          <label for="destino">Nombre Admin:</label>
+          <p>Nicolás Hincapié Reyes</p>
+
+          <label for="transporte">Correo:</label>
+          <p>nicolas.hincapie@example.com</p>
+          <label for="dias">No. teléfono</label>
+          <p>1234567890</p>
+          <label for="transporte">Ubicación:</label>
+          <p>Cali, Colombia</p>
+          <button type="submit" class="btn-submit">Listo</button>
+        </form>
       </div>
-      <table class="table" id="tblUsers">
-        <thead>
-          <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Activo</th><th>Creado</th><th>Acciones</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </section>
-
-    <hr class="hr">
-
-    <section>
-      <h2>Parches publicados</h2>
-      <div class="actions" style="margin-bottom:10px;">
-        <button class="btn" id="pReload">Recargar</button>
-      </div>
-      <div id="grid" class="cards"></div>
-    </section>
+    </div>
   </div>
 
-  <script>
-    const API = {
-      USERS: 'http://localhost:3002/users',
-      PATCHES: 'http://localhost:3003'
-    };
-    const Session = {
-      token() { return localStorage.getItem('token'); },
-      user() { try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
-      clear() { localStorage.removeItem('token'); localStorage.removeItem('user'); }
-    };
-    const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` }});
 
-    (function guard() {
-      const u = Session.user();
-      if (!u || u.rol !== 'ADMIN') window.location.href = './Inicio.html';
-    })();
 
-    document.getElementById('btnLogout').onclick = () => { Session.clear(); window.location.href = './Inicio.html'; };
-    document.getElementById('btnBack').onclick = () => { history.length > 1 ? history.back() : window.location.href = './Inicio.html'; };
+  <!-- VENTANA FLOTANTE CREAR PLAN-->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
 
-    async function loadUsers() {
-      const rol = document.getElementById('uRol').value;
-      const params = new URLSearchParams({ page: 1, limit: 50 });
-      if (rol) params.set('rol', rol);
-      const tb = document.querySelector('#tblUsers tbody');
-      tb.innerHTML = '<tr><td colspan="7">Cargando...</td></tr>';
-      try {
-        const { data } = await axios.get(`${API.USERS}?${params.toString()}`, authHeader());
-        tb.innerHTML = data.data.map(u => `
-          <tr>
-            <td>${u.id}</td>
-            <td>${u.nombre}</td>
-            <td>${u.email}</td>
-            <td><span class="badge">${u.rol}</span></td>
-            <td>${u.is_active ? 'Sí' : 'No'}</td>
-            <td>${new Date(u.created_at).toLocaleString()}</td>
-            <td>
-              ${u.rol !== 'ADMIN' ? `<button class="btn btn-danger" onclick="delUser(${u.id})">Eliminar</button>` : '<span class="badge">Protegido</span>'}
-            </td>
-          </tr>
-        `).join('');
-      } catch {
-        tb.innerHTML = '<tr><td colspan="7">Error cargando usuarios.</td></tr>';
-      }
-    }
-    window.delUser = async function(id) {
-      if (!confirm('¿Eliminar este usuario?')) return;
-      try {
-        await axios.delete(`${API.USERS}/${id}`, authHeader());
-        await loadUsers();
-      } catch { alert('No fue posible eliminar.'); }
-    };
-    document.getElementById('uReload').onclick = loadUsers;
-    document.getElementById('uRol').onchange = loadUsers;
 
-    async function loadPatches() {
-      const grid = document.getElementById('grid');
-      grid.innerHTML = '<div class="alert info">Cargando...</div>';
-      try {
-        const { data } = await axios.get(`${API.PATCHES}/patches`);
-        grid.innerHTML = data.map(p => `
-          <article class="card">
-            <img src="${p.cover_image_url || 'https://picsum.photos/seed/admin'+p.id+'/600/400'}" alt="Portada">
-            <div class="card-body">
-              <h3 class="card-title">${p.titulo}</h3>
-              <div class="card-meta">${p.categoria || ''}</div>
-              <div class="card-actions">
-                <button class="btn btn-danger" onclick="delPatch(${p.id})">Eliminar</button>
-              </div>
-            </div>
-          </article>
-        `).join('');
-      } catch {
-        grid.innerHTML = '<div class="alert error">Error cargando parches.</div>';
-      }
-    }
-    window.delPatch = async function(id) {
-      if (!confirm('¿Eliminar este parche?')) return;
-      try {
-        await axios.delete(`http://localhost:3003/patches/${id}`, authHeader());
-        await loadPatches();
-      } catch { alert('No fue posible eliminar el parche.'); }
-    };
-    document.getElementById('pReload').onclick = loadPatches;
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Nuevo parche</h2>
+        
+        <form>
+          <label for="destino">Nombre parche:</label>
+          <input type="text" id="destino" name="destino" placeholder="Ej: Sato">
 
-    (async function init() {
-      await loadUsers();
-      await loadPatches();
-    })();
-  </script>
+          <label for="transporte">Categoría:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Comida</option>
+            <option>Arte</option>
+            <option>Musica</option>
+            <option>Soplar</option>
+          </select>
+
+          <label for="dias">No. personas sugeridas:</label>
+          <input type="number" id="dias" name="dias" min="1">
+
+          <label for="transporte">Ubicación:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Norte</option>
+            <option>Sur</option>
+            <option>Este</option>
+            <option>Oeste</option>
+          </select>
+
+          <button type="submit" class="btn-submit">Guardar plan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- VENTANA FLOTANTE EDITAR PLAN-->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      
+      <div class="modal-img"></div>
+      <div class="modal-form">
+        <a href="#" class="close">&times;</a>
+        <h2 style="color: #006bb3;">Nuevo parche</h2>
+        
+        <form>
+          <form class="search-box" action="resultados.html" method="get">
+            <input type="search" name="q" placeholder="Buscar destino...">
+            <button type="submit">🔍</button>
+          </form>
+
+          <label for="transporte">Categoría:</label>
+          <select id="transporte" name="transporte">
+            <option>Seleccionar</option>
+            <option>Comida</option>
+            <option>Arte</option>
+            <option>Musica</option>
+            <option>Soplar</option>
+          </select>
+          <button type="submit" class="btn-submit">Buscar plan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="cp">
+    <label for="toggle-filtros" class="izquierda">
+      <a href="#miModal" class="btn">FILTRAR</a>
+    </label>
+    <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
+
+ 
+  <!-- Modal -->
+  <div id="miModal" class="overlay">
+    <div class="popup">
+      <h3><B>FILTRAR POR:</B></h3>
+      <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
+<div class="lista-zonas">
+  <p>Selecciona una zona:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Zonas</option>
+      <option value="op1">Norte</option>
+      <option value="op2">Centro</option>
+      <option value="op3">Sur</option>
+      <option value="op4">Occidente</option>
+      <option value="op4">Oriente</option>
+    </select>
+  </div>
+<div class="lista-zonas">
+  <p>Categorías:</p>
+    <select id="opciones" name="opciones">
+      <option value="op1">Comida</option>
+      <option value="op1">Nocturno</option>
+      <option value="op2">Musica</option>
+      <option value="op3">Arte</option>
+      <option value="op4">Soplar</option>
+      <option value="op4">Deporte</option>
+    </select>
+</div>
+      <a href="admin.html" class="aplicar">Aplicar</a>
+      <a href="#" class="close">Cerrar</a>
+    </div>
+  </div>
+  </div>
+
+  <div class="menu-filtros">
+    <h4>Filtrar por:</h4>
+    <label><input type="checkbox"> Precio bajo</label>
+    <label><input type="checkbox"> Premium</label>
+    <label><input type="checkbox"> Empresarial</label>
+    <label><input type="checkbox"> VIP</label>
+  </div>
+<div class="catalogo">
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 1">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta"> 
+      <img src="../Imagenes/comida.jpg" alt="Plan 2">
+      <h3>Plan Comida</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 3">
+      <h3>Plan Musica</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 4">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+  </div>
+<br>
+<div class="catalogo2">
+    <div class="tarjeta">
+      <img src="../Imagenes/musica.jpg" alt="Plan 5">
+      <h3>Plan Arte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 6">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+
+    <div class="tarjeta">
+      <img src="../Imagenes/Deporte.jpg" alt="Plan 7">
+      <h3>Plan Deporte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+    <div class="tarjeta">
+      <img src="../Imagenes/museo.jpg" alt="Plan 8">
+      <h3>Plan Arte</h3>
+      <a href="#modal4" class="ver">Ver</a>
+    </div>
+  </div>
+  <br>
+<footer>
+    <p>&copy; 2015 Parchate Cali</p>
+</footer>
 </body>
 </html>
