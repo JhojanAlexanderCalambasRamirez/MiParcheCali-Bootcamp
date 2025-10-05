@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Empresa - Parcháte Cali</title>
-  <!-- ✅ usa la carpeta Styles (mayúscula) -->
+
+  <!-- Usa tu carpeta Styles (mayúscula, según tu proyecto) -->
   <link rel="stylesheet" href="../Styles/usuario.empresa.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
@@ -14,7 +15,7 @@
   <nav>
     <ul>
       <li><a href="#catalogo-planes">Planes</a></li>
-      <li><a href="#modalPerfil">Perfil</a></li>
+      <li><a href="#modal3">Perfil</a></li>
       <li><a href="#" id="lnkLogout">Cerrar sesión</a></li>
     </ul>
   </nav>
@@ -24,42 +25,41 @@
   <section class="banner-principal">
     <h2>Gestión de Planes</h2>
     <p>Atrae a los caleños con planes únicos y emocionantes.</p>
-    <a href="#modalCrear" class="button">Crear nuevo plan</a>
+    <!-- Botón que abre el modal de creación (mantiene tu #modal1) -->
+    <a href="#modal1" class="button">Crear nuevo plan</a>
   </section>
 </main>
 
 <div>
   <br />
   <div class="contenedor">
-    <!-- (Opcional) cambia a ../Imagenes si tu carpeta no es "Images" -->
+    <!-- Si tu carpeta es Images (inglés), cambia ../Imagenes por ../Images -->
     <img src="../Imagenes/calibanner.jpg" alt="Imagen 1" />
     <img src="../Imagenes/ermita.jpg" alt="Imagen 2" />
     <img src="../Imagenes/museo.jpg" alt="Imagen 3" />
   </div>
 </div>
 
-<!-- ===== PERFIL ===== -->
-<div id="modalPerfil" class="modal">
+<!-- ========= PERFIL (mantengo tu #modal3) ========= -->
+<div id="modal3" class="modal">
   <div class="modal-content">
     <div class="modal-img"></div>
     <div class="modal-form">
       <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
-      <h1 style="color: #006bb3;">PERFIL :</h1>
+      <h1 style="color:#006bb3;">PERFIL :</h1>
       <p>Usuario Empresa</p>
-      <div id="perfilBody">
-        <!-- se inyecta con JS -->
-      </div>
+      <div id="perfilBody"><!-- se completa con JS --></div>
       <button type="button" class="btn-submit" onclick="closeHashModal()">Listo</button>
     </div>
   </div>
 </div>
 
-<!-- ===== CREAR PARCHE ===== -->
-<div id="modalCrear" class="modal">
+<!-- ========= CREAR PARCHE (mantengo tu #modal1) ========= -->
+<div id="modal1" class="modal">
   <div class="modal-content">
     <div class="modal-form">
       <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
-      <h2 style="color: #006bb3; font-size: 32px; font-family: 'Poppins','Roboto',sans-serif;">Nuevo parche</h2>
+      <h2 style="color:#006bb3; font-size:32px; font-family:'Poppins','Roboto',sans-serif;">Nuevo parche</h2>
 
       <div id="fbCrear" class="alert error" style="display:none;"></div>
 
@@ -109,8 +109,8 @@
   </div>
 </div>
 
-<!-- ===== EDITAR PARCHE ===== -->
-<div id="modalEditar" class="modal">
+<!-- ========= EDITAR PARCHE (mantengo tu #modal2) ========= -->
+<div id="modal2" class="modal">
   <div class="modal-content">
     <div class="modal-form">
       <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
@@ -137,12 +137,13 @@
   </div>
 </div>
 
-<!-- ===== SUBIR FOTOS ===== -->
-<div id="modalUpload" class="modal">
+<!-- ========= SUBIR FOTOS (reutilizo #modal4 para no chocar con tu CSS) ========= -->
+<div id="modal4" class="modal">
   <div class="modal-content">
     <div class="modal-form">
       <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
       <h2 style="color:#006bb3;">Subir fotos al parche</h2>
+
       <div id="fbUpload" class="alert error" style="display:none;"></div>
 
       <label>Selecciona hasta 3 imágenes (JPG, PNG, WEBP o GIF, máx. 5MB c/u)
@@ -159,7 +160,7 @@
   </div>
 </div>
 
-<!-- ===== CATÁLOGO DE MIS PARCHES ===== -->
+<!-- ========= MIS PARCHES ========= -->
 <div class="cp">
   <span class="centro" id="catalogo-planes">MIS PARCHES</span>
 </div>
@@ -169,7 +170,7 @@
   <p>&copy; 2025 Parchate Cali</p>
 </footer>
 
-<!-- ===== SCRIPTS ===== -->
+<!-- =============== SCRIPTS =============== -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
   /* =======================
@@ -187,6 +188,33 @@
   };
   const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` } });
 
+  // Mantener tu UX de cerrar modales con hash limpio
+  function closeHashModal(e){
+    if (e) e.preventDefault();
+    history.pushState('', document.title, window.location.pathname + window.location.search);
+  }
+
+  // Helpers UI
+  function show(el, text, type='error'){
+    el.className = `alert ${type}`;
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+  function hide(el){ el.style.display = 'none'; }
+
+  // Placeholder si no hay portada
+  function placeholderImg(text='Sin portada'){
+    const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
+    return 'data:image/svg+xml;charset=utf-8,'+svg;
+  }
+  function patchAsset(url){
+    if (!url) return placeholderImg();
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/patches')) return API.PATCHES + url; // servido por microservicio
+    return url;
+  }
+
+  // Guard de rol (empresa)
   function requireEmpresa(){
     const u = Session.user();
     if (!u || u.rol !== 'USUARIO_EMPRESA'){
@@ -199,34 +227,8 @@
   document.getElementById('lnkLogout').addEventListener('click', (e) => {
     e.preventDefault();
     Session.clear();
-    window.location.href = '../Screens/bienvenido.html';
+    window.location.href = './bienvenido.html?logout=1';
   });
-
-  // Modal hash helpers
-  function closeHashModal(e){
-    if (e) e.preventDefault();
-    history.pushState('', document.title, window.location.pathname + window.location.search);
-  }
-
-  // UI helpers
-  function show(el, text, type='error'){
-    el.className = `alert ${type}`;
-    el.textContent = text;
-    el.style.display = 'block';
-  }
-  function hide(el){ el.style.display = 'none'; }
-
-  // Imagen placeholder
-  function placeholderImg(text='Sin portada'){
-    const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
-    return 'data:image/svg+xml;charset=utf-8,'+svg;
-  }
-  function patchAsset(url){
-    if (!url) return placeholderImg();
-    if (url.startsWith('http')) return url;
-    if (url.startsWith('/patches')) return API.PATCHES + url;
-    return url;
-  }
 
   /* =======================
      Perfil
@@ -274,7 +276,7 @@
     if (!files || !files.length) return;
     const fd = new FormData();
     for (const f of files) fd.append('photos', f);
-    await axios.post(`${API.PATCHES}/patches/${patchId}/photos`, fd, authHeader()); // axios pone boundary solo
+    await axios.post(`${API.PATCHES}/patches/${patchId}/photos`, fd, authHeader());
   }
 
   document.getElementById('formCrear').addEventListener('submit', async (e) => {
@@ -300,16 +302,14 @@
         titulo, categoria_id, descripcion, zona, telefono, direccion,
         link_red_social: link_red_social || null,
         cover_image_url: cover_image_url || null,
-        fotos: [] // (URLs opcionales, aquí usamos subida de archivos abajo)
+        fotos: [] // (URLs opcionales; aquí subimos archivos después)
       }, authHeader());
 
-      // Subir fotos si el usuario seleccionó archivos
       if (files.length){
-        try { await uploadPhotos(data.id, files); }
-        catch { /* tolerar error de fotos sin bloquear el flujo */ }
+        try { await uploadPhotos(data.id, files); } catch {}
       }
 
-      // Limpiar y cerrar
+      // Limpiar, cerrar y refrescar
       e.target.reset();
       closeHashModal();
       await loadMine();
@@ -319,7 +319,7 @@
   });
 
   /* =======================
-     Mis parches (listar, editar, eliminar, subir fotos)
+     Mis parches
      ======================= */
   function cardMineHTML(p){
     const img = patchAsset(p.cover_image_url);
@@ -331,9 +331,9 @@
         <h3>${p.titulo}</h3>
         <p style="margin:6px 0; font-size:.9rem; color:#666;">${pub} — ${created}</p>
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
-          <a href="#modalEditar" class="ver" onclick="openEdit(${p.id}, '${encodeURIComponent(p.titulo)}', ${p.is_published ? 1 : 0}); return true;">Editar</a>
+          <a href="#modal2" class="ver" onclick="openEdit(${p.id}, '${encodeURIComponent(p.titulo)}', ${p.is_published ? 1 : 0}); return true;">Editar</a>
           <a href="#" class="ver" style="background:#ffe8e8; color:#a10000;" onclick="delPatch(${p.id}); return false;">Eliminar</a>
-          <a href="#modalUpload" class="ver" onclick="openUpload(${p.id}); return true;">Subir fotos</a>
+          <a href="#modal4" class="ver" onclick="openUpload(${p.id}); return true;">Subir fotos</a>
         </div>
       </div>
     `;
@@ -349,12 +349,12 @@
         return;
       }
       grid.innerHTML = data.map(cardMineHTML).join('');
-    }catch(e){
+    }catch{
       grid.innerHTML = '<div class="tarjeta"><h3>Error cargando tus parches</h3></div>';
     }
   }
 
-  // Editar
+  // ===== Editar
   let editId = null;
   function openEdit(id, titulo, publicado){
     editId = id;
@@ -380,7 +380,7 @@
     }
   });
 
-  // Eliminar
+  // ===== Eliminar
   async function delPatch(id){
     if (!confirm('¿Eliminar este parche?')) return;
     try{
@@ -392,7 +392,7 @@
   }
   window.delPatch = delPatch;
 
-  // Subir fotos
+  // ===== Subir fotos
   let uploadPatchId = null;
   function openUpload(patchId){
     uploadPatchId = patchId;
@@ -442,13 +442,10 @@
     await loadCategories();
     await loadMine();
 
-    // Abrir modales por hash
+    // Compatibilidad: si tu CSS usa :target, con los href="#modalX" ya funciona.
+    // Este listener solo asegura que, si hiciste scroll, al cerrar vuelva a estado normal.
     window.addEventListener('hashchange', () => {
-      const h = location.hash;
-      if (h === '#modalPerfil')  document.getElementById('modalPerfil').style.display = 'block';
-      if (h === '#modalCrear')   document.getElementById('modalCrear').style.display = 'block';
-      if (h === '#modalEditar')  document.getElementById('modalEditar').style.display = 'block';
-      if (h === '#modalUpload')  document.getElementById('modalUpload').style.display = 'block';
+      // no forzamos display here; tu CSS controla la visibilidad por :target
     });
   })();
 </script>

@@ -2,10 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Administración - Parcháte Cali</title>
+  <!-- 🔹 Usa la carpeta con S mayúscula según tu estructura -->
   <link rel="stylesheet" href="../Styles/admin.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <div id="closeusu"></div>
 </head>
 <body>
 
@@ -14,8 +16,9 @@
   <nav>
     <ul>
       <li><a href="#catalogo-planes">Planes</a></li>
-      <li><a href="#modalPerfil">Perfil</a></li>
-      <li><a href="#" id="lnkLogout">Cerrar sesión</a></li>
+      <li><a href="#modal3">Perfil</a></li>
+      <!-- añadimos id para limpiar sesión con JS -->
+      <li><a href="bienvenido.html" id="lnkLogout">Cerrar sesión</a></li>
     </ul>
   </nav>
 </header>
@@ -23,419 +26,478 @@
 <main>
   <section class="banner-principal">
     <h2>Panel de Administración</h2>
-    <p>Administra usuarios, categorías y parches</p>
-    <div class="toolbar">
-      <a href="#modalUsuarios" class="button">Usuarios</a>
-      <a href="#modalCategorias" class="button">Categorías</a>
-      <a href="#miModal" class="button">Filtrar parches</a>
-    </div>
+    <p>Administra los perfiles de los usuarios</p>
+    <a href="#modalusuarios" class="button">Buscar usuarios</a>
+    <!-- Botón extra para categorías (requisito de ADMIN) -->
+    <a href="#modalcategorias" class="button">Categorías</a>
   </section>
 </main>
 
-<div id="fbGlobal" class="alert"></div>
-
-<div class="cp">
-  <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
-</div>
-
-<div id="gridParches" class="grid" style="padding: 0 16px 16px;"></div>
-
-<div id="modalDetalle" class="modal-plain">
-  <div class="box">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3 id="dTitulo">Detalle del parche</h3>
-      <button class="btn" onclick="closeModal('modalDetalle')">✕</button>
-    </div>
-    <div id="fbDetalle" class="alert"></div>
-    <div id="dBody"></div>
-    <div class="row-actions" style="margin-top:10px;">
-      <button id="btnDelPatch" class="btn" style="background:#ffe8e8; border:1px solid #ffb8b8; color:#a10000;">Eliminar parche</button>
-    </div>
+<div>
+  <br>
+  <div class="contenedor">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqGeI0Ep6NFmy-WCGN98tZTI3VnMUKp6xDfEsvqIVC2Sxve28GDiNbx64hwnf_Xv6dBa7c72Mc4dpgaJDW_Itblh_3BrhmT3BfFs3Bh3eEbHKdo5NDDPamvwEdyIgnE-qi7Qc0Z=w648-h374-n-k-no" alt="Imagen 1">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noSCdi8R_u_FIEOK-saxUNjfMdxvtA-dMKnCKy-wCqUNSn7E9uQK3OWWwW_TkHzC81DKx-BlCQ5SVvKfQ4U5-SWT9Ni5OHvPiFUvdVy5khtKWrGLyLUoviYgUlFcragzcW7FpM=w648-h374-n-k-no" alt="Imagen 2">
+    <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npcjg6k-PqfliqmbbNogSDq0DyAEPExBqy1Ln5xj9x3bYe_U-X6aj-K0YHYT6SaKH0MM_k3gAoCMOCYOYO2v3Ylsr1UH1i9O-A-N02sK-2CmKVDi2N1FagVDg_vqgO_IE2gwjJV=w648-h374-n-k-no" alt="Imagen 3">
   </div>
-</div>
 
-<div id="modalUsuarios" class="modal-plain">
-  <div class="box">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3>Usuarios registrados</h3>
-      <button class="btn" onclick="closeModal('modalUsuarios')">✕</button>
-    </div>
-    <div class="toolbar">
-      <input id="uSearch" placeholder="Buscar por email o nombre..." />
-      <select id="uRol">
-        <option value="">Todos los roles</option>
-        <option value="USUARIO_BUSCADOR">USUARIO_BUSCADOR</option>
-        <option value="USUARIO_EMPRESA">USUARIO_EMPRESA</option>
-        <option value="ADMIN">ADMIN</option>
-      </select>
-      <button class="btn" onclick="loadUsers()">Aplicar</button>
-    </div>
-    <div id="fbUsers" class="alert"></div>
-    <table class="table-admin">
-      <thead>
-        <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Acciones</th></tr>
-      </thead>
-      <tbody id="tblUsers"></tbody>
-    </table>
-  </div>
-</div>
+  <!-- ===== Modal de DETALLE DE PARCHE (se rellena con JS) ===== -->
+  <div id="modal4" class="modal">
+    <div class="modal-content">
+      <div class="modal-img" id="mdCover"></div>
+      <div class="modal-form">
+        <a href="#closeusu" class="close">&times;</a>
+        <h2 id="mdTitulo" style="color: #006bb3;">Detalle del parche</h2>
+        <div class="info">
+          <span><b>Categoría:</b> <span id="mdCategoria">—</span></span>
+          <span><b>Zona:</b> <span id="mdZona">—</span></span>
+          <span><b>Teléfono:</b> <span id="mdTelefono">—</span></span>
+          <span><b>Dirección:</b> <span id="mdDireccion">—</span></span>
+        </div>
+        <p id="mdDescripcion">—</p>
+        <p><b>Red social:</b> <a id="mdLink" href="#" target="_blank" rel="noopener">—</a></p>
+        <div id="mdFotos" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap:10px;"></div>
 
-<div id="modalCategorias" class="modal-plain">
-  <div class="box">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3>Gestión de categorías</h3>
-      <button class="btn" onclick="closeModal('modalCategorias')">✕</button>
-    </div>
-
-    <div id="fbCats" class="alert"></div>
-
-    <div class="toolbar">
-      <input id="cNombre" placeholder="Nombre de categoría" />
-      <input id="cSlug" placeholder="Slug (opcional)" />
-      <button class="btn primary" onclick="createCategory()">Crear</button>
-      <button class="btn" onclick="loadCategories()">Refrescar</button>
-    </div>
-
-    <table class="table-admin">
-      <thead>
-        <tr><th>ID</th><th>Nombre</th><th>Slug</th><th>Acciones</th></tr>
-      </thead>
-      <tbody id="tblCats"></tbody>
-    </table>
-
-    <div style="margin-top:14px;">
-      <h4>Eliminar categoría</h4>
-      <div class="toolbar">
-        <select id="cDelId"></select>
-        <span>Reasignar parches a:</span>
-        <select id="cReassign"></select>
-        <button class="btn" onclick="deleteCategory()">Eliminar</button>
+        <a href="#closeusu" id="btnEliminarPatch" class="eliminarplan" style="margin-top:10px;">Eliminar Plan</a>
       </div>
     </div>
   </div>
 </div>
 
-<div id="modalPerfil" class="modal-plain">
-  <div class="box">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3>Perfil</h3>
-      <button class="btn" onclick="closeModal('modalPerfil')">✕</button>
+<!-- ========== MODAL LISTA DE USUARIOS (ADMIN) ========== -->
+<div id="modalusuarios">
+  <div class="content">
+    <h2>Usuarios registrados</h2>
+    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+      <input id="uSearch" placeholder="Buscar por nombre o email..." />
+      <select id="uRol">
+        <option value="">Todos</option>
+        <option value="USUARIO_BUSCADOR">USUARIO_BUSCADOR</option>
+        <option value="USUARIO_EMPRESA">USUARIO_EMPRESA</option>
+        <option value="ADMIN">ADMIN</option>
+      </select>
+      <a href="#modalusuarios" class="button" id="btnUsuariosBuscar">Aplicar</a>
     </div>
-    <div id="pBody"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tblUsuarios">
+        <!-- filas dinámicas -->
+      </tbody>
+    </table>
+    <a href="#closeusu" class="closeusuarios">Cerrar</a>
   </div>
 </div>
 
+<!-- ========== PERFIL (usa modal id original: modal3) ========== -->
+<div id="modal3" class="modal">
+  <div class="modal-content">
+    <div class="modal-img"></div>
+    <div class="modal-form">
+      <a href="#closeusu" class="close">&times;</a>
+      <h1 style="color: #006bb3;">PERFIL :</h1>
+      <p>Administrador</p>
+      <div id="perfilAdmin"><!-- inject --></div>
+      <button type="button" class="btn-submit"><a href="#closeusu" style="color:inherit; text-decoration:none;">Listo</a></button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MODAL CATEGORÍAS (ADMIN) ========== -->
+<div id="modalcategorias" class="modal">
+  <div class="modal-content">
+    <div class="modal-img"></div>
+    <div class="modal-form">
+      <a href="#closeusu" class="close">&times;</a>
+      <h2 style="color:#006bb3;">Categorías</h2>
+
+      <div id="fbCats" class="alert info" style="display:none;"></div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
+        <input id="cNombre" class="input" placeholder="Nombre de categoría" />
+        <input id="cSlug" class="input" placeholder="Slug (opcional)" />
+        <button class="btn-submit" id="btnCatCrear">Crear</button>
+        <button class="btn-submit" id="btnCatRefrescar" style="background:#eee; color:#333;">Refrescar</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Nombre</th><th>Slug</th><th>Acciones</th></tr>
+        </thead>
+        <tbody id="tblCats"></tbody>
+      </table>
+
+      <h3 style="margin-top:12px;">Eliminar categoría</h3>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <select id="cDelId"></select>
+        <span>Reasignar parches a:</span>
+        <select id="cReassign"></select>
+        <button class="btn-submit" id="btnCatEliminar" style="background:#ffe8e8; color:#a10000;">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FILTROS (usa overlay original: miModal) ========== -->
+<div class="cp">
+  <label for="toggle-filtros" class="izquierda">
+    <a href="#miModal" class="btn">FILTRAR</a>
+  </label>
+  <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
+</div>
+
+<div id="miModal" class="overlay">
+  <div class="popup">
+    <h3><b>FILTRAR POR:</b></h3>
+    <p style="font-size: 20px;">Escoge tu plan a tu preferencia.</p>
+
+    <div class="lista-zonas">
+      <p>Selecciona una zona:</p>
+      <input id="fZona" name="fZona" placeholder="Norte, Centro, Sur, etc.">
+    </div>
+
+    <div class="lista-zonas">
+      <p>Categorías:</p>
+      <select id="fCategoria" name="fCategoria">
+        <option value="">Todas</option>
+        <!-- opciones con JS -->
+      </select>
+    </div>
+
+    <a href="#closeusu" class="aplicar" id="btnApplyFilters">Aplicar</a>
+    <a href="#closeusu" class="close">Cerrar</a>
+  </div>
+</div>
+
+<!-- ========== GRID DE PARCHES (dinámico) ========== -->
+<div class="catalogo" id="gridParches">
+  <!-- tarjetas dinámicas -->
+</div>
+
+<br>
+
+<!-- (dejamos tu segunda grilla para que no se rompa el layout, pero no la usamos) -->
+<div class="catalogo2" id="gridParches2" style="display:none;"></div>
+
+<br>
 <footer>
-  <p>&copy; 2025 Parchate Cali</p>
+  <p>&copy; 2015 Parchate Cali</p>
 </footer>
 
+<!-- ========== SCRIPTS ========== -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  const API = {
-    AUTH: 'http://localhost:3001/auth',
-    USERS: 'http://localhost:3002/users',
-    PATCHES: 'http://localhost:3003',
-    CATEGORIES: 'http://localhost:3005/categories'
-  };
+/* =======================
+   Configuración & sesión
+   ======================= */
+const API = {
+  USERS: 'http://localhost:3002/users',
+  PATCHES: 'http://localhost:3003',
+  CATEGORIES: 'http://localhost:3005/categories'
+};
+const Session = {
+  token(){ return localStorage.getItem('token'); },
+  user(){ try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
+  clear(){ localStorage.removeItem('token'); localStorage.removeItem('user'); }
+};
+const authHeader = () => ({ headers: { Authorization: 'Bearer ' + Session.token() } });
 
-  const Session = {
-    token(){ return localStorage.getItem('token'); },
-    user(){ try { return JSON.parse(localStorage.getItem('user')); } catch { return null; } },
-    clear(){ localStorage.removeItem('token'); localStorage.removeItem('user'); }
-  };
-
-  function authHeader(){ return { headers: { Authorization: `Bearer ${Session.token()}` } }; }
-
-  function show(el, text, type='error'){
-    el.className = `alert ${type}`;
-    el.textContent = text;
-    el.style.display = 'block';
+function requireAdmin(){
+  const u = Session.user();
+  if (!u || u.rol !== 'ADMIN') {
+    // redirige si no es admin
+    window.location.href = './bienvenido.html';
+    return false;
   }
-  function hide(el){ el.style.display = 'none'; }
+  return true;
+}
 
-  function requireAdmin(){
-    const u = Session.user();
-    if (!u || u.rol !== 'ADMIN') {
-      window.location.href = './bienvenido.html';
-      return false;
+// logout real (limpia token y user)
+document.getElementById('lnkLogout').addEventListener('click', () => {
+  Session.clear();
+});
+
+/* =======================
+   Helpers UI
+   ======================= */
+function show(el, text, type='info'){
+  if (!el) return;
+  el.className = 'alert ' + type;
+  el.textContent = text;
+  el.style.display = 'block';
+}
+function hide(el){ if (el) el.style.display = 'none'; }
+
+function placeholderImg(text='Sin portada'){
+  const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
+  return 'data:image/svg+xml;charset=utf-8,' + svg;
+}
+function patchAsset(url){
+  if (!url) return placeholderImg();
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/patches')) return API.PATCHES + url;
+  return url;
+}
+
+/* =======================
+   PERFIL
+   ======================= */
+function loadProfile(){
+  const u = Session.user() || {};
+  document.getElementById('perfilAdmin').innerHTML = `
+    <label>Nombre Admin:</label>
+    <p>${u.nombre || '-'}</p>
+    <label>Correo:</label>
+    <p>${u.email || '-'}</p>
+    <label>Ubicación:</label>
+    <p>${u.ubicacion || 'Cali, Colombia'}</p>
+  `;
+}
+
+/* =======================
+   PARCHES (listar + detalle + eliminar)
+   ======================= */
+async function loadParches(params = {}){
+  const grid = document.getElementById('gridParches');
+  grid.innerHTML = '<div class="tarjeta"><h3>Cargando...</h3></div>';
+  try{
+    const { data } = await axios.get(API.PATCHES + '/patches', { params });
+    if (!Array.isArray(data) || !data.length){
+      grid.innerHTML = '<div class="tarjeta"><h3>No hay parches publicados.</h3></div>';
+      return;
     }
-    return true;
+    grid.innerHTML = data.map(p => `
+      <div class="tarjeta">
+        <img src="${patchAsset(p.cover_image_url)}" alt="${p.titulo}">
+        <h3>${p.titulo}</h3>
+        <a href="#modal4" class="ver" onclick="openDetalle(${p.id}); return true;">Ver</a>
+      </div>
+    `).join('');
+  }catch(e){
+    grid.innerHTML = '<div class="tarjeta"><h3>Error cargando parches</h3></div>';
   }
+}
 
-  function placeholderImg(text='Sin portada'){
-    const svg = encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="20" fill="#888">${text}</text></svg>`);
-    return `data:image/svg+xml;charset=utf-8,${svg}`;
-  }
-  function patchAsset(url){
-    if (!url) return placeholderImg();
-    if (url.startsWith('http')) return url;
-    if (url.startsWith('/patches')) return API.PATCHES + url;
-    return url;
-  }
+// Detalle en modal4
+async function openDetalle(id){
+  try{
+    const { data } = await axios.get(API.PATCHES + '/patches/' + id);
+    document.getElementById('mdTitulo').textContent = data.titulo || 'Detalle del parche';
+    document.getElementById('mdCategoria').textContent = data.categoria || '—';
+    document.getElementById('mdZona').textContent = data.zona || '—';
+    document.getElementById('mdTelefono').textContent = data.telefono || '—';
+    document.getElementById('mdDireccion').textContent = data.direccion || '—';
+    document.getElementById('mdDescripcion').textContent = data.descripcion || '—';
 
-  function openModal(id){ document.getElementById(id).style.display = 'flex'; }
-  function closeModal(id){ document.getElementById(id).style.display = 'none'; }
+    const a = document.getElementById('mdLink');
+    if (data.link_red_social) { a.href = data.link_red_social; a.textContent = data.link_red_social; }
+    else { a.href = '#'; a.textContent = '—'; }
 
-  document.getElementById('lnkLogout').addEventListener('click', (e) => {
-    e.preventDefault();
-    Session.clear();
-    window.location.href = '../Screens/bienvenido.html';
-  });
+    const cover = patchAsset(data.cover_image_url);
+    const coverDiv = document.getElementById('mdCover');
+    coverDiv.style.backgroundImage = `url('${cover}')`;
+    coverDiv.style.backgroundSize = 'cover';
+    coverDiv.style.backgroundPosition = 'center';
 
+    const gal = document.getElementById('mdFotos');
+    gal.innerHTML = (data.fotos || []).map(f => `<img src="${patchAsset(f.url)}" style="width:100%; height:160px; object-fit:cover; border-radius:8px;" />`).join('');
 
-  async function loadPatches(params = {}){
-    const grid = document.getElementById('gridParches');
-    grid.innerHTML = '<div class="card"><div class="card-body">Cargando...</div></div>';
-    try{
-      const { data } = await axios.get(`${API.PATCHES}/patches`, { params });
-      if (!data.length){
-        grid.innerHTML = '<div class="card"><div class="card-body">No hay parches publicados.</div></div>';
-        return;
+    // Eliminar plan (soft delete en backend)
+    const btnDel = document.getElementById('btnEliminarPatch');
+    btnDel.onclick = async (e) => {
+      e.preventDefault();
+      if (!confirm('¿Eliminar este parche?')) return;
+      try{
+        await axios.delete(API.PATCHES + '/patches/' + id, authHeader());
+        // Cerrar modal navegando a #closeusu (tu CSS cierra con :target)
+        window.location.hash = '#closeusu';
+        await loadParches();
+      }catch(err){
+        alert(err?.response?.data?.error || 'No fue posible eliminar el parche.');
       }
-      grid.innerHTML = data.map(p => `
-        <div class="card">
-          <img src="${patchAsset(p.cover_image_url)}" alt="${p.titulo}">
-          <div class="card-body">
-            <div class="title">${p.titulo}</div>
-            <div class="meta">${p.categoria || ''}</div>
-            <div class="row-actions">
-              <button class="btn" onclick="verDetalle(${p.id})">Ver detalle</button>
-              <button class="btn" style="background:#ffe8e8; border:1px solid #ffb8b8; color:#a10000;"
-                onclick="delPatch(${p.id})">Eliminar</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }catch(e){
-      grid.innerHTML = '';
-      show(document.getElementById('fbGlobal'), e?.response?.data?.error || 'Error cargando parches.');
-    }
+    };
+  }catch(e){
+    alert(e?.response?.data?.error || 'No fue posible cargar el detalle.');
   }
+}
 
-  async function verDetalle(id){
-    const fb = document.getElementById('fbDetalle'); hide(fb);
-    document.getElementById('dBody').innerHTML = 'Cargando...';
-    document.getElementById('btnDelPatch').onclick = () => delPatch(id, true);
+/* =======================
+   USUARIOS (ADMIN)
+   ======================= */
+async function loadUsuarios(){
+  const tbody = document.getElementById('tblUsuarios');
+  tbody.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
+  try{
+    const { data } = await axios.get(API.USERS, authHeader());
+    const rol = document.getElementById('uRol').value;
+    const q   = document.getElementById('uSearch').value.trim().toLowerCase();
 
-    try{
-      const { data } = await axios.get(`${API.PATCHES}/patches/${id}`);
-      document.getElementById('dTitulo').textContent = data.titulo;
-      const fotos = (data.fotos || []).map(f => `<img src="${patchAsset(f.url)}" style="width:100%; max-height:260px; object-fit:cover; border-radius:10px; margin:6px 0;" />`).join('');
-      document.getElementById('dBody').innerHTML = `
-        <div><b>Categoría:</b> ${data.categoria || ''}</div>
-        <div><b>Zona:</b> ${data.zona}</div>
-        <div><b>Teléfono:</b> ${data.telefono}</div>
-        <div><b>Dirección:</b> ${data.direccion}</div>
-        <div><b>Descripción:</b><br>${data.descripcion}</div>
-        <div style="margin-top:6px;"><b>Red social:</b> ${data.link_red_social ? `<a href="${data.link_red_social}" target="_blank">${data.link_red_social}</a>` : '—'}</div>
-        <div style="margin-top:10px;">${fotos || ''}</div>
-      `;
-      openModal('modalDetalle');
-    }catch(e){
-      show(fb, e?.response?.data?.error || 'No fue posible cargar el detalle.');
-    }
-  }
-
-  async function delPatch(id, fromModal=false){
-    if (!confirm('¿Eliminar este parche?')) return;
-    try{
-      await axios.delete(`${API.PATCHES}/patches/${id}`, authHeader());
-      if (fromModal) closeModal('modalDetalle');
-      await loadPatches();
-    }catch(e){
-      show(document.getElementById('fbGlobal'), e?.response?.data?.error || 'No fue posible eliminar el parche.');
-    }
-  }
-
-  async function loadUsers(){
-    const fb = document.getElementById('fbUsers'); hide(fb);
-    const tbody = document.getElementById('tblUsers');
-    tbody.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
-    try{
-      const rol = document.getElementById('uRol').value;
-      const q   = document.getElementById('uSearch').value.trim().toLowerCase();
-
-      const { data } = await axios.get(API.USERS, authHeader());
-      const list = (data.data || data || []).filter(u => {
-        let ok = true;
-        if (rol) ok = ok && u.rol === rol;
-        if (q) ok = ok && (u.email?.toLowerCase().includes(q) || u.nombre?.toLowerCase().includes(q));
-        return ok;
-      });
-
-      if (!list.length){
-        tbody.innerHTML = '<tr><td colspan="5">No hay usuarios.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = list.map(u => `
-        <tr>
-          <td>${u.id}</td>
-          <td>${u.nombre || '-'}</td>
-          <td>${u.email}</td>
-          <td>${u.rol}</td>
-          <td>
-            ${u.rol !== 'ADMIN' ? `<button class="btn" onclick="delUser(${u.id})" style="background:#ffe8e8; border:1px solid #ffb8b8; color:#a10000;">Eliminar</button>` : ''}
-          </td>
-        </tr>
-      `).join('');
-    }catch(e){
-      tbody.innerHTML = '';
-      show(fb, e?.response?.data?.error || 'Error listando usuarios.');
-    }
-  }
-
-  async function delUser(id){
-    if (!confirm('¿Eliminar este usuario?')) return;
-    try{
-      await axios.delete(`${API.USERS}/${id}`, authHeader());
-      await loadUsers();
-    }catch(e){
-      show(document.getElementById('fbUsers'), e?.response?.data?.error || 'No fue posible eliminar el usuario.');
-    }
-  }
-
-  async function loadCategories(){
-    const fb = document.getElementById('fbCats'); hide(fb);
-    const tbody = document.getElementById('tblCats');
-    const selDel = document.getElementById('cDelId');
-    const selRe  = document.getElementById('cReassign');
-
-    tbody.innerHTML = '<tr><td colspan="4">Cargando...</td></tr>';
-    try{
-      const { data } = await axios.get(API.CATEGORIES);
-      if (!data.length){
-        tbody.innerHTML = '<tr><td colspan="4">No hay categorías.</td></tr>';
-        selDel.innerHTML = '<option value="">(sin categorías)</option>';
-        selRe.innerHTML  = '<option value="">(sin categorías)</option>';
-        return;
-      }
-      tbody.innerHTML = data.map(c => `
-        <tr>
-          <td>${c.id}</td>
-          <td><input id="cName_${c.id}" value="${c.nombre}" style="padding:6px; width:100%;"/></td>
-          <td><input id="cSlug_${c.id}" value="${c.slug}" style="padding:6px; width:100%;"/></td>
-          <td class="row-actions">
-            <button class="btn" onclick="updCategory(${c.id})">Guardar</button>
-          </td>
-        </tr>
-      `).join('');
-
-      selDel.innerHTML = data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-      selRe.innerHTML  = '<option value="">(no reasignar)</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-    }catch(e){
-      tbody.innerHTML = '';
-      show(fb, e?.response?.data?.error || 'Error cargando categorías.');
-    }
-  }
-
-  async function createCategory(){
-    const fb = document.getElementById('fbCats'); hide(fb);
-    const nombre = document.getElementById('cNombre').value.trim();
-    const slug   = document.getElementById('cSlug').value.trim();
-    if (!nombre){ show(fb,'El nombre es obligatorio.'); return; }
-    try{
-      await axios.post(API.CATEGORIES, { nombre, slug: slug || undefined }, authHeader());
-      document.getElementById('cNombre').value = '';
-      document.getElementById('cSlug').value = '';
-      show(fb, 'Categoría creada.', 'success');
-      await loadCategories();
-    }catch(e){
-      show(fb, e?.response?.data?.error || 'Error creando categoría.');
-    }
-  }
-
-  async function updCategory(id){
-    const fb = document.getElementById('fbCats'); hide(fb);
-    const nombre = document.getElementById(`cName_${id}`).value.trim();
-    const slug   = document.getElementById(`cSlug_${id}`).value.trim();
-    if (!nombre && !slug){ show(fb,'Nada para actualizar.'); return; }
-    try{
-      await axios.patch(`${API.CATEGORIES}/${id}`, { nombre, slug }, authHeader());
-      show(fb, 'Guardado.', 'success');
-      await loadCategories();
-    }catch(e){
-      show(fb, e?.response?.data?.error || 'Error actualizando categoría.');
-    }
-  }
-
-  async function deleteCategory(){
-    const fb = document.getElementById('fbCats'); hide(fb);
-    const id = Number(document.getElementById('cDelId').value);
-    const reassign = Number(document.getElementById('cReassign').value || 0);
-    if (!id){ show(fb, 'Selecciona una categoría a eliminar.'); return; }
-    if (!confirm('¿Eliminar la categoría seleccionada?')) return;
-
-    let url = `${API.CATEGORIES}/${id}`;
-    if (reassign && reassign !== id) url += `?reassign_to=${reassign}`;
-
-    try{
-      await axios.delete(url, authHeader());
-      show(fb, 'Categoría eliminada.', 'success');
-      await loadCategories();
-    }catch(e){
-      show(fb, e?.response?.data?.error || 'Error eliminando categoría.');
-    }
-  }
-
-  async function prepareFilters(){
-    const selCat = document.getElementById('fCategoria');
-    selCat.innerHTML = '<option value="">Todas</option>';
-    try{
-      const { data } = await axios.get(API.CATEGORIES);
-      selCat.innerHTML += data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-    }catch{}
-  }
-  function applyFilters(){
-    const zona = document.getElementById('fZona').value.trim(); 
-    const categoria_id = document.getElementById('fCategoria').value || '';
-    const params = {};
-    if (zona) params.q = zona;
-    if (categoria_id) params.categoria_id = categoria_id;
-    loadPatches(params);
-    closeModal('miModal');
-  }
-
-  function loadProfile(){
-    const u = Session.user();
-    const html = `
-      <p><b>Rol:</b> ${u?.rol || '-'}</p>
-      <p><b>Nombre:</b> ${u?.nombre || '-'}</p>
-      <p><b>Email:</b> ${u?.email || '-'}</p>
-    `;
-    document.getElementById('pBody').innerHTML = html;
-  }
-
-  (async function init(){
-    if (!requireAdmin()) return;
-    loadProfile();
-    await loadPatches();
-    window.addEventListener('hashchange', () => {
-      const h = location.hash;
-      if (h === '#modalUsuarios'){ openModal('modalUsuarios'); loadUsers(); }
-      else if (h === '#modalCategorias'){ openModal('modalCategorias'); loadCategories(); }
-      else if (h === '#modalPerfil'){ openModal('modalPerfil'); }
-      else if (h === '#miModal'){ openModal('miModal'); }
+    const list = (data.data || data || []).filter(u => {
+      let ok = true;
+      if (rol) ok = ok && u.rol === rol;
+      if (q) ok = ok && (u.email?.toLowerCase().includes(q) || (u.nombre||'').toLowerCase().includes(q));
+      return ok;
     });
-  })();
+
+    if (!list.length){ tbody.innerHTML = '<tr><td colspan="5">No hay usuarios.</td></tr>'; return; }
+
+    tbody.innerHTML = list.map(u => `
+      <tr>
+        <td>${u.id}</td>
+        <td>${u.nombre || '-'}</td>
+        <td>${u.email}</td>
+        <td>${u.rol}</td>
+        <td>
+          ${u.rol !== 'ADMIN'
+            ? `<button class="btn-submit" style="background:#ffe8e8; color:#a10000;"
+                 onclick="delUsuario(${u.id})">Eliminar</button>`
+            : ''}
+        </td>
+      </tr>
+    `).join('');
+  }catch(e){
+    tbody.innerHTML = '<tr><td colspan="5">Error cargando usuarios.</td></tr>';
+  }
+}
+async function delUsuario(id){
+  if (!confirm('¿Eliminar este usuario?')) return;
+  try{
+    await axios.delete(API.USERS + '/' + id, authHeader());
+    await loadUsuarios();
+  }catch(e){
+    alert(e?.response?.data?.error || 'No fue posible eliminar el usuario.');
+  }
+}
+document.getElementById('btnUsuariosBuscar').addEventListener('click', (e) => {
+  // Mantiene abierto el modal (#modalusuarios) y refresca
+  setTimeout(loadUsuarios, 0);
+});
+
+/* =======================
+   CATEGORÍAS (ADMIN)
+   ======================= */
+async function loadCategoriesUI(){
+  const fb = document.getElementById('fbCats'); hide(fb);
+  const tbody = document.getElementById('tblCats');
+  const selDel = document.getElementById('cDelId');
+  const selRe  = document.getElementById('cReassign');
+
+  tbody.innerHTML = '<tr><td colspan="4">Cargando...</td></tr>';
+  try{
+    const { data } = await axios.get(API.CATEGORIES);
+    if (!data.length){
+      tbody.innerHTML = '<tr><td colspan="4">No hay categorías.</td></tr>';
+      selDel.innerHTML = '<option value="">(sin categorías)</option>';
+      selRe.innerHTML  = '<option value="">(sin categorías)</option>';
+      return;
+    }
+    tbody.innerHTML = data.map(c => `
+      <tr>
+        <td>${c.id}</td>
+        <td><input id="cName_${c.id}" value="${c.nombre}" /></td>
+        <td><input id="cSlug_${c.id}" value="${c.slug}" /></td>
+        <td><button class="btn-submit" onclick="updCategory(${c.id})">Guardar</button></td>
+      </tr>
+    `).join('');
+
+    selDel.innerHTML = data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    selRe.innerHTML  = '<option value="">(no reasignar)</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+
+    // también rellenamos el select de filtros del overlay
+    const selFiltro = document.getElementById('fCategoria');
+    if (selFiltro){
+      selFiltro.innerHTML = '<option value="">Todas</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+    }
+  }catch(e){
+    tbody.innerHTML = '<tr><td colspan="4">Error cargando categorías.</td></tr>';
+  }
+}
+async function createCategory(){
+  const fb = document.getElementById('fbCats'); hide(fb);
+  const nombre = document.getElementById('cNombre').value.trim();
+  const slug   = document.getElementById('cSlug').value.trim();
+  if (!nombre){ show(fb, 'El nombre es obligatorio.', 'error'); return; }
+  try{
+    await axios.post(API.CATEGORIES, { nombre, slug: slug || undefined }, authHeader());
+    document.getElementById('cNombre').value = '';
+    document.getElementById('cSlug').value = '';
+    show(fb, 'Categoría creada.', 'success');
+    await loadCategoriesUI();
+  }catch(e){
+    show(fb, e?.response?.data?.error || 'Error creando categoría.', 'error');
+  }
+}
+async function updCategory(id){
+  const fb = document.getElementById('fbCats'); hide(fb);
+  const nombre = document.getElementById('cName_'+id).value.trim();
+  const slug   = document.getElementById('cSlug_'+id).value.trim();
+  if (!nombre && !slug){ show(fb, 'Nada para actualizar.', 'error'); return; }
+  try{
+    await axios.patch(API.CATEGORIES + '/' + id, { nombre, slug }, authHeader());
+    show(fb, 'Guardado.', 'success');
+    await loadCategoriesUI();
+  }catch(e){
+    show(fb, e?.response?.data?.error || 'Error actualizando categoría.', 'error');
+  }
+}
+async function deleteCategory(){
+  const fb = document.getElementById('fbCats'); hide(fb);
+  const id = Number(document.getElementById('cDelId').value);
+  const reassign = Number(document.getElementById('cReassign').value || 0);
+  if (!id){ show(fb, 'Selecciona una categoría a eliminar.', 'error'); return; }
+  if (!confirm('¿Eliminar la categoría seleccionada?')) return;
+
+  let url = API.CATEGORIES + '/' + id;
+  if (reassign && reassign !== id) url += `?reassign_to=${reassign}`;
+
+  try{
+    await axios.delete(url, authHeader());
+    show(fb, 'Categoría eliminada.', 'success');
+    await loadCategoriesUI();
+  }catch(e){
+    show(fb, e?.response?.data?.error || 'Error eliminando categoría.', 'error');
+  }
+}
+document.getElementById('btnCatCrear').addEventListener('click', (e) => { e.preventDefault(); createCategory(); });
+document.getElementById('btnCatRefrescar').addEventListener('click', (e) => { e.preventDefault(); loadCategoriesUI(); });
+document.getElementById('btnCatEliminar').addEventListener('click', (e) => { e.preventDefault(); deleteCategory(); });
+
+/* =======================
+   FILTROS
+   ======================= */
+document.getElementById('btnApplyFilters').addEventListener('click', (e) => {
+  const params = {};
+  const zona = document.getElementById('fZona').value.trim();
+  const categoria_id = document.getElementById('fCategoria').value;
+  if (zona) params.q = zona;
+  if (categoria_id) params.categoria_id = categoria_id;
+  // cerrar overlay navegando a #closeusu (usa :target)
+  window.location.hash = '#closeusu';
+  loadParches(params);
+});
+
+/* =======================
+   BOOT
+   ======================= */
+(async function init(){
+  if (!requireAdmin()) return;
+  loadProfile();
+  await loadParches();
+  await loadCategoriesUI(); // para filtros & modal categorías
+
+  // Cuando abren el modal de usuarios por hash, cargamos
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#modalusuarios') loadUsuarios();
+    if (location.hash === '#modalcategorias') loadCategoriesUI();
+  });
+})();
 </script>
-
-<div id="miModal" class="modal-plain">
-  <div class="box">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3>Filtrar parches</h3>
-      <button class="btn" onclick="closeModal('miModal')">✕</button>
-    </div>
-    <div class="toolbar">
-      <label>Zona (texto): <input id="fZona" placeholder="Norte, Centro, Sur..."/></label>
-      <label>Categoría:
-        <select id="fCategoria"></select>
-      </label>
-      <button class="btn" onclick="prepareFilters()">Refrescar categorías</button>
-      <button class="btn primary" onclick="applyFilters()">Aplicar</button>
-    </div>
-  </div>
-</div>
-
 </body>
 </html>

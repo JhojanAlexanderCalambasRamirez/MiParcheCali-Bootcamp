@@ -5,15 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bienvenido - Parchate Cali</title>
 
-  <!-- ✅ Corrige la ruta al CSS (tu carpeta se llama Styles) -->
+  <!-- Tu hoja de estilos (carpeta con S mayúscula según tu estructura) -->
   <link rel="stylesheet" href="../Styles/bienvenido.css" />
 </head>
 <body>
+  <!-- ================== HEADER ================== -->
   <header class="header-logo">
     <p style="font-size: 35px; font-weight: bold; margin: 20px;">Parchate Cali</p>
     <nav>
       <ul>
         <li>
+          <!-- Los labels controlan el checkbox que abre/cierra el modal por CSS -->
           <label for="login-toggle" class="btn btn-primary">Iniciar Sesión</label>
         </li>
         <li>
@@ -23,18 +25,21 @@
     </nav>
   </header>
 
+  <!-- ================== MAIN ================== -->
   <main>
     <section class="origen">
       <h1>¿Quiénes somos?</h1>
       <div class="descripcion">
         <p style="font-size: 20px;">
-          Parchate Cali es una plataforma dedicada a conectar a los habitantes y visitantes de Cali con los mejores planes, eventos y actividades que la ciudad tiene para ofrecer. Ya seas un explorador buscando nuevas experiencias, un organizador queriendo compartir tus eventos, o una empresa promocionando tus servicios.
+          Parchate Cali es una plataforma dedicada a conectar a los habitantes y visitantes de Cali con los mejores
+          planes, eventos y actividades que la ciudad tiene para ofrecer. Ya seas un explorador buscando nuevas
+          experiencias, un organizador queriendo compartir tus eventos, o una empresa promocionando tus servicios.
         </p>
       </div>
 
-      <!-- ✅ Opcional: si tu carpeta es "Images" (en inglés), cambia Imagenes -> Images -->
       <div class="banner-origen">
         <div class="collage">
+          <!-- Si tu carpeta real es Images (en inglés), cambia ../Imagenes por ../Images -->
           <img src="../Imagenes/calibanner.jpg" alt="Cristo Rey" />
           <img src="../Imagenes/ermita.jpg" alt="La Ermita" />
           <img src="../Imagenes/zoo.jpg" alt="Zoológico de Cali" />
@@ -74,11 +79,13 @@
     </section>
   </main>
 
+  <!-- ================== FOOTER ================== -->
   <footer>
     <p>&copy; 2025 Parchate Cali</p>
   </footer>
 
-  <!-- Toggles para abrir/cerrar modales (estilo CSS) -->
+  <!-- ================== MODALES (controlados por CSS :checked) ================== -->
+  <!-- Toggles para abrir/cerrar modales -->
   <input type="checkbox" id="login-toggle" hidden />
   <input type="checkbox" id="register-toggle" hidden />
 
@@ -88,7 +95,7 @@
       <label for="login-toggle" class="modal-close btn">&times;</label>
       <h3 style="font-size: 30px; margin-bottom: -2px;">Iniciar Sesión</h3>
 
-      <!-- feedback de errores -->
+      <!-- feedback -->
       <div id="fbLogin" class="alert error" style="display:none;"></div>
 
       <form id="loginForm" novalidate>
@@ -96,7 +103,7 @@
         <input id="lEmail" type="email" placeholder="tucorreo@ejemplo.com" required />
         <p style="margin-bottom: -10px;">Contraseña</p>
         <input id="lPass" type="password" placeholder="••••••••" required />
-        <button type="submit" class="big-check-btn">✓</button>
+        <button id="btnLogin" type="submit" class="big-check-btn">✓</button>
       </form>
     </div>
   </div>
@@ -107,7 +114,7 @@
       <label for="register-toggle" class="modal-close btn">&times;</label>
       <h3>Crear Cuenta</h3>
 
-      <!-- feedback de errores -->
+      <!-- feedback -->
       <div id="fbRegister" class="alert error" style="display:none;"></div>
 
       <form id="registerForm" novalidate>
@@ -121,19 +128,19 @@
           <input id="rPass" type="password" required />
         </label>
         <label>Tipo de Usuario
-          <!-- ✅ Valores alineados con el backend -->
+          <!-- Valores alineados con el backend -->
           <select id="rRol" required>
             <option value="" disabled selected>Seleccione...</option>
             <option value="USUARIO_BUSCADOR">Usuario / Explorador</option>
             <option value="USUARIO_EMPRESA">Empresa</option>
           </select>
         </label>
-        <button type="submit" class="btn btn-primary">Crear cuenta</button>
+        <button id="btnRegister" type="submit" class="btn btn-primary">Crear cuenta</button>
       </form>
     </div>
   </div>
 
-  <!-- ====== Scripts ====== -->
+  <!-- ================== SCRIPTS ================== -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
     /* =========================================================
@@ -143,7 +150,7 @@
       AUTH: 'http://localhost:3001/auth'
     };
 
-    // Sesión simple en localStorage
+    // Sesión en localStorage
     const Session = {
       set(token, user) {
         localStorage.setItem('token', token);
@@ -152,33 +159,62 @@
       user() {
         try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
       },
+      token() {
+        return localStorage.getItem('token');
+      },
       clear() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       }
     };
 
-    // Si ya está logueado, redirigir por rol
-    (function redirectIfLogged() {
-      const u = Session.user();
-      if (!u) return;
-      if (u.rol === 'USUARIO_EMPRESA')      window.location.href = './usuario_empresa.html';
-      else if (u.rol === 'USUARIO_BUSCADOR') window.location.href = './usuario_buscador.html';
-      else if (u.rol === 'ADMIN')            window.location.href = './admin.html';
-    })();
-
-    // Helpers UI
+    // Helper UI
     function show(el, text, type='error') {
       el.className = `alert ${type}`;
       el.textContent = text;
       el.style.display = 'block';
     }
     function hide(el) { el.style.display = 'none'; }
+    function disable(el, on=true){ if(el){ el.disabled = on; el.style.opacity = on ? .6 : 1; } }
 
-    // ====== LOGIN ======
+    // Redirección por rol
+    function goToRole(u){
+      if (!u) return;
+      if (u.rol === 'USUARIO_EMPRESA')       window.location.href = './usuario_empresa.html';
+      else if (u.rol === 'USUARIO_BUSCADOR') window.location.href = './usuario_buscador.html';
+      else if (u.rol === 'ADMIN')            window.location.href = './admin.html';
+    }
+
+    // ================== BOOT: validar sesión antes de redirigir ==================
+    (async function bootWelcome(){
+      // Forzar limpieza si se navega con ?logout=1 (útil en desarrollo)
+      const url = new URL(location.href);
+      if (url.searchParams.get('logout') === '1'){
+        Session.clear();
+        history.replaceState({}, '', location.pathname); // limpia el query en la barra
+        return; // quedarse en Bienvenido
+      }
+
+      const token = Session.token();
+      const rawUser = localStorage.getItem('user');
+      if (!token || !rawUser) return; // no hay sesión -> mostrar landing
+
+      // Valida el token con backend antes de redirigir
+      try {
+        await axios.get(`${API.AUTH}/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const u = JSON.parse(rawUser);
+        goToRole(u); // si es válido, redirige
+      } catch {
+        // Token inválido/expirado: limpia y permanece en landing
+        Session.clear();
+      }
+    })();
+
+    // ================== LOGIN ==================
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fb = document.getElementById('fbLogin'); hide(fb);
+      const btn = document.getElementById('btnLogin');
 
       const email = document.getElementById('lEmail').value.trim();
       const password = document.getElementById('lPass').value.trim();
@@ -188,6 +224,7 @@
       }
 
       try {
+        disable(btn, true);
         const { data } = await axios.post(`${API.AUTH}/login`, { email, password });
         Session.set(data.token, data.user);
 
@@ -195,25 +232,24 @@
         document.getElementById('login-toggle').checked = false;
 
         // Redirigir según rol
-        const u = data.user;
-        if (u.rol === 'USUARIO_EMPRESA')      window.location.href = './usuario_empresa.html';
-        else if (u.rol === 'USUARIO_BUSCADOR') window.location.href = './usuario_buscador.html';
-        else if (u.rol === 'ADMIN')            window.location.href = './admin.html';
-        else                                   show(fb, 'Rol no reconocido en el sistema.');
+        goToRole(data.user);
       } catch (e2) {
         show(fb, e2?.response?.data?.error || 'Credenciales inválidas o servicio no disponible.');
+      } finally {
+        disable(btn, false);
       }
     });
 
-    // ====== REGISTRO ======
+    // ================== REGISTRO ==================
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fb = document.getElementById('fbRegister'); hide(fb);
+      const btn = document.getElementById('btnRegister');
 
-      const nombre = document.getElementById('rNombre').value.trim();
-      const email  = document.getElementById('rEmail').value.trim();
+      const nombre   = document.getElementById('rNombre').value.trim();
+      const email    = document.getElementById('rEmail').value.trim();
       const password = document.getElementById('rPass').value.trim();
-      const rol = document.getElementById('rRol').value;
+      const rol      = document.getElementById('rRol').value;
 
       if (!nombre || !email || !password || !rol) {
         show(fb, 'Completa todos los campos del registro.');
@@ -221,19 +257,19 @@
       }
 
       try {
+        disable(btn, true);
         const { data } = await axios.post(`${API.AUTH}/register`, { nombre, email, password, rol });
         Session.set(data.token, data.user);
 
         // Cerrar modal
         document.getElementById('register-toggle').checked = false;
 
-        // Redirigir según rol
-        const u = data.user;
-        if (u.rol === 'USUARIO_EMPRESA')      window.location.href = './usuario_empresa.html';
-        else if (u.rol === 'USUARIO_BUSCADOR') window.location.href = './usuario_buscador.html';
-        else                                   show(fb, 'Rol no reconocido en el sistema.');
+        // Redirigir según rol (ADMIN no se crea por aquí, según tu backend)
+        goToRole(data.user);
       } catch (e2) {
         show(fb, e2?.response?.data?.error || 'No fue posible crear tu cuenta.');
+      } finally {
+        disable(btn, false);
       }
     });
   </script>

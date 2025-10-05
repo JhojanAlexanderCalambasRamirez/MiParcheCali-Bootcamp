@@ -104,8 +104,8 @@ section h2 {
 }
 
 .foto, .miembro {
-  width: 100px;
-  height: 100px;
+  width: 220px;
+  height: 220px;
   background: #FFFFFF;
   border: 2px solid #0077B6;
   display: flex;
