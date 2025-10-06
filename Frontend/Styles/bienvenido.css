@@ -235,7 +235,6 @@ footer {
   transform: translateY(-2px);
 }
 
-/* Banner de origen */
 .banner-origen img {
   width: 100%;
   height: auto;
@@ -244,7 +243,6 @@ footer {
   margin-bottom: 1rem;
 }
 
-/* Sección Tipos de Usuario */
 .tipos-usuario .usuarios {
   display: flex;
   justify-content: center;

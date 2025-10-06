@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Usuario - Parcháte Cali</title>
-
-  <!-- ✅ corrige la ruta: tu carpeta es Styles -->
   <link rel="stylesheet" href="../Styles/usuario_buscador.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
@@ -24,13 +22,11 @@
 <div>
   <br />
   <div class="contenedor">
-    <!-- (Opcional) ajusta a ../Imagenes si tu carpeta no es "Images" -->
     <img src="../Imagenes/calibanner.jpg" alt="Imagen 1" />
     <img src="../Imagenes/ermita.jpg" alt="Imagen 2" />
     <img src="../Imagenes/museo.jpg" alt="Imagen 3" />
   </div>
 
-  <!-- ===== PERFIL (relleno dinámico) ===== -->
   <div id="modalPerfil" class="modal">
     <div class="modal-content">
       <div class="modal-img"></div>
@@ -39,18 +35,15 @@
         <h1 style="color: #006bb3;">PERFIL :</h1>
         <p>Usuario</p>
         <div id="perfilBody">
-          <!-- se inyecta con JS -->
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== DETALLE PARCHE (dinámico) ===== -->
   <div id="modalDetalle" class="modal">
     <div class="modal-content">
       <div class="modal-img" id="dCover" style="background:#f2f2f2;"></div>
       <div class="modal-form">
-        <!-- ⛳️ Botón X controlado por JS -->
         <a href="#" class="close" id="btnCloseDetalle">&times;</a>
         <h2 id="dTitulo" style="color:#006bb3;">Detalle del parche</h2>
         <div class="info">
@@ -73,7 +66,6 @@
   </div>
 </div>
 
-<!-- ====== FILTROS ====== -->
 <div class="cp">
   <label class="izquierda">
     <a href="#miModal" class="btn">FILTRAR</a>
@@ -81,7 +73,6 @@
   <span class="centro" id="catalogo-planes">CATÁLOGO DE PLANES</span>
 </div>
 
-<!-- Modal de filtros (dinámico con categorías reales) -->
 <div id="miModal" class="overlay">
   <div class="popup">
     <h3><b>FILTRAR POR:</b></h3>
@@ -96,7 +87,6 @@
       <p>Categorías:</p>
       <select id="fCategoria">
         <option value="">Todas</option>
-        <!-- se cargan con JS -->
       </select>
     </div>
 
@@ -105,12 +95,9 @@
   </div>
 </div>
 
-<!-- GRID de parches (dinámico) -->
 <div id="gridParches" class="catalogo" style="padding: 0 12px;"></div>
 
 <br />
-
-<!-- ====== FAVORITOS ====== -->
 <div class="cp">
   <span class="centro" id="catalogo-favoritos">PLANES FAVORITOS</span>
 </div>
@@ -120,10 +107,8 @@
   <p>&copy; 2025 Parchate Cali</p>
 </footer>
 
-<!-- ====== SCRIPTS ====== -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  /* ========== Config y sesión ========== */
   const API = {
     PATCHES: 'http://localhost:3003',
     FAVORITES: 'http://localhost:3004/favorites',
@@ -152,7 +137,6 @@
     window.location.href = './bienvenido.html';
   });
 
-  /* ========== Helpers UI ========== */
   function placeholderImg(text='Sin portada'){
     const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
     return 'data:image/svg+xml;charset=utf-8,'+svg;
@@ -160,7 +144,7 @@
   function patchAsset(url){
     if (!url) return placeholderImg();
     if (url.startsWith('http')) return url;
-    if (url.startsWith('/patches')) return API.PATCHES + url; // servido por el microservicio
+    if (url.startsWith('/patches')) return API.PATCHES + url; 
     return url;
   }
   function cardHTML(p, isFav=false){
@@ -179,11 +163,9 @@
   }
   function closeHashModal(e){ if(e) e.preventDefault(); history.pushState('', document.title, window.location.pathname + window.location.search); }
 
-  /* ========== Estado en memoria ========== */
-  let favSet = new Set();   // ids de parches en favoritos
-  let lastQuery = {};       // últimos filtros aplicados
+  let favSet = new Set();   
+  let lastQuery = {};      
 
-  /* ========== Perfil ========== */
   function loadProfile(){
     const u = Session.user() || {};
     const el = document.getElementById('perfilBody');
@@ -194,17 +176,15 @@
     `;
   }
 
-  /* ========== Categorías para filtros ========== */
   async function loadCategories(){
     const sel = document.getElementById('fCategoria');
     sel.innerHTML = '<option value="">Todas</option>';
     try{
       const { data } = await axios.get(API.CATEGORIES);
       sel.innerHTML += data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
-    }catch{ /* tolerar */ }
+    }catch{ }
   }
 
-  /* ========== Parches (catálogo público) ========== */
   async function loadPatches(params = {}){
     lastQuery = params;
     const grid = document.getElementById('gridParches');
@@ -221,14 +201,11 @@
     }
   }
 
-  /* ========== Favoritos ========== */
   async function loadFavorites(){
     const cont = document.getElementById('gridFavs');
     cont.innerHTML = '<div class="tarjeta"><h3>Cargando favoritos...</h3></div>';
     try{
       const { data } = await axios.get(API.FAVORITES, authHeader());
-
-      // Soportar dos formatos: [ {patch_id, patch:{...}} ] o [ { id, titulo, cover_image_url, ... } ]
       const items = Array.isArray(data) ? data : [];
       const patches = items.map(it => {
         if (it.patch) return it.patch;
@@ -237,7 +214,7 @@
         return null;
       }).filter(Boolean);
 
-      favSet = new Set(patches.map(p => p.id)); // refresca set
+      favSet = new Set(patches.map(p => p.id)); 
       if (!patches.length){
         cont.innerHTML = '<div class="tarjeta"><h3>Todavía no tienes favoritos</h3></div>';
         return;
@@ -257,10 +234,8 @@
         await axios.post(API.FAVORITES, { patch_id: patchId }, authHeader());
         favSet.add(patchId);
       }
-      // refrescar paneles
       await loadFavorites();
       await loadPatches(lastQuery);
-      // actualizar texto del botón del modal
       updateFavButton(patchId);
     }catch(e){
       alert(e?.response?.data?.error || 'No fue posible actualizar favoritos.');
@@ -274,31 +249,26 @@
     btn.textContent = isFav ? 'Quitar de favoritos' : 'Agregar a favoritos';
   }
 
-  /* ========== Modal helpers (abrir/cerrar robusto) ========== */
   function showModal(id){
     const el = document.getElementById(id);
-    if (el) el.style.display = 'flex'; // usa flex para mantener centrado
+    if (el) el.style.display = 'flex'; 
   }
   function hideModal(id){
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
-    // limpiar hash (si lo hubiera)
     history.replaceState(null, '', window.location.pathname + window.location.search);
   }
-  // Cerrar con la X
   document.getElementById('btnCloseDetalle')?.addEventListener('click', (e) => {
     e.preventDefault(); hideModal('modalDetalle');
   });
-  // Cerrar con tecla ESC
+
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') hideModal('modalDetalle');
   });
-  // Cerrar al hacer click fuera del contenido
   document.getElementById('modalDetalle')?.addEventListener('click', (e) => {
     if (e.target.id === 'modalDetalle') hideModal('modalDetalle');
   });
 
-  /* ========== Detalle ========== */
   async function openDetalle(id){
     try{
       const { data } = await axios.get(`${API.PATCHES}/patches/${id}`);
@@ -322,12 +292,10 @@
       const gal = document.getElementById('dFotos');
       gal.innerHTML = (data.fotos || []).map(f => `<img src="${patchAsset(f.url)}" alt="" />`).join('');
 
-      // fav
       const btnFav = document.getElementById('btnFavToggle');
       btnFav.onclick = () => toggleFavorite(id);
       updateFavButton(id);
 
-      // compartir
       document.getElementById('btnShare').onclick = async () => {
         const shareData = {
           title: 'Parchate Cali',
@@ -343,7 +311,6 @@
         } catch {}
       };
 
-      // 👉 abrir el modal de forma robusta
       showModal('modalDetalle');
 
     }catch(e){
@@ -351,10 +318,6 @@
     }
   }
 
-  /* ========== Filtros ==========
-     q: texto (zona, título, dirección, etc.)
-     categoria_id: id seleccionado
-  ================================= */
   document.getElementById('btnApplyFilters').addEventListener('click', (e) => {
     e.preventDefault();
     const q = document.getElementById('fQ').value.trim();
@@ -367,24 +330,17 @@
   });
   function closeFilters(e){ if(e) e.preventDefault(); document.location.hash = ''; }
 
-  /* ========== Boot ========== */
   (async function init(){
     if (!requireRole('USUARIO_BUSCADOR')) return;
 
-    // Perfil
     loadProfile();
-
-    // Filtros
     await loadCategories();
-
-    // Datos
     await loadFavorites();
     await loadPatches();
 
-    // Abrir modales por hash (opcional)
     window.addEventListener('hashchange', () => {
       const h = location.hash;
-      if (h === '#miModal') { /* overlay CSS abre solo*/ }
+      if (h === '#miModal') { }
       if (h === '#modalPerfil') { document.getElementById('modalPerfil').style.display = 'block'; }
     });
   })();

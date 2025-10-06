@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Administración - Parcháte Cali</title>
-  <!-- 🔹 Usa la carpeta con S mayúscula según tu estructura -->
   <link rel="stylesheet" href="../Styles/admin.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <div id="closeusu"></div>
@@ -17,7 +16,6 @@
     <ul>
       <li><a href="#catalogo-planes">Planes</a></li>
       <li><a href="#modal3">Perfil</a></li>
-      <!-- añadimos id para limpiar sesión con JS -->
       <li><a href="bienvenido.html" id="lnkLogout">Cerrar sesión</a></li>
     </ul>
   </nav>
@@ -28,7 +26,6 @@
     <h2>Panel de Administración</h2>
     <p>Administra los perfiles de los usuarios</p>
     <a href="#modalusuarios" class="button">Buscar usuarios</a>
-    <!-- Botón extra para categorías (requisito de ADMIN) -->
     <a href="#modalcategorias" class="button">Categorías</a>
   </section>
 </main>
@@ -40,8 +37,6 @@
     <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4noSCdi8R_u_FIEOK-saxUNjfMdxvtA-dMKnCKy-wCqUNSn7E9uQK3OWWwW_TkHzC81DKx-BlCQ5SVvKfQ4U5-SWT9Ni5OHvPiFUvdVy5khtKWrGLyLUoviYgUlFcragzcW7FpM=w648-h374-n-k-no" alt="Imagen 2">
     <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4npcjg6k-PqfliqmbbNogSDq0DyAEPExBqy1Ln5xj9x3bYe_U-X6aj-K0YHYT6SaKH0MM_k3gAoCMOCYOYO2v3Ylsr1UH1i9O-A-N02sK-2CmKVDi2N1FagVDg_vqgO_IE2gwjJV=w648-h374-n-k-no" alt="Imagen 3">
   </div>
-
-  <!-- ===== Modal de DETALLE DE PARCHE (se rellena con JS) ===== -->
   <div id="modal4" class="modal">
     <div class="modal-content">
       <div class="modal-img" id="mdCover"></div>
@@ -64,7 +59,6 @@
   </div>
 </div>
 
-<!-- ========== MODAL LISTA DE USUARIOS (ADMIN) ========== -->
 <div id="modalusuarios">
   <div class="content">
     <h2>Usuarios registrados</h2>
@@ -89,14 +83,12 @@
         </tr>
       </thead>
       <tbody id="tblUsuarios">
-        <!-- filas dinámicas -->
       </tbody>
     </table>
     <a href="#closeusu" class="closeusuarios">Cerrar</a>
   </div>
 </div>
 
-<!-- ========== PERFIL (usa modal id original: modal3) ========== -->
 <div id="modal3" class="modal">
   <div class="modal-content">
     <div class="modal-img"></div>
@@ -104,48 +96,47 @@
       <a href="#closeusu" class="close">&times;</a>
       <h1 style="color: #006bb3;">PERFIL :</h1>
       <p>Administrador</p>
-      <div id="perfilAdmin"><!-- inject --></div>
+      <div id="perfilAdmin"> </div>
       <button type="button" class="btn-submit"><a href="#closeusu" style="color:inherit; text-decoration:none;">Listo</a></button>
     </div>
   </div>
 </div>
 
-<!-- ========== MODAL CATEGORÍAS (ADMIN) ========== -->
 <div id="modalcategorias" class="modal">
-  <div class="modal-content">
-    <div class="modal-img"></div>
+  <div class="modal-content modal-cats">
     <div class="modal-form">
-      <a href="#closeusu" class="close">&times;</a>
-      <h2 style="color:#006bb3;">Categorías</h2>
+      <a href="#closeusu" class="close close-top">&times;</a>
+      <h2 style="color:#006bb3; margin-top:0;">Categorías</h2>
 
       <div id="fbCats" class="alert info" style="display:none;"></div>
 
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;">
+      <div class="cat-toolbar">
         <input id="cNombre" class="input" placeholder="Nombre de categoría" />
         <input id="cSlug" class="input" placeholder="Slug (opcional)" />
         <button class="btn-submit" id="btnCatCrear">Crear</button>
-        <button class="btn-submit" id="btnCatRefrescar" style="background:#eee; color:#333;">Refrescar</button>
+        <button class="btn-submit btn-light" id="btnCatRefrescar">Refrescar</button>
       </div>
 
-      <table>
-        <thead>
-          <tr><th>ID</th><th>Nombre</th><th>Slug</th><th>Acciones</th></tr>
-        </thead>
-        <tbody id="tblCats"></tbody>
-      </table>
+      <div class="cats-table-wrap">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Slug</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="tblCats"></tbody>
+        </table>
+      </div>
 
-      <h3 style="margin-top:12px;">Eliminar categoría</h3>
-      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+      <h3 style="margin:14px 0 8px;">Eliminar categoría</h3>
+      <div class="cat-delete">
         <select id="cDelId"></select>
-        <span>Reasignar parches a:</span>
+        <span class="cat-delete-label">Reasignar parches a:</span>
         <select id="cReassign"></select>
-        <button class="btn-submit" id="btnCatEliminar" style="background:#ffe8e8; color:#a10000;">Eliminar</button>
+        <button class="btn-submit btn-danger" id="btnCatEliminar">Eliminar</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ========== FILTROS (usa overlay original: miModal) ========== -->
 <div class="cp">
   <label for="toggle-filtros" class="izquierda">
     <a href="#miModal" class="btn">FILTRAR</a>
@@ -167,7 +158,6 @@
       <p>Categorías:</p>
       <select id="fCategoria" name="fCategoria">
         <option value="">Todas</option>
-        <!-- opciones con JS -->
       </select>
     </div>
 
@@ -176,14 +166,10 @@
   </div>
 </div>
 
-<!-- ========== GRID DE PARCHES (dinámico) ========== -->
 <div class="catalogo" id="gridParches">
-  <!-- tarjetas dinámicas -->
 </div>
 
 <br>
-
-<!-- (dejamos tu segunda grilla para que no se rompa el layout, pero no la usamos) -->
 <div class="catalogo2" id="gridParches2" style="display:none;"></div>
 
 <br>
@@ -191,12 +177,8 @@
   <p>&copy; 2015 Parchate Cali</p>
 </footer>
 
-<!-- ========== SCRIPTS ========== -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-/* =======================
-   Configuración & sesión
-   ======================= */
 const API = {
   USERS: 'http://localhost:3002/users',
   PATCHES: 'http://localhost:3003',
@@ -212,21 +194,16 @@ const authHeader = () => ({ headers: { Authorization: 'Bearer ' + Session.token(
 function requireAdmin(){
   const u = Session.user();
   if (!u || u.rol !== 'ADMIN') {
-    // redirige si no es admin
     window.location.href = './bienvenido.html';
     return false;
   }
   return true;
 }
 
-// logout real (limpia token y user)
 document.getElementById('lnkLogout').addEventListener('click', () => {
   Session.clear();
 });
 
-/* =======================
-   Helpers UI
-   ======================= */
 function show(el, text, type='info'){
   if (!el) return;
   el.className = 'alert ' + type;
@@ -246,9 +223,6 @@ function patchAsset(url){
   return url;
 }
 
-/* =======================
-   PERFIL
-   ======================= */
 function loadProfile(){
   const u = Session.user() || {};
   document.getElementById('perfilAdmin').innerHTML = `
@@ -261,9 +235,6 @@ function loadProfile(){
   `;
 }
 
-/* =======================
-   PARCHES (listar + detalle + eliminar)
-   ======================= */
 async function loadParches(params = {}){
   const grid = document.getElementById('gridParches');
   grid.innerHTML = '<div class="tarjeta"><h3>Cargando...</h3></div>';
@@ -285,7 +256,6 @@ async function loadParches(params = {}){
   }
 }
 
-// Detalle en modal4
 async function openDetalle(id){
   try{
     const { data } = await axios.get(API.PATCHES + '/patches/' + id);
@@ -309,14 +279,12 @@ async function openDetalle(id){
     const gal = document.getElementById('mdFotos');
     gal.innerHTML = (data.fotos || []).map(f => `<img src="${patchAsset(f.url)}" style="width:100%; height:160px; object-fit:cover; border-radius:8px;" />`).join('');
 
-    // Eliminar plan (soft delete en backend)
     const btnDel = document.getElementById('btnEliminarPatch');
     btnDel.onclick = async (e) => {
       e.preventDefault();
       if (!confirm('¿Eliminar este parche?')) return;
       try{
         await axios.delete(API.PATCHES + '/patches/' + id, authHeader());
-        // Cerrar modal navegando a #closeusu (tu CSS cierra con :target)
         window.location.hash = '#closeusu';
         await loadParches();
       }catch(err){
@@ -328,9 +296,6 @@ async function openDetalle(id){
   }
 }
 
-/* =======================
-   USUARIOS (ADMIN)
-   ======================= */
 async function loadUsuarios(){
   const tbody = document.getElementById('tblUsuarios');
   tbody.innerHTML = '<tr><td colspan="5">Cargando...</td></tr>';
@@ -376,13 +341,9 @@ async function delUsuario(id){
   }
 }
 document.getElementById('btnUsuariosBuscar').addEventListener('click', (e) => {
-  // Mantiene abierto el modal (#modalusuarios) y refresca
   setTimeout(loadUsuarios, 0);
 });
 
-/* =======================
-   CATEGORÍAS (ADMIN)
-   ======================= */
 async function loadCategoriesUI(){
   const fb = document.getElementById('fbCats'); hide(fb);
   const tbody = document.getElementById('tblCats');
@@ -410,7 +371,6 @@ async function loadCategoriesUI(){
     selDel.innerHTML = data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
     selRe.innerHTML  = '<option value="">(no reasignar)</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
 
-    // también rellenamos el select de filtros del overlay
     const selFiltro = document.getElementById('fCategoria');
     if (selFiltro){
       selFiltro.innerHTML = '<option value="">Todas</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
@@ -469,30 +429,22 @@ document.getElementById('btnCatCrear').addEventListener('click', (e) => { e.prev
 document.getElementById('btnCatRefrescar').addEventListener('click', (e) => { e.preventDefault(); loadCategoriesUI(); });
 document.getElementById('btnCatEliminar').addEventListener('click', (e) => { e.preventDefault(); deleteCategory(); });
 
-/* =======================
-   FILTROS
-   ======================= */
 document.getElementById('btnApplyFilters').addEventListener('click', (e) => {
   const params = {};
   const zona = document.getElementById('fZona').value.trim();
   const categoria_id = document.getElementById('fCategoria').value;
   if (zona) params.q = zona;
   if (categoria_id) params.categoria_id = categoria_id;
-  // cerrar overlay navegando a #closeusu (usa :target)
   window.location.hash = '#closeusu';
   loadParches(params);
 });
 
-/* =======================
-   BOOT
-   ======================= */
 (async function init(){
   if (!requireAdmin()) return;
   loadProfile();
   await loadParches();
-  await loadCategoriesUI(); // para filtros & modal categorías
+  await loadCategoriesUI(); 
 
-  // Cuando abren el modal de usuarios por hash, cargamos
   window.addEventListener('hashchange', () => {
     if (location.hash === '#modalusuarios') loadUsuarios();
     if (location.hash === '#modalcategorias') loadCategoriesUI();

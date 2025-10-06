@@ -105,7 +105,6 @@ footer {
     text-align: center;
   }
 
-/* CSS PARA CATALOGO ADMIN */
 
 body {
       font-family: Arial, sans-serif;
@@ -161,7 +160,7 @@ body {
       font-size: 1.2rem;
       color: #333;
     }
-    /* Área clickeable completa */
+
     .izquierda {
       position: absolute;
       left: 50px;
@@ -172,17 +171,14 @@ body {
       user-select: none;
     }
 
-    /* Ícono y texto dentro del label */
     .izquierda i {
       font-size: 30px;
     }
 
-    /* Checkbox oculto */
     #toggle-filtros {
       display: none;
     }
 
-    /* Menú desplegable */
     .menu-filtros {
       position: absolute;
       top: 75px;
@@ -240,7 +236,6 @@ body {
       margin-left: 0%;
     }
 
-    /* Fondo oscuro */
     .overlay {
       position: fixed;
       top: 0; left: 0;
@@ -251,7 +246,6 @@ body {
       align-items: center;
     }
 
-    /* Contenido del modal */
     .popup {
       background: rgb(255, 255, 255);
       padding: 20px;
@@ -262,7 +256,6 @@ body {
       color: black ;
     }
 
-    /* Mostrar modal cuando está activo */
     .overlay:target {
       display: flex;
     }
@@ -283,8 +276,6 @@ body {
       outline: none;
     }
 
-/*CREAR PLANES ADMIN*/
-
 .modal {
       display: none;
       position: fixed;
@@ -299,30 +290,26 @@ body {
       overflow-y: auto;
     }
 
-    /* Mostrar cuando tiene el target */
     .modal:target {
       display: flex;
     }
 
-    /* Contenido */
     .modal-content {
       background: #fff;
       padding: 18px;
       border-radius: 8px;
       max-width: 600px;
       width: 100%;
-      max-height: 80vh;   /* límite de altura */
-      overflow-y: auto;   /* scroll solo dentro del cuadro */
+      max-height: 80vh;   
+      overflow-y: auto;   
       box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
 
-    /* Columna izquierda (imagen) */
     .modal-img {
       flex: 1;
       background: url("https://encrypted-tbn2.gstatic.com/licensed-image?q=tbn:ANd9GcQLwrkG00nPvtMz0-BNdYyDfmrqJ6BroB4fkfbv3SLrPM5EufTUvdfcQrjwI9pJtxnxSzWH1i2aNUWApvaGnQA6NFrY60aNQB8YHvW6Qu4") center/cover no-repeat;
     }
 
-    /* Columna derecha (formulario) */
     .modal-form {
       flex: 1.2;
       padding: 20px;
@@ -374,8 +361,8 @@ body {
     }
     .contenedor {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
-      gap: 15px; /* espacio entre imágenes */
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 15px; 
       max-width: 900px;
       margin: auto;
     }
@@ -383,7 +370,7 @@ body {
     .contenedor img {
       width: 100%;
       height: auto;
-      border-radius: 10px; /* esquinas redondeadas opcionales */
+      border-radius: 10px; 
     }
 
     .ver {

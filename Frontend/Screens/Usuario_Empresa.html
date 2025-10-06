@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Empresa - Parcháte Cali</title>
-
-  <!-- Usa tu carpeta Styles (mayúscula, según tu proyecto) -->
   <link rel="stylesheet" href="../Styles/usuario.empresa.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
@@ -15,7 +13,7 @@
   <nav>
     <ul>
       <li><a href="#catalogo-planes">Planes</a></li>
-      <li><a href="#modal3">Perfil</a></li>
+      <li><a href="#modalPerfil" onclick="openModal('modalPerfil'); return false;">Perfil</a></li>
       <li><a href="#" id="lnkLogout">Cerrar sesión</a></li>
     </ul>
   </nav>
@@ -25,40 +23,35 @@
   <section class="banner-principal">
     <h2>Gestión de Planes</h2>
     <p>Atrae a los caleños con planes únicos y emocionantes.</p>
-    <!-- Botón que abre el modal de creación (mantiene tu #modal1) -->
-    <a href="#modal1" class="button">Crear nuevo plan</a>
+    <a href="#modalCrear" class="button" onclick="openModal('modalCrear'); return false;">Crear nuevo plan</a>
   </section>
 </main>
 
 <div>
   <br />
   <div class="contenedor">
-    <!-- Si tu carpeta es Images (inglés), cambia ../Imagenes por ../Images -->
     <img src="../Imagenes/calibanner.jpg" alt="Imagen 1" />
     <img src="../Imagenes/ermita.jpg" alt="Imagen 2" />
     <img src="../Imagenes/museo.jpg" alt="Imagen 3" />
   </div>
 </div>
 
-<!-- ========= PERFIL (mantengo tu #modal3) ========= -->
-<div id="modal3" class="modal">
+<div id="modalPerfil" class="modal" style="display:none;">
   <div class="modal-content">
-    <div class="modal-img"></div>
     <div class="modal-form">
-      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <button type="button" class="close" aria-label="Cerrar" onclick="closeModal('modalPerfil')">&times;</button>
       <h1 style="color:#006bb3;">PERFIL :</h1>
       <p>Usuario Empresa</p>
-      <div id="perfilBody"><!-- se completa con JS --></div>
-      <button type="button" class="btn-submit" onclick="closeHashModal()">Listo</button>
+      <div id="perfilBody"></div>
+      <button type="button" class="btn-submit" onclick="closeModal('modalPerfil')">Listo</button>
     </div>
   </div>
 </div>
 
-<!-- ========= CREAR PARCHE (mantengo tu #modal1) ========= -->
-<div id="modal1" class="modal">
+<div id="modalCrear" class="modal" style="display:none;">
   <div class="modal-content">
     <div class="modal-form">
-      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <button type="button" class="close" aria-label="Cerrar" onclick="closeModal('modalCrear')">&times;</button>
       <h2 style="color:#006bb3; font-size:32px; font-family:'Poppins','Roboto',sans-serif;">Nuevo parche</h2>
 
       <div id="fbCrear" class="alert error" style="display:none;"></div>
@@ -109,11 +102,10 @@
   </div>
 </div>
 
-<!-- ========= EDITAR PARCHE (mantengo tu #modal2) ========= -->
-<div id="modal2" class="modal">
+<div id="modalEditar" class="modal" style="display:none;">
   <div class="modal-content">
     <div class="modal-form">
-      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <button type="button" class="close" aria-label="Cerrar" onclick="closeModal('modalEditar')">&times;</button>
       <h2 style="color:#006bb3;">Editar parche</h2>
 
       <div id="fbEditar" class="alert error" style="display:none;"></div>
@@ -131,19 +123,17 @@
 
       <div style="display:flex; gap:8px; margin-top:10px;">
         <button id="btnGuardarEdit" class="btn-submit">Guardar</button>
-        <button class="btn-submit" style="background:#eee; color:#333;" onclick="closeHashModal()">Cancelar</button>
+        <button class="btn-submit" style="background:#eee; color:#333;" onclick="closeModal('modalEditar')">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ========= SUBIR FOTOS (reutilizo #modal4 para no chocar con tu CSS) ========= -->
-<div id="modal4" class="modal">
+<div id="modalUpload" class="modal" style="display:none;">
   <div class="modal-content">
     <div class="modal-form">
-      <a href="#" class="close" onclick="closeHashModal(event)">&times;</a>
+      <button type="button" class="close" aria-label="Cerrar" onclick="closeModal('modalUpload')">&times;</button>
       <h2 style="color:#006bb3;">Subir fotos al parche</h2>
-
       <div id="fbUpload" class="alert error" style="display:none;"></div>
 
       <label>Selecciona hasta 3 imágenes (JPG, PNG, WEBP o GIF, máx. 5MB c/u)
@@ -154,28 +144,23 @@
 
       <div style="display:flex; gap:8px; margin-top:10px;">
         <button id="btnDoUpload" class="btn-submit">Subir</button>
-        <button class="btn-submit" style="background:#eee; color:#333;" onclick="closeHashModal()">Cancelar</button>
+        <button class="btn-submit" style="background:#eee; color:#333;" onclick="closeModal('modalUpload')">Cancelar</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ========= MIS PARCHES ========= -->
 <div class="cp">
   <span class="centro" id="catalogo-planes">MIS PARCHES</span>
 </div>
-<div id="gridMine" class="catalogo" style="padding: 0 12px;"></div>
+<div id="gridMine" class="catalogo" style="padding:0 12px;"></div>
 
 <footer>
   <p>&copy; 2025 Parchate Cali</p>
 </footer>
 
-<!-- =============== SCRIPTS =============== -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-  /* =======================
-     Configuración & sesión
-     ======================= */
   const API = {
     PATCHES: 'http://localhost:3003',
     CATEGORIES: 'http://localhost:3005/categories'
@@ -188,33 +173,6 @@
   };
   const authHeader = () => ({ headers: { Authorization: `Bearer ${Session.token()}` } });
 
-  // Mantener tu UX de cerrar modales con hash limpio
-  function closeHashModal(e){
-    if (e) e.preventDefault();
-    history.pushState('', document.title, window.location.pathname + window.location.search);
-  }
-
-  // Helpers UI
-  function show(el, text, type='error'){
-    el.className = `alert ${type}`;
-    el.textContent = text;
-    el.style.display = 'block';
-  }
-  function hide(el){ el.style.display = 'none'; }
-
-  // Placeholder si no hay portada
-  function placeholderImg(text='Sin portada'){
-    const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
-    return 'data:image/svg+xml;charset=utf-8,'+svg;
-  }
-  function patchAsset(url){
-    if (!url) return placeholderImg();
-    if (url.startsWith('http')) return url;
-    if (url.startsWith('/patches')) return API.PATCHES + url; // servido por microservicio
-    return url;
-  }
-
-  // Guard de rol (empresa)
   function requireEmpresa(){
     const u = Session.user();
     if (!u || u.rol !== 'USUARIO_EMPRESA'){
@@ -227,25 +185,60 @@
   document.getElementById('lnkLogout').addEventListener('click', (e) => {
     e.preventDefault();
     Session.clear();
-    window.location.href = './bienvenido.html?logout=1';
+    window.location.href = './bienvenido.html';
   });
 
-  /* =======================
-     Perfil
-     ======================= */
+  function show(el, text, type='error'){
+    el.className = `alert ${type}`;
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+  function hide(el){ el.style.display = 'none'; }
+
+  function placeholderImg(text='Sin portada'){
+    const svg = encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="400" height="240"><rect width="100%" height="100%" fill="#EEE"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="18" fill="#888">'+text+'</text></svg>');
+    return 'data:image/svg+xml;charset=utf-8,'+svg;
+  }
+  function patchAsset(url){
+    if (!url) return placeholderImg();
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/patches')) return API.PATCHES + url;
+    return url;
+  }
+
+  function openModal(id){
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = 'flex';
+    document.body.classList.add('modal-open');
+  }
+  function closeModal(id){
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.display = 'none';
+    const anyOpen = Array.from(document.querySelectorAll('.modal')).some(m => m.style.display === 'flex' || m.style.display === 'block');
+    if (!anyOpen) document.body.classList.remove('modal-open');
+  }
+  Array.from(document.querySelectorAll('.modal')).forEach(m => {
+    m.addEventListener('click', (e) => { if (e.target === m) closeModal(m.id); });
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape'){
+      document.querySelectorAll('.modal').forEach(m => { if (m.style.display !== 'none') m.style.display = 'none'; });
+      document.body.classList.remove('modal-open');
+    }
+  });
+
   function loadProfile(){
     const u = Session.user() || {};
-    const el = document.getElementById('perfilBody');
-    el.innerHTML = `
+    document.getElementById('perfilBody').innerHTML = `
       <p><b>Nombre:</b> ${u.nombre || '-'}</p>
       <p><b>Email:</b> ${u.email || '-'}</p>
       <p><b>Rol:</b> ${u.rol || '-'}</p>
     `;
   }
 
-  /* =======================
-     Categorías
-     ======================= */
   async function loadCategories(){
     const sel = document.getElementById('iCategoria');
     sel.innerHTML = '<option value="">Cargando...</option>';
@@ -257,11 +250,8 @@
     }
   }
 
-  /* =======================
-     Crear parche
-     ======================= */
   const MAX_FILES = 3;
-  const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+  const MAX_SIZE = 5 * 1024 * 1024; 
 
   document.getElementById('iFotos').addEventListener('change', (e) => {
     const files = Array.from(e.target.files || []);
@@ -302,25 +292,21 @@
         titulo, categoria_id, descripcion, zona, telefono, direccion,
         link_red_social: link_red_social || null,
         cover_image_url: cover_image_url || null,
-        fotos: [] // (URLs opcionales; aquí subimos archivos después)
+        fotos: []
       }, authHeader());
 
       if (files.length){
         try { await uploadPhotos(data.id, files); } catch {}
       }
 
-      // Limpiar, cerrar y refrescar
       e.target.reset();
-      closeHashModal();
+      closeModal('modalCrear');
       await loadMine();
     }catch(err){
       show(fb, err?.response?.data?.error || 'No fue posible crear el parche.');
     }
   });
 
-  /* =======================
-     Mis parches
-     ======================= */
   function cardMineHTML(p){
     const img = patchAsset(p.cover_image_url);
     const pub = p.is_published ? 'Publicado' : 'Oculto';
@@ -331,9 +317,9 @@
         <h3>${p.titulo}</h3>
         <p style="margin:6px 0; font-size:.9rem; color:#666;">${pub} — ${created}</p>
         <div style="display:flex; gap:6px; flex-wrap:wrap;">
-          <a href="#modal2" class="ver" onclick="openEdit(${p.id}, '${encodeURIComponent(p.titulo)}', ${p.is_published ? 1 : 0}); return true;">Editar</a>
+          <a href="#modalEditar" class="ver" onclick="openEdit(${p.id}, '${encodeURIComponent(p.titulo)}', ${p.is_published ? 1 : 0}); return false;">Editar</a>
           <a href="#" class="ver" style="background:#ffe8e8; color:#a10000;" onclick="delPatch(${p.id}); return false;">Eliminar</a>
-          <a href="#modal4" class="ver" onclick="openUpload(${p.id}); return true;">Subir fotos</a>
+          <a href="#modalUpload" class="ver" onclick="openUpload(${p.id}); return false;">Subir fotos</a>
         </div>
       </div>
     `;
@@ -349,18 +335,18 @@
         return;
       }
       grid.innerHTML = data.map(cardMineHTML).join('');
-    }catch{
+    }catch(e){
       grid.innerHTML = '<div class="tarjeta"><h3>Error cargando tus parches</h3></div>';
     }
   }
 
-  // ===== Editar
   let editId = null;
   function openEdit(id, titulo, publicado){
     editId = id;
     document.getElementById('eTitulo').value = decodeURIComponent(titulo);
     document.getElementById('ePublicado').value = String(publicado);
     hide(document.getElementById('fbEditar'));
+    openModal('modalEditar');
   }
   window.openEdit = openEdit;
 
@@ -373,14 +359,13 @@
       if (t) payload.titulo = t;
       if (pub !== '') payload.is_published = Number(pub);
       await axios.patch(`${API.PATCHES}/patches/${editId}`, payload, authHeader());
-      closeHashModal();
+      closeModal('modalEditar');
       await loadMine();
     }catch(e){
       show(fb, e?.response?.data?.error || 'No fue posible guardar.');
     }
   });
 
-  // ===== Eliminar
   async function delPatch(id){
     if (!confirm('¿Eliminar este parche?')) return;
     try{
@@ -392,7 +377,6 @@
   }
   window.delPatch = delPatch;
 
-  // ===== Subir fotos
   let uploadPatchId = null;
   function openUpload(patchId){
     uploadPatchId = patchId;
@@ -401,15 +385,19 @@
     input.value = '';
     prev.innerHTML = '';
     hide(document.getElementById('fbUpload'));
+    openModal('modalUpload');
   }
   window.openUpload = openUpload;
+
+  const MAX_FILES_UPLOAD = 3;
+  const MAX_SIZE_UPLOAD = 5 * 1024 * 1024;
 
   document.getElementById('uFiles').addEventListener('change', (e) => {
     const files = Array.from(e.target.files || []);
     const prev = document.getElementById('uPreview'); prev.innerHTML = '';
-    if (files.length > MAX_FILES){ alert('Máximo 3 archivos'); e.target.value=''; return; }
+    if (files.length > MAX_FILES_UPLOAD){ alert('Máximo 3 archivos'); e.target.value=''; return; }
     for (const f of files){
-      if (f.size > MAX_SIZE){ alert(`"${f.name}" supera 5MB`); e.target.value=''; return; }
+      if (f.size > MAX_SIZE_UPLOAD){ alert(`"${f.name}" supera 5MB`); e.target.value=''; return; }
       if (!/^image\//.test(f.type)){ alert(`"${f.name}" no es una imagen`); e.target.value=''; return; }
       const url = URL.createObjectURL(f);
       const img = document.createElement('img');
@@ -426,27 +414,17 @@
     try{
       await uploadPhotos(uploadPatchId, files);
       show(fb, 'Fotos subidas correctamente', 'success');
-      setTimeout(async () => { closeHashModal(); await loadMine(); }, 900);
+      setTimeout(async () => { closeModal('modalUpload'); await loadMine(); }, 900);
     }catch(e){
       show(fb, e?.response?.data?.error || 'No fue posible subir las fotos');
     }
   });
 
-  /* =======================
-     Boot
-     ======================= */
   (async function init(){
     if (!requireEmpresa()) return;
-
     loadProfile();
     await loadCategories();
     await loadMine();
-
-    // Compatibilidad: si tu CSS usa :target, con los href="#modalX" ya funciona.
-    // Este listener solo asegura que, si hiciste scroll, al cerrar vuelva a estado normal.
-    window.addEventListener('hashchange', () => {
-      // no forzamos display here; tu CSS controla la visibilidad por :target
-    });
   })();
 </script>
 </body>

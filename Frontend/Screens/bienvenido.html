@@ -5,17 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bienvenido - Parchate Cali</title>
 
-  <!-- Tu hoja de estilos (carpeta con S mayúscula según tu estructura) -->
   <link rel="stylesheet" href="../Styles/bienvenido.css" />
 </head>
 <body>
-  <!-- ================== HEADER ================== -->
   <header class="header-logo">
     <p style="font-size: 35px; font-weight: bold; margin: 20px;">Parchate Cali</p>
     <nav>
       <ul>
         <li>
-          <!-- Los labels controlan el checkbox que abre/cierra el modal por CSS -->
           <label for="login-toggle" class="btn btn-primary">Iniciar Sesión</label>
         </li>
         <li>
@@ -25,7 +22,6 @@
     </nav>
   </header>
 
-  <!-- ================== MAIN ================== -->
   <main>
     <section class="origen">
       <h1>¿Quiénes somos?</h1>
@@ -39,7 +35,6 @@
 
       <div class="banner-origen">
         <div class="collage">
-          <!-- Si tu carpeta real es Images (en inglés), cambia ../Imagenes por ../Images -->
           <img src="../Imagenes/calibanner.jpg" alt="Cristo Rey" />
           <img src="../Imagenes/ermita.jpg" alt="La Ermita" />
           <img src="../Imagenes/zoo.jpg" alt="Zoológico de Cali" />
@@ -79,23 +74,18 @@
     </section>
   </main>
 
-  <!-- ================== FOOTER ================== -->
   <footer>
     <p>&copy; 2025 Parchate Cali</p>
   </footer>
 
-  <!-- ================== MODALES (controlados por CSS :checked) ================== -->
-  <!-- Toggles para abrir/cerrar modales -->
   <input type="checkbox" id="login-toggle" hidden />
   <input type="checkbox" id="register-toggle" hidden />
 
-  <!-- ===== Modal Login ===== -->
   <div class="modal login-modal">
     <div class="modal-content">
       <label for="login-toggle" class="modal-close btn">&times;</label>
       <h3 style="font-size: 30px; margin-bottom: -2px;">Iniciar Sesión</h3>
 
-      <!-- feedback -->
       <div id="fbLogin" class="alert error" style="display:none;"></div>
 
       <form id="loginForm" novalidate>
@@ -108,13 +98,11 @@
     </div>
   </div>
 
-  <!-- ===== Modal Registro ===== -->
   <div class="modal register-modal">
     <div class="modal-content">
       <label for="register-toggle" class="modal-close btn">&times;</label>
       <h3>Crear Cuenta</h3>
 
-      <!-- feedback -->
       <div id="fbRegister" class="alert error" style="display:none;"></div>
 
       <form id="registerForm" novalidate>
@@ -128,7 +116,6 @@
           <input id="rPass" type="password" required />
         </label>
         <label>Tipo de Usuario
-          <!-- Valores alineados con el backend -->
           <select id="rRol" required>
             <option value="" disabled selected>Seleccione...</option>
             <option value="USUARIO_BUSCADOR">Usuario / Explorador</option>
@@ -140,17 +127,13 @@
     </div>
   </div>
 
-  <!-- ================== SCRIPTS ================== -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    /* =========================================================
-       Conexión con microservicios (AUTH) y flujo de login/signup
-       ========================================================= */
+
     const API = {
       AUTH: 'http://localhost:3001/auth'
     };
 
-    // Sesión en localStorage
     const Session = {
       set(token, user) {
         localStorage.setItem('token', token);
@@ -168,7 +151,6 @@
       }
     };
 
-    // Helper UI
     function show(el, text, type='error') {
       el.className = `alert ${type}`;
       el.textContent = text;
@@ -177,7 +159,6 @@
     function hide(el) { el.style.display = 'none'; }
     function disable(el, on=true){ if(el){ el.disabled = on; el.style.opacity = on ? .6 : 1; } }
 
-    // Redirección por rol
     function goToRole(u){
       if (!u) return;
       if (u.rol === 'USUARIO_EMPRESA')       window.location.href = './usuario_empresa.html';
@@ -185,32 +166,27 @@
       else if (u.rol === 'ADMIN')            window.location.href = './admin.html';
     }
 
-    // ================== BOOT: validar sesión antes de redirigir ==================
     (async function bootWelcome(){
-      // Forzar limpieza si se navega con ?logout=1 (útil en desarrollo)
       const url = new URL(location.href);
       if (url.searchParams.get('logout') === '1'){
         Session.clear();
-        history.replaceState({}, '', location.pathname); // limpia el query en la barra
-        return; // quedarse en Bienvenido
+        history.replaceState({}, '', location.pathname); 
+        return; 
       }
 
       const token = Session.token();
       const rawUser = localStorage.getItem('user');
-      if (!token || !rawUser) return; // no hay sesión -> mostrar landing
+      if (!token || !rawUser) return; 
 
-      // Valida el token con backend antes de redirigir
       try {
         await axios.get(`${API.AUTH}/me`, { headers: { Authorization: `Bearer ${token}` } });
         const u = JSON.parse(rawUser);
-        goToRole(u); // si es válido, redirige
+        goToRole(u);
       } catch {
-        // Token inválido/expirado: limpia y permanece en landing
         Session.clear();
       }
     })();
 
-    // ================== LOGIN ==================
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fb = document.getElementById('fbLogin'); hide(fb);
@@ -228,10 +204,8 @@
         const { data } = await axios.post(`${API.AUTH}/login`, { email, password });
         Session.set(data.token, data.user);
 
-        // Cerrar modal
         document.getElementById('login-toggle').checked = false;
 
-        // Redirigir según rol
         goToRole(data.user);
       } catch (e2) {
         show(fb, e2?.response?.data?.error || 'Credenciales inválidas o servicio no disponible.');
@@ -240,7 +214,6 @@
       }
     });
 
-    // ================== REGISTRO ==================
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const fb = document.getElementById('fbRegister'); hide(fb);
@@ -261,10 +234,8 @@
         const { data } = await axios.post(`${API.AUTH}/register`, { nombre, email, password, rol });
         Session.set(data.token, data.user);
 
-        // Cerrar modal
         document.getElementById('register-toggle').checked = false;
 
-        // Redirigir según rol (ADMIN no se crea por aquí, según tu backend)
         goToRole(data.user);
       } catch (e2) {
         show(fb, e2?.response?.data?.error || 'No fue posible crear tu cuenta.');
