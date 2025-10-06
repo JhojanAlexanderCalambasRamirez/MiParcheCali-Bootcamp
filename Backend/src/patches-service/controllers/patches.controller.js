@@ -1,7 +1,5 @@
 import crypto from 'crypto';
 import { pool } from '../../db.js';
-
-/* ================== LISTADO PÚBLICO ================== */
 export async function listPublic(req, res) {
   try {
     const { q, categoria_id } = req.query;
@@ -17,7 +15,6 @@ export async function listPublic(req, res) {
        WHERE ${where}`;
 
     if (q && q.trim().length > 0) {
-      // FULLTEXT (asegúrate de haber creado el índice); si no, usa LIKE.
       sql += ' AND MATCH(p.titulo, p.descripcion, p.zona, p.direccion) AGAINST (? IN NATURAL LANGUAGE MODE)';
       args.push(q);
     }
@@ -44,8 +41,6 @@ export async function detail(req, res) {
        WHERE p.id=?`, [id]
     );
 
-    // Solo devolver detalles si el parche no está eliminado y está publicado;
-    // (si quieres que el dueño/Admin lo vean no publicado, mueve esta condición abajo y revisa req.user)
     if (!patch || patch.deleted_at) return res.status(404).json({ error: 'No encontrado' });
     if (!patch.is_published) return res.status(403).json({ error: 'No publicado' });
 
@@ -53,7 +48,6 @@ export async function detail(req, res) {
       'SELECT id, url, posicion FROM patch_photos WHERE patch_id=? ORDER BY posicion ASC', [id]
     );
 
-    // Normalizar: si no hay url (porque está en DB), exponer una ruta pública de servido
     const fotosOut = fotos.map(ph => ({
       id: ph.id,
       posicion: ph.posicion,
@@ -69,7 +63,7 @@ export async function detail(req, res) {
       telefono: patch.telefono,
       direccion: patch.direccion,
       link_red_social: patch.link_red_social,
-      cover_image_url: patch.cover_image_url, // puede ser URL externa o una ruta /patches/:id/photos/:photoId si la seteas así
+      cover_image_url: patch.cover_image_url, 
       user_id: patch.user_id,
       fotos: fotosOut
     });
@@ -79,7 +73,6 @@ export async function detail(req, res) {
   }
 }
 
-/* ================== MIS PARCHES (EMPRESA) ================== */
 export async function listMine(req, res) {
   try {
     const userId = req.user.id;
@@ -94,7 +87,6 @@ export async function listMine(req, res) {
   }
 }
 
-/* ================== CREAR PARCHES ================== */
 export async function create(req, res) {
   try {
     const userId = req.user.id;
@@ -111,7 +103,6 @@ export async function create(req, res) {
 
     const patchId = r.insertId;
 
-    // Si llegan URLs de fotos, insertarlas (modo "clásico")
     if (Array.isArray(fotos) && fotos.length) {
       const values = fotos.slice(0, 3).map((url, i) => [patchId, url, i + 1]);
       await pool.query('INSERT INTO patch_photos (patch_id, url, posicion) VALUES ?', [values]);
@@ -124,12 +115,10 @@ export async function create(req, res) {
   }
 }
 
-/* ================== EDITAR / ELIMINAR (SOFT) ================== */
 export async function update(req, res) {
   try {
     const id = Number(req.params.id);
 
-    // Validar dueño o admin
     const [[owner]] = await pool.query(
       'SELECT user_id FROM patches WHERE id=? AND deleted_at IS NULL', [id]
     );
@@ -185,20 +174,11 @@ export async function softDelete(req, res) {
   }
 }
 
-/* ================== SUBIR FOTOS (BINARIO A DB) ================== */
-/**
- * POST /patches/:id/photos (multipart/form-data)
- * Campo: photos (Files)
- * - Valida dueño o admin
- * - Inserta hasta 3 fotos (según el límite del router)
- * - Si el parche no tiene cover_image_url, se lo setea con la primera foto subida (ruta de servido)
- */
 export async function uploadPhotos(req, res) {
   const conn = await pool.getConnection();
   try {
     const id = Number(req.params.id);
 
-    // Validar dueño/admin & existencia
     const [[owner]] = await conn.query(
       'SELECT user_id, cover_image_url FROM patches WHERE id=? AND deleted_at IS NULL', [id]
     );
@@ -212,7 +192,6 @@ export async function uploadPhotos(req, res) {
 
     await conn.beginTransaction();
 
-    // Calcular próxima posición
     const [[pos]] = await conn.query(
       'SELECT COALESCE(MAX(posicion),0) AS nextPos FROM patch_photos WHERE patch_id=?', [id]
     );
@@ -229,7 +208,6 @@ export async function uploadPhotos(req, res) {
       inserted.push({ id: r.insertId, posicion: next - 1 });
     }
 
-    // Si no hay cover, usa la primera foto subida como cover (ruta de servido)
     if (!owner.cover_image_url && inserted.length) {
       const coverPath = `/patches/${id}/photos/${inserted[0].id}`;
       await conn.query('UPDATE patches SET cover_image_url=? WHERE id=?', [coverPath, id]);
@@ -238,7 +216,6 @@ export async function uploadPhotos(req, res) {
     await conn.commit();
     conn.release();
 
-    // Devolver rutas de servido relativas (el front puede anteponer http://localhost:3003)
     const photos = inserted.map(p => ({ id: p.id, posicion: p.posicion, url: `/patches/${id}/photos/${p.id}` }));
     return res.status(201).json({ ok: true, photos });
   } catch (e) {
@@ -248,13 +225,6 @@ export async function uploadPhotos(req, res) {
     return res.status(500).json({ error: 'Error subiendo fotos' });
   }
 }
-
-/* ================== SERVIR UNA FOTO (BINARIO -> HTTP) ================== */
-/**
- * GET /patches/:id/photos/:photoId
- * - Si el parche está publicado y no eliminado, se sirve sin auth.
- * - Si el parche NO está publicado, se podría restringir (opcional).
- */
 export async function servePhoto(req, res) {
   try {
     const patchId = Number(req.params.id);
@@ -269,24 +239,17 @@ export async function servePhoto(req, res) {
     );
     if (!ph || ph.deleted_at) return res.status(404).json({ error: 'No encontrado' });
 
-    // Público solo si publicado; si no, 403 (o podrías permitir al dueño con authGuard, según tu política)
     if (!ph.is_published) return res.status(403).json({ error: 'No publicado' });
 
     res.setHeader('Content-Type', ph.mime_type || 'application/octet-stream');
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    return res.status(200).end(ph.data); // enviar binario
+    return res.status(200).end(ph.data); 
   } catch (e) {
     console.error('[patches.servePhoto]', e);
     return res.status(500).json({ error: 'Error sirviendo foto' });
   }
 }
 
-/* ================== BORRAR UNA FOTO ================== */
-/**
- * DELETE /patches/:id/photos/:photoId
- * - Valida dueño o admin
- * - Elimina la foto; si era cover, limpia cover_image_url
- */
 export async function deletePhoto(req, res) {
   const conn = await pool.getConnection();
   try {
@@ -301,13 +264,11 @@ export async function deletePhoto(req, res) {
       conn.release(); return res.status(403).json({ error: 'Prohibido' });
     }
 
-    // ¿La foto existe y pertenece al parche?
     const [[ph]] = await conn.query(
       'SELECT id FROM patch_photos WHERE id=? AND patch_id=?', [photoId, patchId]
     );
     if (!ph) { conn.release(); return res.status(404).json({ error: 'Foto no encontrada' }); }
 
-    // Si la foto borrada era la cover, limpiar cover_image_url
     const wasCover = owner.cover_image_url && owner.cover_image_url.endsWith(`/patches/${patchId}/photos/${photoId}`);
 
     await conn.beginTransaction();

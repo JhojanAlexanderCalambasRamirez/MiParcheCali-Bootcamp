@@ -102,6 +102,7 @@
   </div>
 </div>
 
+<!-- ========== MODAL EDITAR (AMPLIADO) ========== -->
 <div id="modalEditar" class="modal" style="display:none;">
   <div class="modal-content">
     <div class="modal-form">
@@ -110,15 +111,47 @@
 
       <div id="fbEditar" class="alert error" style="display:none;"></div>
 
+      <!-- Solo título y publicado ya existían. Se agregan todos los campos: -->
       <label>Título
         <input id="eTitulo" type="text" />
       </label>
+
       <label>Publicado
         <select id="ePublicado">
           <option value="">(no cambiar)</option>
           <option value="1">Publicado</option>
           <option value="0">Oculto</option>
         </select>
+      </label>
+
+      <label>Categoría (opcional)
+        <select id="eCategoria">
+          <option value="">(sin cambio)</option>
+        </select>
+      </label>
+
+      <label>Zona
+        <input id="eZona" type="text" placeholder="Ej: Norte, San Antonio, Granada..." />
+      </label>
+
+      <label>Teléfono
+        <input id="eTelefono" type="text" placeholder="Ej: +57 300 0000000" />
+      </label>
+
+      <label>Dirección
+        <input id="eDireccion" type="text" placeholder="Calle 00 # 00-00, Cali" />
+      </label>
+
+      <label>Descripción
+        <textarea id="eDescripcion" placeholder="Describe la actividad, horarios, requisitos..."></textarea>
+      </label>
+
+      <label>Link red social
+        <input id="eLink" type="url" placeholder="https://instagram.com/mi_negocio" />
+      </label>
+
+      <label>Portada (URL)
+        <input id="eCover" type="url" placeholder="https://...imagen.jpg" />
       </label>
 
       <div style="display:flex; gap:8px; margin-top:10px;">
@@ -239,19 +272,31 @@
     `;
   }
 
+  // === Cargar categorías en crear (iCategoria) y editar (eCategoria) ===
   async function loadCategories(){
-    const sel = document.getElementById('iCategoria');
-    sel.innerHTML = '<option value="">Cargando...</option>';
+    const selCreate = document.getElementById('iCategoria');
+    const selEdit   = document.getElementById('eCategoria');
+    if (selCreate) selCreate.innerHTML = '<option value="">Cargando...</option>';
+    if (selEdit)   selEdit.innerHTML   = '<option value="">(sin cambio)</option>';
+
     try{
       const { data } = await axios.get(API.CATEGORIES);
-      sel.innerHTML = '<option value="">Seleccione...</option>' + data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+      if (selCreate) {
+        selCreate.innerHTML = '<option value="">Seleccione...</option>' +
+          data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+      }
+      if (selEdit) {
+        selEdit.innerHTML = '<option value="">(sin cambio)</option>' +
+          data.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('');
+      }
     }catch{
-      sel.innerHTML = '<option value="">(error)</option>';
+      if (selCreate) selCreate.innerHTML = '<option value="">(error)</option>';
+      // en edición simplemente dejamos (sin cambio)
     }
   }
 
   const MAX_FILES = 3;
-  const MAX_SIZE = 5 * 1024 * 1024; 
+  const MAX_SIZE = 5 * 1024 * 1024;
 
   document.getElementById('iFotos').addEventListener('change', (e) => {
     const files = Array.from(e.target.files || []);
@@ -341,23 +386,96 @@
   }
 
   let editId = null;
-  function openEdit(id, titulo, publicado){
+  let editSnapshot = null; // valores originales para detectar cambios
+
+  async function openEdit(id, titulo, publicado){
     editId = id;
+    // precargamos selects de categorías para tener opciones
+    await loadCategories();
+
+    // poner lo mínimo de inmediato
     document.getElementById('eTitulo').value = decodeURIComponent(titulo);
     document.getElementById('ePublicado').value = String(publicado);
+
+    // limpiar/ocultar feedback
     hide(document.getElementById('fbEditar'));
+
+    // intentar precargar el resto del parche (zona, tel, etc.)
+    try{
+      // Nota: usamos authHeader() por si el parche está "oculto" y tu backend permite
+      // que el dueño lo consulte (recomendado).
+      const { data } = await axios.get(`${API.PATCHES}/patches/${id}`, authHeader());
+
+      // snapshot original para detectar cambios
+      editSnapshot = {
+        titulo: data.titulo || '',
+        zona: data.zona || '',
+        telefono: data.telefono || '',
+        direccion: data.direccion || '',
+        descripcion: data.descripcion || '',
+        link_red_social: data.link_red_social || '',
+        cover_image_url: data.cover_image_url || '',
+        // OJO: detail devuelve nombre de categoría, no id. Dejamos eCategoria como "(sin cambio)".
+      };
+
+      // rellenar campos
+      document.getElementById('eTitulo').value      = editSnapshot.titulo;
+      document.getElementById('eZona').value        = editSnapshot.zona;
+      document.getElementById('eTelefono').value    = editSnapshot.telefono;
+      document.getElementById('eDireccion').value   = editSnapshot.direccion;
+      document.getElementById('eDescripcion').value = editSnapshot.descripcion;
+      document.getElementById('eLink').value        = editSnapshot.link_red_social;
+      document.getElementById('eCover').value       = editSnapshot.cover_image_url;
+
+    }catch(err){
+      // Si no se pudo precargar (por ejemplo, si backend no permite ver ocultos),
+      // seguimos permitiendo editar con título/publicado y campos libres.
+      editSnapshot = {
+        titulo: document.getElementById('eTitulo').value || '',
+        zona: '', telefono: '', direccion: '', descripcion: '',
+        link_red_social: '', cover_image_url: ''
+      };
+    }
+
     openModal('modalEditar');
   }
   window.openEdit = openEdit;
 
+  // Construye payload solo con campos cambiados/no vacíos
+  function buildEditPayload(){
+    const payload = {};
+    const take = (key, value) => {
+      const v = (value ?? '').toString().trim();
+      if (v === '') return; // no enviar vacíos (COALESCE en backend)
+      if (!editSnapshot || v !== (editSnapshot[key] ?? '')) payload[key] = v;
+    };
+
+    take('titulo', document.getElementById('eTitulo').value);
+    const pub = document.getElementById('ePublicado').value;
+    if (pub !== '') payload.is_published = Number(pub);
+
+    // si el usuario escoge categoría, se envía categoria_id
+    const catVal = document.getElementById('eCategoria').value;
+    if (catVal !== '') payload.categoria_id = Number(catVal);
+
+    take('zona', document.getElementById('eZona').value);
+    take('telefono', document.getElementById('eTelefono').value);
+    take('direccion', document.getElementById('eDireccion').value);
+    take('descripcion', document.getElementById('eDescripcion').value);
+    take('link_red_social', document.getElementById('eLink').value);
+    take('cover_image_url', document.getElementById('eCover').value);
+
+    return payload;
+  }
+
   document.getElementById('btnGuardarEdit').addEventListener('click', async () => {
     const fb = document.getElementById('fbEditar'); hide(fb);
     try{
-      const payload = {};
-      const t = document.getElementById('eTitulo').value.trim();
-      const pub = document.getElementById('ePublicado').value;
-      if (t) payload.titulo = t;
-      if (pub !== '') payload.is_published = Number(pub);
+      const payload = buildEditPayload();
+      if (Object.keys(payload).length === 0){
+        show(fb, 'No hay cambios para guardar.', 'info');
+        return;
+      }
       await axios.patch(`${API.PATCHES}/patches/${editId}`, payload, authHeader());
       closeModal('modalEditar');
       await loadMine();
