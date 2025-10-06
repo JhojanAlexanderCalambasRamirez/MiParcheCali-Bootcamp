@@ -27,8 +27,6 @@ export async function listPublic(req, res) {
     return res.status(500).json({ error: 'Error listando parches' });
   }
 }
-
-/* ================== DETALLE PÚBLICO ================== */
 export async function detail(req, res) {
   try {
     const id = Number(req.params.id);
